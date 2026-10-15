@@ -1,0 +1,29 @@
+{
+  "model": "deepseek",
+  "trace": "Kyber",
+  "path": "runs/deepseek/Kyber/run01",
+  "original_calls_sha256": "cab9c7af20f91dbbd06459276c223790534218a33e97d4382d43f9c1071e6cff",
+  "replay_path": "<LOCAL>/run01",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "2926fa13128e38e8ed91d14d2bb1638e8a528c27dae2f8a700edd484a664dc62",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/Kyber/run01\\snapshots\\call004_0001_result.txt",
+        "sequence_sha256": "b4d407457207ff7c819c1acdc69845b5894cfc051f6c85640b96b822b1349ca9"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

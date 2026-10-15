@@ -1,0 +1,112 @@
+{
+  "model": "deepseek",
+  "trace": "Sim-3-1",
+  "path": "runs/deepseek/Sim-3-1/run07",
+  "original_calls_sha256": "888890a78f1227056116836e6292cad64a98ea20f8f520f2a392ef3311cdcd88",
+  "replay_path": "<LOCAL>/run07",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "2cfe3dce70b4cd49615458028845050d6c1409f0a694589d28ce219934dc776e",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 52.213541666666664,
+        "source": "archived_replay_diverged",
+        "variable": "operations",
+        "sequence_sha256": "184f8590854b8d318112ce72582d53a435d1c93e7325c824e53668ce919595c7"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 50.9765625,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "95d9ea0a92df38e80df08105e95b36ccf2a3e0a67f82910f09c8409b89832dc1"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 51.041666666666664,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "185e5062115767c218b1d149b9fe95a7dda648d85580a191f6a7d8861898e79b"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 50.390625,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "1314066e97369677275e26aa4c33205b62f7fa95c7a60a299fd032e73bc2f5cf"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 50.911458333333336,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "db1e4d897de2f655735d0e9d17ba3439babcc94c1ef2c2e44420e7887c50a1c4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/Sim-3-1/run07\\snapshots\\call008_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

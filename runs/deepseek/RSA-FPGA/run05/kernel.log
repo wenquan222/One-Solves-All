@@ -1,0 +1,464 @@
+初始化 Jupyter Kernel Manager，工作目录 F:/侧信道/SCA-GPT/实验二：一段话解决分段/spa_agent/TCAD大修/exp2_runs_variant_fpga_c\deepseek\RSA-FPGA\run05\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5061)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5061
+Press CTRL+C to quit
+127.0.0.1 - - [08/Oct/2026 23:46:06] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.mixture import GaussianMixture
+from sklearn.preprocessing import StandardScaler
+import warnings
+warnings.filterwarnings('ignore')
+
+# Load the trace data
+trace = np.load('./trace/RSA-FPGA-2443776.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Check if we can divide into 1536 equal segments
+segment_length = len(trace) // 1536
+print(f"Segment length: {segment_length}")
+print(f"Total segments possible: {len(trace) // segment_length}")
+
+# Reshape into segments
+segments = trace[:1536 * segment_length].reshape(1536, segment_length)
+print(f"Segments shape: {segments.shape}")
+
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_234636_148100_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_234636_148100_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+
+============================================================
+
+执行请求已发送, msg_id=538674ee-a979dea4c81de83f44b11d50_14916_1
+[Stream]: Trace shape: (2443776,)
+Trace length: 2443776
+Segment length: 1591
+Total segments possible: 1536
+Segments shape: (1536, 1591)
+[Stream]: {"plot_path": "../images/img_20261008_234636_148100_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [08/Oct/2026 23:46:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 1: Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Step 2: Apply PCA
+pca = PCA(n_components=10)
+segments_pca = pca.fit_transform(segments_scaled)
+
+print("Explained variance ratio:")
+print(pca.explained_variance_ratio_)
+print(f"Total variance explained: {np.sum(pca.explained_variance_ratio_):.3f}")
+
+# Step 3: Apply Gaussian Mixture Model with 3 components
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(segments_pca)
+
+print(f"Cluster labels: {np.unique(labels)}")
+print(f"Cluster sizes: {np.bincount(labels)}")
+
+# Step 4: Analyze the sequence structure
+print("\nAnalyzing sequence structure:")
+for cluster in range(3):
+    cluster_indices = np.where(labels == cluster)[0]
+    following_labels = []
+    for idx in cluster_indices:
+        if idx < len(labels) - 1:
+            following_labels.append(labels[idx + 1])
+
+    if following_labels:
+        unique_following, counts = np.unique(following_labels, return_counts=True)
+        print(f"Cluster {cluster}: {len(cluster_indices)} segments")
+        print(f"  Following labels: {dict(zip(unique_following, counts))}")
+
+        # Check if all following segments belong to one same group
+        if len(unique_following) == 1:
+            print(f"  ✓ All following segments belong to cluster {unique_following[0]}")
+        else:
+            print(f"  ✗ Following segments belong to multiple clusters")
+
+# Step 5: Identify M and S operations
+# The cluster where all following segments belong to one same group is M
+# The other two clusters are S (S1 and S2)
+
+m_cluster = None
+for cluster in range(3):
+    cluster_indices = np.where(labels == cluster)[0]
+    following_labels = []
+    for idx in cluster_indices:
+        if idx < len(labels) - 1:
+            following_labels.append(labels[idx + 1])
+
+    if following_labels and len(np.unique(following_labels)) == 1:
+        m_cluster = cluster
+        break
+
+if m_cluster is not None:
+    print(f"\nIdentified M operations as cluster {m_cluster}")
+    s_clusters = [c for c in range(3) if c != m_cluster]
+    print(f"S operations are clusters {s_clusters}")
+
+    # Map labels to S and M
+    operation_labels = []
+    for label in labels:
+        if label == m_cluster:
+            operation_labels.append('M')
+        else:
+            operation_labels.append('S')
+
+    operation_labels = np.array(operation_labels)
+
+    # Verify constraints
+    print("\nConstraint Verification:")
+    print(f"1. S count: {np.sum(operation_labels == 'S')}, M count: {np.sum(operation_labels == 'M')}")
+    print(f"   Target: 1024 S, 512 M")
+    print(f"   Pass: {np.sum(operation_labels == 'S') == 1024 and np.sum(operation_labels == 'M') == 512}")
+
+    print(f"2. First operation is S: {operation_labels[0] == 'S'}")
+
+    # Check for consecutive M operations
+    consecutive_m = False
+    for i in range(len(operation_labels) - 1):
+        if operation_labels[i] == 'M' and operation_labels[i + 1] == 'M':
+            consecutive_m = True
+            break
+    print(f"3. No two consecutive M operations: {not consecutive_m}")
+
+    # Check M group constraint
+    m_indices = np.where(labels == m_cluster)[0]
+    following_m_labels = []
+    for idx in m_indices:
+        if idx < len(labels) - 1:
+            following_m_labels.append(labels[idx + 1])
+
+    unique_following_m = np.unique(following_m_labels)
+    print(f"4. M group followed by one same group: {len(unique_following_m) == 1}")
+
+else:
+    print("Could not identify M cluster - no cluster has all following segments in one group")
+============================================================
+
+执行请求已发送, msg_id=538674ee-a979dea4c81de83f44b11d50_14916_2
+[Stream]: Explained variance ratio:
+[0.3145316  0.21246913 0.15706046 0.10331038 0.07172028 0.04479098
+ 0.02283944 0.01464796 0.009322   0.0063417 ]
+Total variance explained: 0.957
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster labels: [0 1 2]
+Cluster sizes: [841 505 190]
+
+Analyzing sequence structure:
+[Stream]: Cluster 0: 841 segments
+  Following labels: {0: 414, 1: 389, 2: 37}
+  ✗ Following segments belong to multiple clusters
+Cluster 1: 505 segments
+  Following labels: {0: 354, 2: 151}
+  ✗ Following segments belong to multiple clusters
+Cluster 2: 190 segments
+  Following labels: {0: 73, 1: 116, 2: 1}
+  ✗ Following segments belong to multiple clusters
+[Stream]: Could not identify M cluster - no cluster has all following segments in one group
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [08/Oct/2026 23:47:31] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Try with fewer PCA components
+pca = PCA(n_components=5)
+segments_pca = pca.fit_transform(segments_scaled)
+
+print("Explained variance ratio (5 components):")
+print(pca.explained_variance_ratio_)
+print(f"Total variance explained: {np.sum(pca.explained_variance_ratio_):.3f}")
+
+# Apply Gaussian Mixture Model
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(segments_pca)
+
+print(f"Cluster labels: {np.unique(labels)}")
+print(f"Cluster sizes: {np.bincount(labels)}")
+
+# Analyze the sequence structure
+print("\nAnalyzing sequence structure:")
+for cluster in range(3):
+    cluster_indices = np.where(labels == cluster)[0]
+    following_labels = []
+    for idx in cluster_indices:
+        if idx < len(labels) - 1:
+            following_labels.append(labels[idx + 1])
+
+    if following_labels:
+        unique_following, counts = np.unique(following_labels, return_counts=True)
+        print(f"Cluster {cluster}: {len(cluster_indices)} segments")
+        print(f"  Following labels: {dict(zip(unique_following, counts))}")
+
+        # Check if all following segments belong to one same group
+        if len(unique_following) == 1:
+            print(f"  ✓ All following segments belong to cluster {unique_following[0]}")
+        else:
+            print(f"  ✗ Following segments belong to multiple clusters")
+
+# Identify M and S operations
+m_cluster = None
+for cluster in range(3):
+    cluster_indices = np.where(labels == cluster)[0]
+    following_labels = []
+    for idx in cluster_indices:
+        if idx < len(labels) - 1:
+            following_labels.append(labels[idx + 1])
+
+    if following_labels and len(np.unique(following_labels)) == 1:
+        m_cluster = cluster
+        break
+
+if m_cluster is not None:
+    print(f"\nIdentified M operations as cluster {m_cluster}")
+    s_clusters = [c for c in range(3) if c != m_cluster]
+    print(f"S operations are clusters {s_clusters}")
+
+    # Map labels to S and M
+    operation_labels = []
+    for label in labels:
+        if label == m_cluster:
+            operation_labels.append('M')
+        else:
+            operation_labels.append('S')
+
+    operation_labels = np.array(operation_labels)
+
+    # Verify constraints
+    print("\nConstraint Verification:")
+    print(f"1. S count: {np.sum(operation_labels == 'S')}, M count: {np.sum(operation_labels == 'M')}")
+    print(f"   Target: 1024 S, 512 M")
+    print(f"   Pass: {np.sum(operation_labels == 'S') == 1024 and np.sum(operation_labels == 'M') == 512}")
+
+    print(f"2. First operation is S: {operation_labels[0] == 'S'}")
+
+    # Check for consecutive M operations
+    consecutive_m = False
+    for i in range(len(operation_labels) - 1):
+        if operation_labels[i] == 'M' and operation_labels[i + 1] == 'M':
+            consecutive_m = True
+            break
+    print(f"3. No two consecutive M operations: {not consecutive_m}")
+
+    # Check M group constraint
+    m_indices = np.where(labels == m_cluster)[0]
+    following_m_labels = []
+    for idx in m_indices:
+        if idx < len(labels) - 1:
+            following_m_labels.append(labels[idx + 1])
+
+    unique_following_m = np.unique(following_m_labels)
+    print(f"4. M group followed by one same group: {len(unique_following_m) == 1}")
+
+else:
+    print("Could not identify M cluster - no cluster has all following segments in one group")
+============================================================
+
+执行请求已发送, msg_id=538674ee-a979dea4c81de83f44b11d50_14916_3
+[Stream]: Explained variance ratio (5 components):
+[0.3145316  0.21246913 0.15706046 0.10331038 0.07172028]
+Total variance explained: 0.859
+[Stream]: Cluster labels: [0 1 2]
+Cluster sizes: [512 512 512]
+
+Analyzing sequence structure:
+[Stream]: Cluster 0: 512 segments
+  Following labels: {0: 383, 1: 128}
+  ✗ Following segments belong to multiple clusters
+Cluster 1: 512 segments
+  Following labels: {2: 512}
+  ✓ All following segments belong to cluster 2
+Cluster 2: 512 segments
+  Following labels: {0: 128, 1: 384}
+  ✗ Following segments belong to multiple clusters
+[Stream]: Identified M operations as cluster 1
+S operations are clusters [0, 2]
+
+Constraint Verification:
+1. S count: 1024, M count: 512
+   Target: 1024 S, 512 M
+   Pass: True
+2. First operation is S: True
+3. No two consecutive M operations: True
+4. M group followed by one same group: True
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:48:25] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Final verification and output
+print("Final Classification Results:")
+print(f"Total operations: {len(operation_labels)}")
+print(f"S operations: {np.sum(operation_labels == 'S')}")
+print(f"M operations: {np.sum(operation_labels == 'M')}")
+
+# Verify the sequence pattern
+print("\nSequence Pattern Verification:")
+print(f"First operation: {operation_labels[0]}")
+print(f"Last operation: {operation_labels[-1]}")
+
+# Check for any consecutive M operations
+consecutive_m_indices = []
+for i in range(len(operation_labels) - 1):
+    if operation_labels[i] == 'M' and operation_labels[i + 1] == 'M':
+        consecutive_m_indices.append(i)
+
+if consecutive_m_indices:
+    print(f"Found consecutive M operations at indices: {consecutive_m_indices}")
+else:
+    print("No consecutive M operations found ✓")
+
+# Check that every M is followed by the same S type
+m_indices = np.where(operation_labels == 'M')[0]
+following_s_labels = []
+for idx in m_indices:
+    if idx < len(operation_labels) - 1:
+        following_s_labels.append(labels[idx + 1])  # Use original cluster labels
+
+unique_following_s = np.unique(following_s_labels)
+print(f"M operations are followed by clusters: {unique_following_s}")
+print(f"All M operations followed by same cluster: {len(unique_following_s) == 1}")
+
+# Display first 50 operations as a sample
+print(f"\nFirst 50 operations: {''.join(operation_labels[:50])}")
+
+# Save the complete sequence to file
+with open('./result.txt', 'w') as f:
+    f.write(''.join(operation_labels))
+
+print(f"\nComplete operation sequence saved to ./result.txt")
+print(f"Sequence length: {len(operation_labels)}")
+
+# Final constraint check
+print("\nFINAL CONSTRAINT CHECK:")
+print(f"1. 1024 S and 512 M: ✓")
+print(f"2. First operation is S: ✓")
+print(f"3. No consecutive M operations: ✓")
+print(f"4. M followed by one same group: ✓")
+print("\nALL CONSTRAINTS SATISFIED!")
+============================================================
+
+执行请求已发送, msg_id=538674ee-a979dea4c81de83f44b11d50_14916_4
+[Stream]: Final Classification Results:
+Total operations: 1536
+S operations: 1024
+M operations: 512
+
+Sequence Pattern Verification:
+First operation: S
+Last operation: S
+No consecutive M operations found ✓
+M operations are followed by clusters: [2]
+All M operations followed by same cluster: True
+
+First 50 operations: SMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSM
+[Stream]: Complete operation sequence saved to ./result.txt
+[Stream]: Sequence length: 1536
+
+FINAL CONSTRAINT CHECK:
+1. 1024 S and 512 M: ✓
+2. First operation is S: ✓
+3. No consecutive M operations: ✓
+4. M followed by one same group: ✓
+
+ALL CONSTRAINTS SATISFIED!
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [08/Oct/2026 23:48:57] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Visualize the clustering results
+plt.figure(figsize=(15, 6))
+
+# Plot 1: PCA components colored by cluster
+plt.subplot(1, 2, 1)
+for cluster in range(3):
+    mask = labels == cluster
+    plt.scatter(segments_pca[mask, 0], segments_pca[mask, 1], 
+                label=f'Cluster {cluster}', alpha=0.7)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('PCA Clustering Results')
+plt.legend()
+
+# Plot 2: Operation sequence
+plt.subplot(1, 2, 2)
+operation_numeric = np.where(operation_labels == 'S', 0, 1)
+plt.plot(operation_numeric, '.-', markersize=3, alpha=0.7)
+plt.xlabel('Operation Index')
+plt.ylabel('Operation Type (0=S, 1=M)')
+plt.title('Operation Sequence')
+plt.yticks([0, 1], ['S', 'M'])
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_234922_780956_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_234922_780956_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# Print some statistics
+print("Sequence Statistics:")
+print(f"Total length: {len(operation_labels)}")
+print(f"S operations: {np.sum(operation_labels == 'S')} ({np.sum(operation_labels == 'S')/len(operation_labels)*100:.1f}%)")
+print(f"M operations: {np.sum(operation_labels == 'M')} ({np.sum(operation_labels == 'M')/len(operation_labels)*100:.1f}%)")
+
+# Verify the file was written correctly
+with open('./result.txt', 'r') as f:
+    saved_sequence = f.read().strip()
+
+print(f"\nSaved sequence length: {len(saved_sequence)}")
+print(f"Sequence matches: {saved_sequence == ''.join(operation_labels)}")
+print(f"First 100 characters of saved sequence: {saved_sequence[:100]}")
+============================================================
+
+执行请求已发送, msg_id=538674ee-a979dea4c81de83f44b11d50_14916_5
+[Stream]: {"plot_path": "../images/img_20261008_234922_780956_2.png"}
+Sequence Statistics:
+Total length: 1536
+[Stream]: S operations: 1024 (66.7%)
+M operations: 512 (33.3%)
+[Stream]: Saved sequence length: 1536
+[Stream]: Sequence matches: True
+First 100 characters of saved sequence: SMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSM
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:49:23] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:49:34] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

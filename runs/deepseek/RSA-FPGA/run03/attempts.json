@@ -1,0 +1,40 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-FPGA",
+  "path": "runs/deepseek/RSA-FPGA/run03",
+  "original_calls_sha256": "c8a85e7fd782caf44ca678c3890edab8f6bd158bfdfbf7b746487ad39b6906ad",
+  "replay_path": "<LOCAL>/run03",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "66a3c666af557eb0c96da126685fd68790583727ef4a802ebdec74777d78a1ac",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-FPGA/run03\\snapshots\\call004_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

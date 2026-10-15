@@ -1,0 +1,770 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/ECC-AT89S52/run02\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5067)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5067
+Press CTRL+C to quit
+127.0.0.1 - - [05/Oct/2026 20:26:01] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+import os
+
+# Load the trace data
+trace_path = "./trace/ECC-AT89S52-32148.npy"
+trace_data = np.load(trace_path)
+print(f"Trace data shape: {trace_data.shape}")
+print(f"Trace data type: {trace_data.dtype}")
+print(f"Trace data range: {trace_data.min()} to {trace_data.max()}")
+
+# Plot the entire trace to visualize it
+plt.figure(figsize=(15, 6))
+plt.plot(trace_data)
+plt.title("Full ECC Power Trace")
+plt.xlabel("Sample Index")
+plt.ylabel("Power Consumption")
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202618_028417_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202618_028417_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_1
+[Stream]: Trace data shape: (32148,)
+Trace data type: float64
+[Stream]: Trace data range: -56.9932 to 39.88148352941177
+[Stream]: {"plot_path": "../images/img_20261005_202618_028417_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:26:19] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Segment the waveform into 188 equal parts
+n_segments = 188
+segment_length = len(trace_data) // n_segments
+print(f"Total samples: {len(trace_data)}")
+print(f"Segment length: {segment_length}")
+print(f"Total segments: {n_segments}")
+
+# Create segments
+segments = []
+for i in range(n_segments):
+    start_idx = i * segment_length
+    end_idx = (i + 1) * segment_length
+    segment = trace_data[start_idx:end_idx]
+    segments.append(segment)
+
+segments = np.array(segments)
+print(f"Segments shape: {segments.shape}")
+
+# Plot a few segments to verify segmentation
+plt.figure(figsize=(15, 10))
+for i in range(6):
+    plt.subplot(2, 3, i+1)
+    plt.plot(segments[i])
+    plt.title(f"Segment {i+1}")
+    plt.xlabel("Sample Index")
+    plt.ylabel("Power")
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202643_835911_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202643_835911_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_2
+[Stream]: Total samples: 32148
+Segment length: 171
+Total segments: 188
+[Stream]: Segments shape: (188, 171)
+[Stream]: {"plot_path": "../images/img_20261005_202643_835911_2.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [05/Oct/2026 20:26:44] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 1: PCA + KMeans
+print("=== ATTEMPT 1: PCA + KMeans ===\n")
+
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=2)
+segments_pca = pca.fit_transform(segments_scaled)
+
+print(f"PCA explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(segments_pca)
+
+# Determine which cluster is D (larger cluster)
+unique, counts = np.unique(labels, return_counts=True)
+cluster_sizes = dict(zip(unique, counts))
+print(f"Cluster sizes: {cluster_sizes}")
+
+# Assign larger cluster as D
+if counts[0] > counts[1]:
+    d_label = 0
+    a_label = 1
+else:
+    d_label = 1
+    a_label = 0
+
+# Convert labels to D/A
+operations = []
+for label in labels:
+    if label == d_label:
+        operations.append('D')
+    else:
+        operations.append('A')
+
+operations = np.array(operations)
+
+# Verify constraints
+d_count = np.sum(operations == 'D')
+print(f"D count: {d_count}")
+
+# Check first operation
+first_is_d = operations[0] == 'D'
+print(f"First operation is D: {first_is_d}")
+
+# Check no consecutive A operations
+consecutive_a = False
+for i in range(1, len(operations)):
+    if operations[i] == 'A' and operations[i-1] == 'A':
+        consecutive_a = True
+        break
+print(f"No consecutive A operations: {not consecutive_a}")
+
+# Plot the PCA results
+plt.figure(figsize=(10, 6))
+colors = ['red' if op == 'A' else 'blue' for op in operations]
+plt.scatter(segments_pca[:, 0], segments_pca[:, 1], c=colors, alpha=0.7)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('PCA + KMeans Clustering (Attempt 1)')
+plt.legend(['A', 'D'])
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202741_325340_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202741_325340_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+print(f"\nConstraints satisfied: {d_count == 125 and first_is_d and not consecutive_a}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_3
+[Stream]: === ATTEMPT 1: PCA + KMeans ===
+[Stream]: 
+[Stream]: PCA explained variance ratio: [0.50780757 0.19247161]
+Total explained variance: 0.700
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster sizes: {0: 77, 1: 111}
+D count: 111
+First operation is D: True
+No consecutive A operations: False
+[Stream]: {"plot_path": "../images/img_20261005_202741_325340_3.png"}
+
+Constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 7 条输出。
+127.0.0.1 - - [05/Oct/2026 20:27:42] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 2: PCA with more components + KMeans
+print("=== ATTEMPT 2: PCA (more components) + KMeans ===\n")
+
+# Apply PCA with more components
+pca2 = PCA(n_components=5)
+segments_pca2 = pca2.fit_transform(segments_scaled)
+
+print(f"PCA explained variance ratio: {pca2.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca2.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans2 = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels2 = kmeans2.fit_predict(segments_pca2)
+
+# Determine which cluster is D (larger cluster)
+unique2, counts2 = np.unique(labels2, return_counts=True)
+cluster_sizes2 = dict(zip(unique2, counts2))
+print(f"Cluster sizes: {cluster_sizes2}")
+
+# Assign larger cluster as D
+if counts2[0] > counts2[1]:
+    d_label2 = 0
+    a_label2 = 1
+else:
+    d_label2 = 1
+    a_label2 = 0
+
+# Convert labels to D/A
+operations2 = []
+for label in labels2:
+    if label == d_label2:
+        operations2.append('D')
+    else:
+        operations2.append('A')
+
+operations2 = np.array(operations2)
+
+# Verify constraints
+d_count2 = np.sum(operations2 == 'D')
+print(f"D count: {d_count2}")
+
+# Check first operation
+first_is_d2 = operations2[0] == 'D'
+print(f"First operation is D: {first_is_d2}")
+
+# Check no consecutive A operations
+consecutive_a2 = False
+for i in range(1, len(operations2)):
+    if operations2[i] == 'A' and operations2[i-1] == 'A':
+        consecutive_a2 = True
+        break
+print(f"No consecutive A operations: {not consecutive_a2}")
+
+print(f"\nConstraints satisfied: {d_count2 == 125 and first_is_d2 and not consecutive_a2}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_4
+[Stream]: === ATTEMPT 2: PCA (more components) + KMeans ===
+[Stream]: PCA explained variance ratio: [0.50780757 0.19247161 0.06954601 0.04251653 0.0273414 ]
+Total explained variance: 0.840
+[Stream]: Cluster sizes: {0: 77, 1: 111}
+D count: 111
+First operation is D: True
+No consecutive A operations: False
+
+Constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:28:23] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 3: t-SNE + KMeans
+print("=== ATTEMPT 3: t-SNE + KMeans ===\n")
+
+from sklearn.manifold import TSNE
+
+# Apply t-SNE
+tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+segments_tsne = tsne.fit_transform(segments_scaled)
+
+# Apply KMeans clustering
+kmeans3 = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels3 = kmeans3.fit_predict(segments_tsne)
+
+# Determine which cluster is D (larger cluster)
+unique3, counts3 = np.unique(labels3, return_counts=True)
+cluster_sizes3 = dict(zip(unique3, counts3))
+print(f"Cluster sizes: {cluster_sizes3}")
+
+# Assign larger cluster as D
+if counts3[0] > counts3[1]:
+    d_label3 = 0
+    a_label3 = 1
+else:
+    d_label3 = 1
+    a_label3 = 0
+
+# Convert labels to D/A
+operations3 = []
+for label in labels3:
+    if label == d_label3:
+        operations3.append('D')
+    else:
+        operations3.append('A')
+
+operations3 = np.array(operations3)
+
+# Verify constraints
+d_count3 = np.sum(operations3 == 'D')
+print(f"D count: {d_count3}")
+
+# Check first operation
+first_is_d3 = operations3[0] == 'D'
+print(f"First operation is D: {first_is_d3}")
+
+# Check no consecutive A operations
+consecutive_a3 = False
+for i in range(1, len(operations3)):
+    if operations3[i] == 'A' and operations3[i-1] == 'A':
+        consecutive_a3 = True
+        break
+print(f"No consecutive A operations: {not consecutive_a3}")
+
+# Plot the t-SNE results
+plt.figure(figsize=(10, 6))
+colors = ['red' if op == 'A' else 'blue' for op in operations3]
+plt.scatter(segments_tsne[:, 0], segments_tsne[:, 1], c=colors, alpha=0.7)
+plt.xlabel('t-SNE 1')
+plt.ylabel('t-SNE 2')
+plt.title('t-SNE + KMeans Clustering (Attempt 3)')
+plt.legend(['A', 'D'])
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202907_444573_4.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202907_444573_4.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+print(f"\nConstraints satisfied: {d_count3 == 125 and first_is_d3 and not consecutive_a3}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_5
+[Stream]: === ATTEMPT 3: t-SNE + KMeans ===
+[Stream]: Cluster sizes: {0: 77, 1: 111}
+D count: 111
+First operation is D: True
+No consecutive A operations: False
+[Stream]: {"plot_path": "../images/img_20261005_202907_444573_4.png"}
+
+Constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:29:08] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 4: PCA + DBSCAN
+print("=== ATTEMPT 4: PCA + DBSCAN ===\n")
+
+from sklearn.cluster import DBSCAN
+
+# Use PCA with 2 components
+pca4 = PCA(n_components=2)
+segments_pca4 = pca4.fit_transform(segments_scaled)
+
+# Apply DBSCAN clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels4 = dbscan.fit_predict(segments_pca4)
+
+# Check number of clusters
+unique4, counts4 = np.unique(labels4, return_counts=True)
+print(f"DBSCAN labels: {unique4}")
+print(f"DBSCAN counts: {dict(zip(unique4, counts4))}")
+
+# If we don't get exactly 2 clusters, try different parameters
+if len(unique4) != 2:
+    print("DBSCAN didn't find exactly 2 clusters, trying different parameters...")
+    # Try with different eps values
+    for eps_val in [0.3, 0.4, 0.6, 0.7]:
+        dbscan_try = DBSCAN(eps=eps_val, min_samples=5)
+        labels_try = dbscan_try.fit_predict(segments_pca4)
+        unique_try = np.unique(labels_try)
+        print(f"eps={eps_val}: {len(unique_try)} clusters")
+        if len(unique_try) == 2:
+            labels4 = labels_try
+            unique4 = unique_try
+            counts4 = np.unique(labels4, return_counts=True)[1]
+            break
+
+# If we still don't have 2 clusters, fall back to KMeans
+if len(unique4) != 2:
+    print("Using KMeans as fallback...")
+    kmeans4 = KMeans(n_clusters=2, random_state=42, n_init=10)
+    labels4 = kmeans4.fit_predict(segments_pca4)
+    unique4, counts4 = np.unique(labels4, return_counts=True)
+
+print(f"Final cluster sizes: {dict(zip(unique4, counts4))}")
+
+# Assign larger cluster as D
+if counts4[0] > counts4[1]:
+    d_label4 = 0
+    a_label4 = 1
+else:
+    d_label4 = 1
+    a_label4 = 0
+
+# Convert labels to D/A
+operations4 = []
+for label in labels4:
+    if label == d_label4:
+        operations4.append('D')
+    else:
+        operations4.append('A')
+
+operations4 = np.array(operations4)
+
+# Verify constraints
+d_count4 = np.sum(operations4 == 'D')
+print(f"D count: {d_count4}")
+
+# Check first operation
+first_is_d4 = operations4[0] == 'D'
+print(f"First operation is D: {first_is_d4}")
+
+# Check no consecutive A operations
+consecutive_a4 = False
+for i in range(1, len(operations4)):
+    if operations4[i] == 'A' and operations4[i-1] == 'A':
+        consecutive_a4 = True
+        break
+print(f"No consecutive A operations: {not consecutive_a4}")
+
+print(f"\nConstraints satisfied: {d_count4 == 125 and first_is_d4 and not consecutive_a4}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_6
+[Stream]: === ATTEMPT 4: PCA + DBSCAN ===
+[Stream]: 
+[Stream]: DBSCAN labels: [-1  0  1  2  3  4  5  6  7]
+[Stream]: DBSCAN counts: {-1: 48, 0: 30, 1: 57, 2: 21, 3: 7, 4: 3, 5: 7, 6: 10, 7: 5}
+DBSCAN didn't find exactly 2 clusters, trying different parameters...
+eps=0.3: 7 clusters
+[Stream]: eps=0.4: 6 clusters
+[Stream]: eps=0.6: 7 clusters
+[Stream]: eps=0.7: 4 clusters
+Using KMeans as fallback...
+[Stream]: Final cluster sizes: {0: 77, 1: 111}
+D count: 111
+First operation is D: True
+No consecutive A operations: False
+
+Constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 8 条输出。
+127.0.0.1 - - [05/Oct/2026 20:30:10] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 5: PCA + Gaussian Mixture Model
+print("=== ATTEMPT 5: PCA + GMM ===\n")
+
+from sklearn.mixture import GaussianMixture
+
+# Use PCA with 2 components
+pca5 = PCA(n_components=2)
+segments_pca5 = pca5.fit_transform(segments_scaled)
+
+# Apply Gaussian Mixture Model
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels5 = gmm.fit_predict(segments_pca5)
+
+# Determine which cluster is D (larger cluster)
+unique5, counts5 = np.unique(labels5, return_counts=True)
+cluster_sizes5 = dict(zip(unique5, counts5))
+print(f"Cluster sizes: {cluster_sizes5}")
+
+# Assign larger cluster as D
+if counts5[0] > counts5[1]:
+    d_label5 = 0
+    a_label5 = 1
+else:
+    d_label5 = 1
+    a_label5 = 0
+
+# Convert labels to D/A
+operations5 = []
+for label in labels5:
+    if label == d_label5:
+        operations5.append('D')
+    else:
+        operations5.append('A')
+
+operations5 = np.array(operations5)
+
+# Verify constraints
+d_count5 = np.sum(operations5 == 'D')
+print(f"D count: {d_count5}")
+
+# Check first operation
+first_is_d5 = operations5[0] == 'D'
+print(f"First operation is D: {first_is_d5}")
+
+# Check no consecutive A operations
+consecutive_a5 = False
+for i in range(1, len(operations5)):
+    if operations5[i] == 'A' and operations5[i-1] == 'A':
+        consecutive_a5 = True
+        break
+print(f"No consecutive A operations: {not consecutive_a5}")
+
+print(f"\nConstraints satisfied: {d_count5 == 125 and first_is_d5 and not consecutive_a5}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_7
+[Stream]: === ATTEMPT 5: PCA + GMM ===
+[Stream]: Cluster sizes: {0: 77, 1: 111}
+D count: 111
+First operation is D: True
+No consecutive A operations: False
+
+Constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:30:47] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 6: Statistical Features + PCA + KMeans
+print("=== ATTEMPT 6: Statistical Features + PCA + KMeans ===\n")
+
+# Extract statistical features from each segment
+features = []
+for segment in segments:
+    feature_vector = [
+        np.mean(segment),      # Mean
+        np.std(segment),       # Standard deviation
+        np.var(segment),       # Variance
+        np.max(segment),       # Maximum
+        np.min(segment),       # Minimum
+        np.median(segment),    # Median
+        np.percentile(segment, 25),  # 25th percentile
+        np.percentile(segment, 75),  # 75th percentile
+        np.sum(np.abs(segment)),     # Sum of absolute values
+        np.sum(segment**2),          # Energy
+    ]
+    features.append(feature_vector)
+
+features = np.array(features)
+print(f"Features shape: {features.shape}")
+
+# Standardize the features
+scaler6 = StandardScaler()
+features_scaled = scaler6.fit_transform(features)
+
+# Apply PCA
+pca6 = PCA(n_components=3)
+features_pca = pca6.fit_transform(features_scaled)
+
+print(f"PCA explained variance ratio: {pca6.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca6.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans6 = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels6 = kmeans6.fit_predict(features_pca)
+
+# Determine which cluster is D (larger cluster)
+unique6, counts6 = np.unique(labels6, return_counts=True)
+cluster_sizes6 = dict(zip(unique6, counts6))
+print(f"Cluster sizes: {cluster_sizes6}")
+
+# Assign larger cluster as D
+if counts6[0] > counts6[1]:
+    d_label6 = 0
+    a_label6 = 1
+else:
+    d_label6 = 1
+    a_label6 = 0
+
+# Convert labels to D/A
+operations6 = []
+for label in labels6:
+    if label == d_label6:
+        operations6.append('D')
+    else:
+        operations6.append('A')
+
+operations6 = np.array(operations6)
+
+# Verify constraints
+d_count6 = np.sum(operations6 == 'D')
+print(f"D count: {d_count6}")
+
+# Check first operation
+first_is_d6 = operations6[0] == 'D'
+print(f"First operation is D: {first_is_d6}")
+
+# Check no consecutive A operations
+consecutive_a6 = False
+for i in range(1, len(operations6)):
+    if operations6[i] == 'A' and operations6[i-1] == 'A':
+        consecutive_a6 = True
+        break
+print(f"No consecutive A operations: {not consecutive_a6}")
+
+print(f"\nConstraints satisfied: {d_count6 == 125 and first_is_d6 and not consecutive_a6}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_8
+[Stream]: === ATTEMPT 6: Statistical Features + PCA + KMeans ===
+[Stream]: Features shape: (188, 10)
+[Stream]: PCA explained variance ratio: [0.46563777 0.39480814 0.0920923 ]
+[Stream]: Total explained variance: 0.953
+[Stream]: Cluster sizes: {0: 140, 1: 48}
+D count: 140
+First operation is D: False
+No consecutive A operations: True
+
+Constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [05/Oct/2026 20:31:47] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 7: Different Statistical Features + PCA + KMeans
+print("=== ATTEMPT 7: Different Statistical Features + PCA + KMeans ===\n")
+
+# Extract different statistical features from each segment
+features7 = []
+for segment in segments:
+    feature_vector = [
+        np.mean(segment),           # Mean
+        np.std(segment),            # Standard deviation
+        np.var(segment),            # Variance
+        np.max(segment) - np.min(segment),  # Range
+        np.median(segment),         # Median
+        np.mean(np.abs(segment)),   # Mean absolute value
+        np.sum(segment**2),         # Energy
+        np.sum(np.diff(segment)**2), # Differential energy
+        np.mean(np.diff(segment)),  # Mean of differences
+        np.std(np.diff(segment)),   # Std of differences
+    ]
+    features7.append(feature_vector)
+
+features7 = np.array(features7)
+print(f"Features shape: {features7.shape}")
+
+# Standardize the features
+scaler7 = StandardScaler()
+features_scaled7 = scaler7.fit_transform(features7)
+
+# Apply PCA with different number of components
+pca7 = PCA(n_components=4)
+features_pca7 = pca7.fit_transform(features_scaled7)
+
+print(f"PCA explained variance ratio: {pca7.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca7.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering with different random state
+kmeans7 = KMeans(n_clusters=2, random_state=123, n_init=10)
+labels7 = kmeans7.fit_predict(features_pca7)
+
+# Determine which cluster is D (larger cluster)
+unique7, counts7 = np.unique(labels7, return_counts=True)
+cluster_sizes7 = dict(zip(unique7, counts7))
+print(f"Cluster sizes: {cluster_sizes7}")
+
+# Assign larger cluster as D
+if counts7[0] > counts7[1]:
+    d_label7 = 0
+    a_label7 = 1
+else:
+    d_label7 = 1
+    a_label7 = 0
+
+# Convert labels to D/A
+operations7 = []
+for label in labels7:
+    if label == d_label7:
+        operations7.append('D')
+    else:
+        operations7.append('A')
+
+operations7 = np.array(operations7)
+
+# Verify constraints
+d_count7 = np.sum(operations7 == 'D')
+print(f"D count: {d_count7}")
+
+# Check first operation
+first_is_d7 = operations7[0] == 'D'
+print(f"First operation is D: {first_is_d7}")
+
+# Check no consecutive A operations
+consecutive_a7 = False
+for i in range(1, len(operations7)):
+    if operations7[i] == 'A' and operations7[i-1] == 'A':
+        consecutive_a7 = True
+        break
+print(f"No consecutive A operations: {not consecutive_a7}")
+
+print(f"\nConstraints satisfied: {d_count7 == 125 and first_is_d7 and not consecutive_a7}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_9
+[Stream]: === ATTEMPT 7: Different Statistical Features + PCA + KMeans ===
+[Stream]: Features shape: (188, 10)
+PCA explained variance ratio: [0.56852492 0.38280681 0.03353559 0.0096139 ]
+Total explained variance: 0.994
+[Stream]: Cluster sizes: {0: 63, 1: 125}
+D count: 125
+First operation is D: True
+No consecutive A operations: True
+
+Constraints satisfied: True
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:32:45] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Save the operation sequence to file
+operation_sequence = ''.join(operations7)
+print(f"Operation sequence length: {len(operation_sequence)}")
+print(f"First 50 operations: {operation_sequence[:50]}")
+print(f"Last 50 operations: {operation_sequence[-50:]}")
+
+# Write to file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+
+print(f"\nOperation sequence successfully written to ./result.txt")
+print(f"Final verification:")
+print(f"- Total operations: {len(operation_sequence)}")
+print(f"- D operations: {d_count7}")
+print(f"- A operations: {len(operation_sequence) - d_count7}")
+print(f"- First operation: {operation_sequence[0]}")
+print(f"- No consecutive A operations: {not consecutive_a7}")
+============================================================
+
+执行请求已发送, msg_id=dd67fbe6-a6dc39d9ae27f98157e9f7dd_30148_10
+[Stream]: Operation sequence length: 188
+First 50 operations: DDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADD
+Last 50 operations: DADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDA
+[Stream]: Operation sequence successfully written to ./result.txt
+Final verification:
+- Total operations: 188
+- D operations: 125
+- A operations: 63
+- First operation: D
+- No consecutive A operations: True
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:33:04] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [05/Oct/2026 20:33:11] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

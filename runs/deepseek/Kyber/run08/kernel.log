@@ -1,0 +1,288 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/Kyber/run08\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5065)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5065
+Press CTRL+C to quit
+127.0.0.1 - - [05/Oct/2026 20:33:35] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace data
+print("Loading trace data...")
+trace = np.load('./trace/Kyber-34560.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Calculate segment length
+num_segments = 256
+segment_length = len(trace) // num_segments
+print(f"Segment length: {segment_length}")
+print(f"Total samples: {len(trace)}")
+print(f"Expected total from segments: {num_segments * segment_length}")
+
+# Verify we can divide evenly
+if len(trace) % num_segments != 0:
+    print("Warning: Trace length not perfectly divisible by 256")
+    # Truncate to make it divisible
+    trace = trace[:num_segments * segment_length]
+    print(f"Truncated trace length: {len(trace)}")
+
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_203347_477348_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_203347_477348_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+
+============================================================
+
+执行请求已发送, msg_id=ace7fc4d-e662710dddacee9619455953_33112_1
+[Stream]: Loading trace data...
+[Stream]: 
+[Stream]: Trace shape: (34560,)
+[Stream]: Trace length: 34560
+Segment length: 135
+Total samples: 34560
+Expected total from segments: 34560
+[Stream]: {"plot_path": "../images/img_20261005_203347_477348_1.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 6 条输出。
+127.0.0.1 - - [05/Oct/2026 20:33:48] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 1: Segment the waveform into 256 equal parts
+segments = trace.reshape(num_segments, segment_length)
+print(f"Segments shape: {segments.shape}")
+
+# Visualize a few segments to understand the data
+plt.figure(figsize=(12, 8))
+for i in range(6):
+    plt.subplot(2, 3, i+1)
+    plt.plot(segments[i])
+    plt.title(f'Segment {i}')
+    plt.xlabel('Sample')
+    plt.ylabel('Amplitude')
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_203356_236494_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_203356_236494_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=ace7fc4d-e662710dddacee9619455953_33112_2
+[Stream]: Segments shape: (256, 135)
+[Stream]: 
+[Stream]: {"plot_path": "../images/img_20261005_203356_236494_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:33:57] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 2: Apply PCA for dimensionality reduction
+print("Applying PCA...")
+pca = PCA(n_components=2)
+segments_pca = pca.fit_transform(segments)
+print(f"PCA explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca.explained_variance_ratio_):.3f}")
+
+# Visualize PCA results
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca[:, 0], segments_pca[:, 1], alpha=0.7)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('PCA of Segments')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_203405_518527_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_203405_518527_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=ace7fc4d-e662710dddacee9619455953_33112_3
+[Stream]: Applying PCA...
+[Stream]: PCA explained variance ratio: [0.48553438 0.22420488]
+[Stream]: Total explained variance: 0.710
+[Stream]: {"plot_path": "../images/img_20261005_203405_518527_3.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [05/Oct/2026 20:34:06] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 3: Apply KMeans clustering with k=2
+print("Applying KMeans clustering...")
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+cluster_labels = kmeans.fit_predict(segments)
+
+print(f"Cluster sizes: {np.bincount(cluster_labels)}")
+
+# Identify which cluster is larger (should be 0 bits)
+if np.bincount(cluster_labels)[0] > np.bincount(cluster_labels)[1]:
+    # Cluster 0 is larger, so assign it as 0 bits
+    bit_mapping = {0: 0, 1: 1}
+    print("Cluster 0 is larger - assigning as 0 bits")
+else:
+    # Cluster 1 is larger, so assign it as 0 bits
+    bit_mapping = {0: 1, 1: 0}
+    print("Cluster 1 is larger - assigning as 0 bits")
+
+# Map cluster labels to bits
+bit_sequence = [bit_mapping[label] for label in cluster_labels]
+print(f"Bit sequence length: {len(bit_sequence)}")
+print(f"Number of 0s: {bit_sequence.count(0)}")
+print(f"Number of 1s: {bit_sequence.count(1)}")
+
+# Visualize clustering results
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.scatter(segments_pca[:, 0], segments_pca[:, 1], c=cluster_labels, alpha=0.7)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('KMeans Clustering Results')
+plt.colorbar(label='Cluster')
+
+plt.subplot(1, 2, 2)
+plt.plot(bit_sequence, 'o-', markersize=3)
+plt.xlabel('Segment Index')
+plt.ylabel('Bit Value')
+plt.title('Extracted Bit Sequence')
+plt.grid(True)
+
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_203426_223567_4.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_203426_223567_4.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=ace7fc4d-e662710dddacee9619455953_33112_4
+[Stream]: Applying KMeans clustering...
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster sizes: [182  74]
+Cluster 0 is larger - assigning as 0 bits
+Bit sequence length: 256
+Number of 0s: 182
+Number of 1s: 74
+[Stream]: {"plot_path": "../images/img_20261005_203426_223567_4.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 6 条输出。
+127.0.0.1 - - [05/Oct/2026 20:34:27] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 4: Save the bit sequence to file
+bit_string = ''.join(str(bit) for bit in bit_sequence)
+print(f"First 50 bits: {bit_string[:50]}")
+print(f"Last 50 bits: {bit_string[-50:]}")
+
+# Save to file
+with open('./result.txt', 'w') as f:
+    f.write(bit_string)
+
+print(f"Bit sequence saved to ./result.txt")
+print(f"Total bits written: {len(bit_string)}")
+
+# Verify the file was written correctly
+with open('./result.txt', 'r') as f:
+    saved_bits = f.read().strip()
+
+print(f"Bits read back from file: {len(saved_bits)}")
+print(f"First 20 bits from file: {saved_bits[:20]}")
+print(f"Verification: {'PASS' if saved_bits == bit_string else 'FAIL'}")
+============================================================
+
+执行请求已发送, msg_id=ace7fc4d-e662710dddacee9619455953_33112_5
+[Stream]: First 50 bits: 00100001000000100000110010000000100010010101000010
+Last 50 bits: 01000001100010100000011000100010010001101000000100
+[Stream]: Bit sequence saved to ./result.txt
+[Stream]: Total bits written: 256
+[Stream]: Bits read back from file: 256
+[Stream]: First 20 bits from file: 00100001000000100000
+Verification: PASS
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [05/Oct/2026 20:34:38] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Final summary and visualization
+print("\n=== ANALYSIS SUMMARY ===")
+print(f"Trace file: ./trace/Kyber-34560.npy")
+print(f"Trace length: {len(trace)} samples")
+print(f"Segments: {num_segments} segments of {segment_length} samples each")
+print(f"PCA explained variance: {sum(pca.explained_variance_ratio_):.3f}")
+print(f"Cluster distribution: {np.bincount(cluster_labels)}")
+print(f"Bit distribution: 0s={bit_sequence.count(0)}, 1s={bit_sequence.count(1)}")
+print(f"Output file: ./result.txt")
+
+# Display the complete bit sequence in a readable format
+print("\nComplete bit sequence:")
+for i in range(0, 256, 32):
+    print(f"{i:3d}-{i+31:3d}: {bit_string[i:i+32]}")
+============================================================
+
+执行请求已发送, msg_id=ace7fc4d-e662710dddacee9619455953_33112_6
+[Stream]: === ANALYSIS SUMMARY ===
+[Stream]: Trace file: ./trace/Kyber-34560.npy
+Trace length: 34560 samples
+Segments: 256 segments of 135 samples each
+PCA explained variance: 0.710
+Cluster distribution: [182  74]
+Bit distribution: 0s=182, 1s=74
+Output file: ./result.txt
+
+Complete bit sequence:
+  0- 31: 00100001000000100000110010000000
+ 32- 63: 10001001010100001001110010001001
+ 64- 95: 00000000100110100001101011100110
+ 96-127: 00000100000110001000100001000010
+128-159: 01000001011010001000000000000010
+160-191: 00101101011000010000000100111011
+192-223: 00100001010000010000011000101000
+224-255: 00011000100010010001101000000100
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:34:50] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [05/Oct/2026 20:35:01] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

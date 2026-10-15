@@ -1,0 +1,77 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-ASIC",
+  "path": "runs/deepseek/RSA-ASIC/run09",
+  "original_calls_sha256": "f797ad473a26d8d74b8274df1595cc59ace08bd28768112f02a1739f5ec76d0a",
+  "replay_path": "<LOCAL>/run09",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "37f5fd7d45e981531512d7ecc7d350a11fe5a46c496fb2534900542338ad7a44",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 44.3359375,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "8854166576a9691dda09b5aa5be875759c39e4656036ae341ca7f972dda031f2"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 32.682291666666664,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "12bf453e67a928662ecda18cef734c9d659966c0e32137ff4fd40d4534588fef"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cef0bfa8c7e90b6481e715f75de9369310cc3d5f15c07896ce0b3b710e50cc24"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-ASIC/run09\\snapshots\\call006_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

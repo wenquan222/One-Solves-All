@@ -1,0 +1,77 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-AT89S52",
+  "path": "runs/deepseek/ECC-AT89S52/run07",
+  "original_calls_sha256": "1595f482f1b785107fef0ab9ebc166e76b310b242199ec96687ca3f9e49335f5",
+  "replay_path": "<LOCAL>/run07",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "32fa0ffd36f78b9b5735cd6811294f88d7dd3b398cc2d49f742ecd9d8ced0f6d",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "original_snapshot_or_full_print",
+        "variable": "Original printed complete sequence",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/ECC-AT89S52/run07\\snapshots\\call006_0001_result.txt",
+        "sequence_sha256": "36675a0f4fff8521bc0107f32d3f14c81b7e321fdbdeb2ab10ea4e3d2b78d61a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

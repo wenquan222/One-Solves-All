@@ -1,0 +1,2391 @@
+{
+  "trace": "RSA-FPGA",
+  "data": "new",
+  "env": {
+    "python": "3.11.0",
+    "numpy": "1.26.4",
+    "scipy": "1.12.0",
+    "sklearn": "1.4.1.post1",
+    "umap": "0.5.7"
+  },
+  "mode": "random",
+  "menu": "full",
+  "kmeans_n_init": "auto",
+  "seed": 2,
+  "budget": 100,
+  "total_sec": 89.72598814964294,
+  "attempts": [
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 30,
+          "min_dist": 0.5
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 13.024152994155884,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 1.0,
+          "degree": 2
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1243448257446289,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "KMeans",
+        "clu_kw": {}
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 609,
+      "n_d": 1418,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 58.984375,
+      "sec": 0.19418954849243164,
+      "n_m_bad": 118,
+      "n_s1_bad": 97
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 5,
+          "gamma": 1.0
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "full"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 533,
+      "n_d": 1043,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 34.5703125,
+      "sec": 0.1665515899658203,
+      "n_m_bad": 330,
+      "n_s1_bad": 184
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 1.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1561422348022461,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "cosine",
+          "n_components": 2,
+          "gamma": null
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "diag"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 872,
+      "n_d": 1217,
+      "n_aa": 118,
+      "first_bad": 1,
+      "acc": 45.8984375,
+      "sec": 0.12215733528137207,
+      "n_m_bad": 134,
+      "n_s1_bad": 426
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 1.0,
+          "degree": 4
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "complete"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.18015074729919434,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 3,
+          "gamma": 0.01
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 782,
+      "n_d": 1202,
+      "n_aa": 21,
+      "first_bad": 1,
+      "acc": 69.53125,
+      "sec": 0.1529831886291504,
+      "n_m_bad": 160,
+      "n_s1_bad": 422
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.834774971008301,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 0.01
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.14383935928344727,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 15,
+          "min_dist": 0.8
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "tied"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 52,
+      "n_d": 1023,
+      "n_aa": 1,
+      "first_bad": 0,
+      "acc": 99.93489583333333,
+      "sec": 3.5661611557006836,
+      "n_m_bad": 50,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 1.0,
+          "degree": 4
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "complete"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 848,
+      "n_d": 956,
+      "n_aa": 189,
+      "first_bad": 0,
+      "acc": 35.15625,
+      "sec": 0.14229583740234375,
+      "n_m_bad": 572,
+      "n_s1_bad": 19
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 10.0,
+          "degree": 2
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "full"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 1100,
+      "n_d": 1533,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.47135416666667,
+      "sec": 0.12351655960083008,
+      "n_m_bad": 0,
+      "n_s1_bad": 590
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 2,
+          "gamma": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.12723588943481445,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 0.1,
+          "degree": 2
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 650,
+      "n_d": 1415,
+      "n_aa": 7,
+      "first_bad": 1,
+      "acc": 64.2578125,
+      "sec": 0.11858797073364258,
+      "n_m_bad": 109,
+      "n_s1_bad": 142
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 3,
+          "gamma": 1.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.19128799438476562,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 3,
+          "gamma": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.12882709503173828,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.8
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.682785749435425,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.001,
+          "degree": 4
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "single"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.1300520896911621,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 100,
+          "min_dist": 0.8
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 25,
+      "n_d": 1018,
+      "n_aa": 8,
+      "first_bad": 1,
+      "acc": 99.609375,
+      "sec": 3.7657763957977295,
+      "n_m_bad": 10,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 5
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 549,
+      "n_d": 1519,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 66.6015625,
+      "sec": 0.11784791946411133,
+      "n_m_bad": 16,
+      "n_s1_bad": 38
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 8
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 10
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 23,
+      "n_d": 1026,
+      "n_aa": 5,
+      "first_bad": 0,
+      "acc": 99.47916666666667,
+      "sec": 0.0872197151184082,
+      "n_m_bad": 6,
+      "n_s1_bad": 10
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.1,
+          "degree": 3
+        },
+        "clu": "KMeans",
+        "clu_kw": {}
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 695,
+      "n_d": 1049,
+      "n_aa": 144,
+      "first_bad": 0,
+      "acc": 45.1171875,
+      "sec": 0.13658547401428223,
+      "n_m_bad": 310,
+      "n_s1_bad": 216
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.1,
+          "degree": 2
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.09729242324829102,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 100,
+          "min_dist": 0.1
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "full"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 16,
+      "n_d": 1020,
+      "n_aa": 5,
+      "first_bad": 1,
+      "acc": 99.73958333333333,
+      "sec": 3.260376453399658,
+      "n_m_bad": 6,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 1.0,
+          "degree": 3
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.14650988578796387,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 0.001,
+          "degree": 3
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 10
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 28,
+      "n_d": 1024,
+      "n_aa": 7,
+      "first_bad": 0,
+      "acc": 99.34895833333333,
+      "sec": 0.1402289867401123,
+      "n_m_bad": 11,
+      "n_s1_bad": 10
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "cosine",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.10948419570922852,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "linear",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "spherical"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 890,
+      "n_d": 955,
+      "n_aa": 225,
+      "first_bad": 0,
+      "acc": 39.388020833333336,
+      "sec": 0.11075520515441895,
+      "n_m_bad": 507,
+      "n_s1_bad": 89
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 2,
+          "gamma": 1.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1402444839477539,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 1.0,
+          "degree": 4
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "tied"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.11800050735473633,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 5,
+          "gamma": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.12767982482910156,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 5,
+          "gamma": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.11865901947021484,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "TSNE",
+        "red_kw": {
+          "perplexity": 100
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "full"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 16,
+      "n_d": 1020,
+      "n_aa": 5,
+      "first_bad": 1,
+      "acc": 99.73958333333333,
+      "sec": 4.811721086502075,
+      "n_m_bad": 6,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.001,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.16393470764160156,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": null,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1645352840423584,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 0.001
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 591,
+      "n_d": 1423,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 59.309895833333336,
+      "sec": 0.24222588539123535,
+      "n_m_bad": 113,
+      "n_s1_bad": 79
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 2,
+          "gamma": 1.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1731576919555664,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 0.01
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.009001970291137695,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.25
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.282378673553467,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 30,
+          "min_dist": 0.5
+        },
+        "clu": "KMeans",
+        "clu_kw": {}
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 14,
+      "n_d": 1021,
+      "n_aa": 5,
+      "first_bad": 0,
+      "acc": 99.8046875,
+      "sec": 0.0060007572174072266,
+      "n_m_bad": 6,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 10.0,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.12906599044799805,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 10.0,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1365952491760254,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.1
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 350,
+      "n_d": 1097,
+      "n_aa": 1,
+      "first_bad": 0,
+      "acc": 93.68489583333333,
+      "sec": 2.5009517669677734,
+      "n_m_bad": 111,
+      "n_s1_bad": 165
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 50
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "complete"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 1154,
+      "n_d": 1532,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.40625,
+      "sec": 0.4042930603027344,
+      "n_m_bad": 3,
+      "n_s1_bad": 642
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.01,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.10358881950378418,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 5
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.06770563125610352,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 3,
+          "gamma": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.11628317832946777,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.1,
+          "degree": 3
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.11644625663757324,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "TSNE",
+        "red_kw": {
+          "perplexity": 10
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.16861629486084,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 10.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.14177465438842773,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": null,
+          "degree": 2
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 807,
+      "n_d": 969,
+      "n_aa": 185,
+      "first_bad": 0,
+      "acc": 46.6796875,
+      "sec": 0.12399578094482422,
+      "n_m_bad": 410,
+      "n_s1_bad": 157
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 30,
+          "min_dist": 0.8
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.9033217430114746,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 30
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.3195798397064209,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 10,
+          "min_dist": 0.8
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.338136911392212,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 10,
+          "min_dist": 0.25
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.251681327819824,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 3,
+          "gamma": 0.001
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.11138367652893066,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.5
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.178656578063965,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 5
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.06100606918334961,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 30,
+          "min_dist": 0.1
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "tied"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 106,
+      "n_d": 1053,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 98.11197916666667,
+      "sec": 3.1137332916259766,
+      "n_m_bad": 48,
+      "n_s1_bad": 29
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 1.0,
+          "degree": 2
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "diag"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 1112,
+      "n_d": 1533,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.47135416666667,
+      "sec": 0.1014094352722168,
+      "n_m_bad": 0,
+      "n_s1_bad": 602
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 0.01,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.16308951377868652,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 10.0,
+          "degree": 4
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "single"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.16938543319702148,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 10.0,
+          "degree": 2
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.11019158363342285,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 9
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.09099030494689941,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": null,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 5
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 531,
+      "n_d": 1506,
+      "n_aa": 4,
+      "first_bad": 0,
+      "acc": 67.31770833333333,
+      "sec": 0.14753031730651855,
+      "n_m_bad": 26,
+      "n_s1_bad": 19
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.12627887725830078,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 5,
+          "gamma": 0.001
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "average"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 576,
+      "n_d": 1489,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 63.606770833333336,
+      "sec": 0.1730952262878418,
+      "n_m_bad": 47,
+      "n_s1_bad": 64
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 100,
+          "min_dist": 0.25
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 3.1652848720550537,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 30,
+          "min_dist": 0.8
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.7172963619232178,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": null,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.012000322341918945,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 4
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 841,
+      "n_d": 1013,
+      "n_aa": 133,
+      "first_bad": 1,
+      "acc": 79.8828125,
+      "sec": 0.06716775894165039,
+      "n_m_bad": 463,
+      "n_s1_bad": 233
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 6
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 20
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 54,
+      "n_d": 1025,
+      "n_aa": 14,
+      "first_bad": 1,
+      "acc": 98.6328125,
+      "sec": 0.06828904151916504,
+      "n_m_bad": 17,
+      "n_s1_bad": 21
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.001,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.005999088287353516,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.25
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.0689876079559326,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 15
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 842,
+      "n_d": 847,
+      "n_aa": 309,
+      "first_bad": 0,
+      "acc": 88.4765625,
+      "sec": 0.09610247611999512,
+      "n_m_bad": 356,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "cosine",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 20
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 544,
+      "n_d": 1355,
+      "n_aa": 1,
+      "first_bad": 0,
+      "acc": 61.1328125,
+      "sec": 0.11631536483764648,
+      "n_m_bad": 169,
+      "n_s1_bad": 43
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.01,
+          "degree": 2
+        },
+        "clu": "KMeans",
+        "clu_kw": {}
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 986,
+      "n_d": 928,
+      "n_aa": 197,
+      "first_bad": 1,
+      "acc": 73.30729166666667,
+      "sec": 0.10573768615722656,
+      "n_m_bad": 462,
+      "n_s1_bad": 230
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": null,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.14351391792297363,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.08489990234375,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 0.001,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.10299825668334961,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 50
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "average"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1532,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.40625,
+      "sec": 0.40068554878234863,
+      "n_m_bad": 4,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": null,
+          "degree": 2
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "single"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.007000923156738281,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "linear",
+          "n_components": 2,
+          "gamma": null
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "full"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 677,
+      "n_d": 1119,
+      "n_aa": 18,
+      "first_bad": 1,
+      "acc": 59.700520833333336,
+      "sec": 0.09637331962585449,
+      "n_m_bad": 250,
+      "n_s1_bad": 313
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": 1.0,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.010999679565429688,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 1.0,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.1294865608215332,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 5,
+          "gamma": null,
+          "degree": 3
+        },
+        "clu": "GMM",
+        "clu_kw": {
+          "covariance_type": "tied"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 674,
+      "n_d": 1533,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.47135416666667,
+      "sec": 0.12020754814147949,
+      "n_m_bad": 2,
+      "n_s1_bad": 162
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 0.01,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.10900068283081055,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 100,
+          "min_dist": 0.0
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 230,
+      "n_d": 974,
+      "n_aa": 81,
+      "first_bad": 1,
+      "acc": 96.74479166666667,
+      "sec": 3.3488361835479736,
+      "n_m_bad": 98,
+      "n_s1_bad": 0
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 2,
+          "gamma": 10.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.0055048465728759766,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "PCA",
+        "red_kw": {
+          "n_components": 1
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 836,
+      "n_d": 1168,
+      "n_aa": 73,
+      "first_bad": 1,
+      "acc": 68.88020833333333,
+      "sec": 0.06142377853393555,
+      "n_m_bad": 260,
+      "n_s1_bad": 358
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 0.1,
+          "degree": 4
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.09993529319763184,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.007998228073120117,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 100,
+          "min_dist": 0.25
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 3.4798145294189453,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 15,
+          "min_dist": 0.0
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 2.652679920196533,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 10.0,
+          "degree": 3
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "average"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.16852450370788574,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 10.0,
+          "degree": 3
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "single"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.12486910820007324,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 30,
+          "min_dist": 0.5
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "complete"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 106,
+      "n_d": 1053,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 98.11197916666667,
+      "sec": 2.768552541732788,
+      "n_m_bad": 48,
+      "n_s1_bad": 29
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 2,
+          "gamma": 0.01,
+          "degree": 4
+        },
+        "clu": "KMeans",
+        "clu_kw": {}
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 514,
+      "n_d": 1534,
+      "n_aa": 0,
+      "first_bad": 1,
+      "acc": 66.53645833333333,
+      "sec": 0.10635495185852051,
+      "n_m_bad": 2,
+      "n_s1_bad": 1
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "TSNE",
+        "red_kw": {
+          "perplexity": 50
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.8,
+          "min_samples": 5
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 3.172898769378662,
+      "error": null
+    }
+  ],
+  "publication_note": "Paper endpoints are computed from attempts with first-passed/last-valid selection."
+}

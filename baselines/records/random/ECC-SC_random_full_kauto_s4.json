@@ -1,0 +1,111 @@
+{
+  "trace": "ECC-SC",
+  "data": "new",
+  "env": {
+    "python": "3.11.0",
+    "numpy": "1.26.4",
+    "scipy": "1.12.0",
+    "sklearn": "1.4.1.post1",
+    "umap": "0.5.7"
+  },
+  "mode": "random",
+  "menu": "full",
+  "kmeans_n_init": "auto",
+  "seed": 4,
+  "budget": 100,
+  "total_sec": 10.739137411117554,
+  "attempts": [
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.9,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 9.313691139221191,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 5,
+          "min_dist": 0.5
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 14,
+      "n_d": 246,
+      "n_aa": 7,
+      "first_bad": 1,
+      "acc": 98.38709677419355,
+      "sec": 0.20159006118774414
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "sigmoid",
+          "n_components": 3,
+          "gamma": 0.01
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 20
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 58,
+      "n_d": 220,
+      "n_aa": 26,
+      "first_bad": 0,
+      "acc": 91.39784946236558,
+      "sec": 0.013607501983642578
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 50,
+          "min_dist": 0.1
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "average"
+        }
+      },
+      "valid": true,
+      "passed": true,
+      "violation": 0,
+      "n_d": 252,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 100.0,
+      "sec": 0.45810437202453613
+    }
+  ],
+  "publication_note": "Paper endpoints are computed from attempts with first-passed/last-valid selection."
+}

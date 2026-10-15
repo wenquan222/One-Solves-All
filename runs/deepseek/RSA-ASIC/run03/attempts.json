@@ -1,0 +1,512 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-ASIC",
+  "path": "runs/deepseek/RSA-ASIC/run03",
+  "original_calls_sha256": "110c8e4bb7589b6bc0c5bf47cfe83e8e94bb623d930303593160455187124f84",
+  "replay_path": "<LOCAL>/run03",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "f09380823de8f1e805708cf7906b2918237f77fdb0e46ad4090f20434d6c887c",
+  "original_final_accuracy": 99.86979166666667,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 44.3359375,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "8854166576a9691dda09b5aa5be875759c39e4656036ae341ca7f972dda031f2"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.4140625,
+        "source": "archived_replay_matching_output",
+        "variable": "operations2",
+        "sequence_sha256": "00452905e1d90026592daaf2a0fdc0915c3ffac9920616f120614189f7061277"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operations3",
+        "sequence_sha256": "cef0bfa8c7e90b6481e715f75de9369310cc3d5f15c07896ce0b3b710e50cc24"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 33.3984375,
+        "source": "archived_replay_matching_output",
+        "variable": "operations4",
+        "sequence_sha256": "6bab5a7d3c9d150487316168c78473cb8349f016d2356c751d36d366a4fd95f7"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "operations5",
+        "sequence_sha256": "507d2be6e8b2b8d2727a58ed6ca8144c83afe0840cfe886abe00d862d8e26d77"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 61.9140625,
+        "source": "archived_replay_matching_output",
+        "variable": "operations6",
+        "sequence_sha256": "cb5ceeeddf2b1cf60813420cb51a6604d85e32886b606a8997afdabcf2445c9d"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 73.4375,
+        "source": "archived_replay_matching_output",
+        "variable": "operations7",
+        "sequence_sha256": "028aa4509b2f2f2ef992ac05de3f9212b05c27433cc6993b9d39f25d920be4c4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 9,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 73.4375,
+        "source": "archived_replay_matching_output",
+        "variable": "operations7",
+        "sequence_sha256": "028aa4509b2f2f2ef992ac05de3f9212b05c27433cc6993b9d39f25d920be4c4"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 10,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.34895833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operations9",
+        "sequence_sha256": "21926b8346e039c39bd1b970ada793d4432b60b662f2f6f79e9af37dff270fdc"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 11,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.8046875,
+        "source": "archived_replay_matching_output",
+        "variable": "operations10",
+        "sequence_sha256": "dc80a6490ccd27ea3df4465accb7fde65e5d6d6f410a1dfaa70b6ab03e784523"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 12,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.4140625,
+        "source": "archived_replay_matching_output",
+        "variable": "operations11",
+        "sequence_sha256": "00452905e1d90026592daaf2a0fdc0915c3ffac9920616f120614189f7061277"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 12,
+      "call": 13,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.4140625,
+        "source": "archived_replay_matching_output",
+        "variable": "operations12",
+        "sequence_sha256": "00452905e1d90026592daaf2a0fdc0915c3ffac9920616f120614189f7061277"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 13,
+      "call": 14,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "operations13",
+        "sequence_sha256": "507d2be6e8b2b8d2727a58ed6ca8144c83afe0840cfe886abe00d862d8e26d77"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 14,
+      "call": 15,
+      "fit_names": [
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.6015625,
+        "source": "archived_replay_matching_output",
+        "variable": "operations14",
+        "sequence_sha256": "7b2ac97f5b92cad331970325d97bc888146b31e47e132961ed3797a3b74370a1"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 15,
+      "call": 16,
+      "fit_names": [
+        "MiniBatchKMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 32.747395833333336,
+        "source": "archived_replay_matching_output",
+        "variable": "operations15",
+        "sequence_sha256": "00351a17f632b5558a9ee0aa385674f4941aa5e0712c4e0166d55e40914dce0a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 16,
+      "call": 17,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "best_operations",
+        "sequence_sha256": "507d2be6e8b2b8d2727a58ed6ca8144c83afe0840cfe886abe00d862d8e26d77"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 17,
+      "call": 18,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 54.166666666666664,
+        "source": "archived_replay_matching_output",
+        "variable": "operations17",
+        "sequence_sha256": "6d6b7c455697e43c9e4b689b80f438d8f82a8dcdd477f68fb97c6078870ff871"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 18,
+      "call": 19,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-ASIC/run03\\snapshots\\call020_0001_result.txt",
+        "sequence_sha256": "507d2be6e8b2b8d2727a58ed6ca8144c83afe0840cfe886abe00d862d8e26d77"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

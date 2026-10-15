@@ -1,0 +1,22 @@
+{
+  "model": "gpt4o",
+  "trace": "Kyber",
+  "path": "runs/gpt4o/Kyber/run06",
+  "metadata_sha256": "4ab6e55d2258ea09fe6a013b7ae196b1f8732562eb2aada6dee992206a2cc874",
+  "model_id": "openai/gpt-4o-2024-11-20",
+  "temperature": 0,
+  "duration_sec": 12.8,
+  "tool_sec": 1.12,
+  "other_elapsed_sec": 11.68,
+  "llm_calls": 2,
+  "tool_calls": 1,
+  "clustering_attempts": 1,
+  "input_tokens": 1593,
+  "output_tokens": 445,
+  "cached_tokens": 0,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0084325,
+  "currency": "USD",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

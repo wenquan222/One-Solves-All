@@ -1,0 +1,29 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-AT89S52",
+  "path": "runs/deepseek/ECC-AT89S52/run04",
+  "original_calls_sha256": "adfd5df05bc8a56d3e0b38214e92e5519e03d45265f1773dd1f01bb60827cac9",
+  "replay_path": "<LOCAL>/run04",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "e5b66c15aff48f12ed2c4b92e7cf74ea8f1c2a7a48003e4cbb626a3dec0d3631",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/ECC-AT89S52/run04\\snapshots\\call005_0001_result.txt",
+        "sequence_sha256": "36675a0f4fff8521bc0107f32d3f14c81b7e321fdbdeb2ab10ea4e3d2b78d61a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

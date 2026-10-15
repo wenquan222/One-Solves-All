@@ -1,0 +1,270 @@
+{
+  "model": "deepseek",
+  "trace": "Sim-3-10",
+  "path": "runs/deepseek/Sim-3-10/run04",
+  "original_calls_sha256": "d2dc016d5a97de56f115b725759d683009946d640407b8dccabe733910363252",
+  "replay_path": "<LOCAL>/run04",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "50e77a4d7eb0267411277bd7c7aeec0ba7374213f6289b158b8ac3044420772f",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 55.143229166666664,
+        "source": "archived_replay_diverged",
+        "variable": "operations",
+        "sequence_sha256": "7c74d8bad19a7270f9e7a5be28f16196a82c1af49dd947fdf14567779c4524f7"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 50.78125,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "21789839a66f8979f807481e8a9a2fc39c22cbc556770805c2f7b1c8692fa214"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 49.21875,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "f3d45fd088d2f770c5f4975e6a6bc1cd21cf618ea61664b677bd21402e161734"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 56.119791666666664,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "31744028a519cf03447e75953a1f6dd4aaa273f5563772022724a533a0f89539"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 42.838541666666664,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "244f8787bce9ae325c35df94ce5f65361319789df3e1cc4c5294f8fa8045593f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "DBSCAN",
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 49.609375,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "941d1105497cd30ea92dc47cb330a23a23cd9ae249ca6d1760e226e776951dec"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "ecb5a86d3cf5872cc0dd928c6ce5bf5e28adb811af6a1b8d902de8204b288bb3"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 9,
+      "fit_names": [
+        "KMeans",
+        "KMeans",
+        "KMeans",
+        "KMeans",
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "ecb5a86d3cf5872cc0dd928c6ce5bf5e28adb811af6a1b8d902de8204b288bb3"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 10,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.67447916666667,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "e0fb2aa0238ab64085f093626c3ddd91e4873d292f7aaa3ebec8ef9b251c2cfc"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 11,
+      "fit_names": [
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.6015625,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "1ff21fa380d797b1a1a2eef0ba1810ba0cd4547e62cdb284a600cd7c9d46a4fa"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 12,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.73958333333333,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "1a1504f573dcb05134f797abba1f45bb5fa6dbcd4353095ed2cf2215fac96e4a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 12,
+      "call": 13,
+      "fit_names": [
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "23ef59f11c57066eb95e67baf2e096845d100a6859a5ea63ad245192c2dd2598"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 13,
+      "call": 14,
+      "fit_names": [
+        "SpectralClustering",
+        "SpectralClustering",
+        "SpectralClustering",
+        "SpectralClustering",
+        "SpectralClustering",
+        "SpectralClustering",
+        "SpectralClustering",
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "23ef59f11c57066eb95e67baf2e096845d100a6859a5ea63ad245192c2dd2598"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 14,
+      "call": 15,
+      "fit_names": [
+        "KMeans",
+        "KMeans",
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 15,
+      "call": 16,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/Sim-3-10/run04\\snapshots\\call016_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "model": "deepseek",
+  "trace": "Sim-1-20",
+  "path": "runs/deepseek/Sim-1-20/run07",
+  "original_calls_sha256": "6d9e4da58a6b7f7d2d4ba2176d160dcf153ce5f87141b7ac02745d177144cc36",
+  "replay_path": "<LOCAL>/run07",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "75457b668380add38a016fe2e2befa4e2276b302da28f26b3b378697d575cee5",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/Sim-1-20/run07\\snapshots\\call004_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

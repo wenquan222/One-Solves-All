@@ -1,0 +1,29 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-SC",
+  "path": "runs/deepseek/RSA-SC/run04",
+  "original_calls_sha256": "2a75f534fa311bad0cc3f143cd4de7cd3d707fe0a96ada1fc1a387a9d98e5dff",
+  "replay_path": "<LOCAL>/run04",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "f8ad3f93d598e3e219b812c1bf335eb7b3c243fdf42bf7787d7d1ce47bd3f922",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-SC/run04\\snapshots\\call003_0001_result.txt",
+        "sequence_sha256": "2e16234be9aa82343137289ff5aebde2937d76fdd10ac8fba7fd48ad3242602d"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "model": "gpt4o",
+  "trace": "RSA-FPGA",
+  "path": "runs/gpt4o/RSA-FPGA/run09",
+  "original_calls_sha256": "bd7b2115a729fbff261a1ac8e9f509d57b267dd806d943cc1bd10b76a973a543",
+  "replay_path": "<LOCAL>/run09",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "4b91729c29439c8ad0cc41cb95e552bbcf1e46b03cca527fe61663a108f83855",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 1,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 2,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 3,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 4,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 5,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 7,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 8,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 9,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 10,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/gpt4o/RSA-FPGA/run09\\snapshots\\call010_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

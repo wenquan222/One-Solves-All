@@ -1,0 +1,22 @@
+{
+  "model": "gpt4o",
+  "trace": "RSA-SC",
+  "path": "runs/gpt4o/RSA-SC/run09",
+  "metadata_sha256": "0934f69f9335b218f0b46ee44f7482f29ab0e0c6ef5c99ff8add83f6ba60677c",
+  "model_id": "openai/gpt-4o-2024-11-20",
+  "temperature": 0,
+  "duration_sec": 22.6,
+  "tool_sec": 0.98,
+  "other_elapsed_sec": 21.62,
+  "llm_calls": 2,
+  "tool_calls": 1,
+  "clustering_attempts": 1,
+  "input_tokens": 2266,
+  "output_tokens": 496,
+  "cached_tokens": 1024,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.009345,
+  "currency": "USD",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

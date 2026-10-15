@@ -1,0 +1,113 @@
+{
+  "trace": "Sim-3-20",
+  "data": "new",
+  "env": {
+    "python": "3.11.0",
+    "numpy": "1.26.4",
+    "scipy": "1.12.0",
+    "sklearn": "1.4.1.post1",
+    "umap": "0.5.7"
+  },
+  "mode": "random",
+  "menu": "full",
+  "kmeans_n_init": "auto",
+  "seed": 9,
+  "budget": 100,
+  "total_sec": 14.481918573379517,
+  "attempts": [
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "rbf",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.5,
+          "min_samples": 10
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 0.16687583923339844,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "cosine",
+          "n_components": 3,
+          "gamma": null
+        },
+        "clu": "Agglomerative",
+        "clu_kw": {
+          "linkage": "ward"
+        }
+      },
+      "valid": true,
+      "passed": false,
+      "violation": 446,
+      "n_d": 868,
+      "n_aa": 290,
+      "first_bad": 0,
+      "acc": 53.385416666666664,
+      "sec": 0.15538692474365234
+    },
+    {
+      "cfg": {
+        "std": true,
+        "red": "UMAP",
+        "red_kw": {
+          "n_neighbors": 15,
+          "min_dist": 0.1
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.95,
+          "min_samples": 20
+        }
+      },
+      "valid": false,
+      "passed": false,
+      "violation": 1000000000,
+      "acc": null,
+      "n_d": null,
+      "sec": 13.113261461257935,
+      "error": null
+    },
+    {
+      "cfg": {
+        "std": false,
+        "red": "KernelPCA",
+        "red_kw": {
+          "kernel": "poly",
+          "n_components": 3,
+          "gamma": 10.0,
+          "degree": 2
+        },
+        "clu": "DBSCAN",
+        "clu_kw": {
+          "q": 0.7,
+          "min_samples": 10
+        }
+      },
+      "valid": true,
+      "passed": true,
+      "violation": 0,
+      "n_d": 1024,
+      "n_aa": 0,
+      "first_bad": 0,
+      "acc": 100.0,
+      "sec": 0.09403753280639648
+    }
+  ],
+  "publication_note": "Paper endpoints are computed from attempts with first-passed/last-valid selection."
+}

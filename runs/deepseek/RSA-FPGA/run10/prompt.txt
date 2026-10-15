@@ -1,0 +1,37 @@
+System:
+You are an expert assistant specialized in side-channel analysis.
+
+I would like you to act as an expert in side-channel analysis and signal processing, helping me analyze vulnerabilities in an encryption system. During the analysis process, please do not ask me any questions; instead, proceed step by step until you provide the final answer.
+The file contains a power consumption waveform from an RSA modular exponentiation (square-and-multiply) computed on the chosen input N-1, where each segment represents an operation. There are 1536 operations in this waveform. Because of the chosen input, the operations show three distinct power patterns: M (modular multiplication, whose result is N-1), S1 (squaring of N-1, which always directly follows an M), and S2 (squaring of 1, which always directly follows a squaring). Both S1 and S2 are squarings (S). Please identify every operation as S or M.
+
+To complete this task, you may need to follow these steps:
+
+**Step 1 — Segmentation**
+Segment the waveform into exactly 1536 equal-length parts. Each part represents one operation.
+
+**Step 2 — Dimensionality Reduction and Clustering**
+Apply dimensionality reduction first — PCA is recommended as a starting point. Then cluster the segments into three groups — a Gaussian mixture model with 3 components is recommended. Label the groups by sequence structure: for each of the three groups, collect the group labels of the segments that immediately follow its segments. Exactly one group is followed by one same other group in every case; that group is M, and the other two groups are S.
+
+**Step 3 — Constraint Verification**
+After every classification attempt, verify all of the following and print the results:
+1. Exactly 1024 S operations and 512 M operations
+2. First operation is S
+3. No two consecutive M operations
+4. For the group labeled M, the segments immediately after its segments all belong to one same group (check this on the three group labels, before mapping groups to S and M)
+
+**Step 4 — If Constraints Are Not Satisfied**
+Do NOT modify labels manually to force the count. Instead, adjust the analysis method:
+- First, try adjusting the PCA parameters (e.g., change the number of components to retain) and re-run clustering.
+- If that still fails, replace PCA with a different dimensionality reduction method (e.g., t-SNE, UMAP, or kernel PCA), then re-cluster.
+- If KMeans continues to fail, try a different clustering algorithm (e.g., DBSCAN, GMM, or agglomerative clustering).
+- Keep iterating with different combinations until all constraints are satisfied.
+
+Print the S count, the M count and pass/fail for each constraint after every attempt.
+
+**MANDATORY CONSTRAINTS - VIOLATION IS NOT ALLOWED:**
+1. You MUST use JupyterAPITool to execute ALL analysis. You are FORBIDDEN from assuming, estimating, or fabricating any results without running actual code.
+2. Classification labels MUST come from clustering output only. Do NOT write any code that flips or reassigns labels based on target counts after clustering — this includes any logic that iterates through the sequence to force the S count to 1024. This is FORBIDDEN and counts as a fabricated result.
+3. You MUST NOT give a Final Answer until an Observation confirms all constraints are satisfied simultaneously.
+4. If constraints are not met, change the feature extraction strategy or clustering parameters and retry. There is no limit on the number of attempts. Do not stop until all constraints are satisfied.
+
+Human: Perform Simple Power Analysis (SPA) on the RSA trace collected from an FPGA. The trace file is located at: ./trace/RSA-FPGA-2443776.npy, and the trace can be divided into equal 1536 segments. After classification, output the complete operation sequence (S or M only) to a file named ./result.txt, with all operations written on a single line with no spaces (e.g., SSMSMSSM...).

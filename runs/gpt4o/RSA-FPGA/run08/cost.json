@@ -1,0 +1,22 @@
+{
+  "model": "gpt4o",
+  "trace": "RSA-FPGA",
+  "path": "runs/gpt4o/RSA-FPGA/run08",
+  "metadata_sha256": "951c064d01e7845d39aced267a3eaf650f6a57d2a60c449e22812536abaee40e",
+  "model_id": "openai/gpt-4o-2024-11-20",
+  "temperature": 0,
+  "duration_sec": 113.1,
+  "tool_sec": 16.09,
+  "other_elapsed_sec": 97.00999999999999,
+  "llm_calls": 7,
+  "tool_calls": 6,
+  "clustering_attempts": 6,
+  "input_tokens": 44566,
+  "output_tokens": 4301,
+  "cached_tokens": 37760,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.107225,
+  "currency": "USD",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

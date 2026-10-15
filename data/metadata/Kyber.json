@@ -1,0 +1,10 @@
+{
+  "based_on": "处理后/Kyber-包络-33536.npy（256 位 × 131 点，全部采到）",
+  "filled_operations": [],
+  "resampling": "每位线性插值重采样 131 → 135 点",
+  "n_ops": 256,
+  "points_per_op": 135,
+  "total_points": 34560,
+  "disclosure_en": "Every bit is resampled to 135 points.",
+  "date": "2026-10-05"
+}

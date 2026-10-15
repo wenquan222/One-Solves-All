@@ -1,0 +1,2142 @@
+初始化 Jupyter Kernel Manager，工作目录 <LOCAL>/work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5062)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5062
+Press CTRL+C to quit
+127.0.0.1 - - [06/Oct/2026 23:49:00] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace file
+trace_file = './trace/RSA-STM32F429-418782.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_operations = 1534
+segment_length = len(waveform) // num_operations
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_operations)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=2)  # Start with 2 components
+reduced_data = pca.fit_transform(segments)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:04] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA parameters: Increase the number of components to 3
+pca = PCA(n_components=3)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_2
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:09] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Use t-SNE for dimensionality reduction
+tsne = TSNE(n_components=2, random_state=42)
+reduced_data = tsne.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_3
+[Stream]: S count: 1017
+First operation is S: True
+No consecutive M operations: False
+[Result]: (1017, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:16] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.mixture import GaussianMixture
+
+# Use GMM for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_4
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:21] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import umap
+
+# Use UMAP for dimensionality reduction
+umap_reducer = umap.UMAP(n_components=2, random_state=42)
+reduced_data = umap_reducer.fit_transform(segments)
+
+# Re-run GMM clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_5
+[Stream]: <LOCAL>/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count:
+[Stream]: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:37] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 23:49:37] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import AgglomerativeClustering
+
+# Use Agglomerative Clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_6
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:41] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.decomposition import KernelPCA
+
+# Use Kernel PCA for dimensionality reduction
+kernel_pca = KernelPCA(n_components=2, kernel='rbf', random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run Agglomerative Clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_7
+[Stream]: S count:
+[Stream]: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:47] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust Kernel PCA parameters: Change kernel to 'poly' and set degree=3
+kernel_pca = KernelPCA(n_components=2, kernel='poly', degree=3, random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run Agglomerative Clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_8
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:51] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import DBSCAN
+
+# Use DBSCAN for clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(reduced_data)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    first_operation_is_s = operation_sequence[0] == 'S'
+    no_consecutive_m = 'MM' not in operation_sequence
+
+    # Print results
+    print("S count:", s_count)
+    print("First operation is S:", first_operation_is_s)
+    print("No consecutive M operations:", no_consecutive_m)
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operation_sequence)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Retrying with adjusted parameters.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_9
+[Stream]: DBSCAN did not produce exactly 2 clusters. Retrying with adjusted parameters.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:49:59] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust DBSCAN parameters: Increase eps to 0.7 and decrease min_samples to 3
+dbscan = DBSCAN(eps=0.7, min_samples=3)
+labels = dbscan.fit_predict(reduced_data)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    first_operation_is_s = operation_sequence[0] == 'S'
+    no_consecutive_m = 'MM' not in operation_sequence
+
+    # Print results
+    print("S count:", s_count)
+    print("First operation is S:", first_operation_is_s)
+    print("No consecutive M operations:", no_consecutive_m)
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operation_sequence)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Retrying with adjusted parameters.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_10
+[Stream]: DBSCAN did not produce exactly 2 clusters. Retrying with adjusted parameters.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:05] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Fine-tune GMM parameters: Increase the number of initializations (n_init) to 10
+gmm = GaussianMixture(n_components=2, n_init=10, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_11
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:10] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Fine-tune GMM parameters: Change covariance type to 'tied'
+gmm = GaussianMixture(n_components=2, covariance_type='tied', n_init=10, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_12
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:20] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to PCA with adjusted parameters: Retain 5 components
+pca = PCA(n_components=5)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run GMM clustering with 'tied' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='tied', n_init=10, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_13
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:24] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Increase PCA components to 10
+pca = PCA(n_components=10)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run GMM clustering with 'tied' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='tied', n_init=10, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_14
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:29] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run KMeans clustering with PCA (10 components)
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_15
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:34] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run KMeans clustering with adjusted parameters: Increase max_iter to 500
+kmeans = KMeans(n_clusters=2, max_iter=500, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_16
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run KMeans clustering with 'k-means++' initialization
+kmeans = KMeans(n_clusters=2, init='k-means++', max_iter=500, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_17
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:41] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import SpectralClustering
+
+# Use Spectral Clustering
+spectral = SpectralClustering(n_clusters=2, affinity='nearest_neighbors', random_state=42)
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_18
+[Stream]: <LOCAL>/_spectral_embedding.py:301: UserWarning: Graph is not fully connected, spectral embedding may not work as expected.
+  warnings.warn(
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:45] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Spectral Clustering with 'rbf' affinity
+spectral = SpectralClustering(n_clusters=2, affinity='rbf', random_state=42)
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_19
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:51] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA components to 15
+pca = PCA(n_components=15)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run Spectral Clustering with 'rbf' affinity
+spectral = SpectralClustering(n_clusters=2, affinity='rbf', random_state=42)
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_20
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:50:58] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.decomposition import FastICA
+
+# Use ICA for dimensionality reduction
+ica = FastICA(n_components=2, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'tied' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='tied', n_init=10, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_21
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:02] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 3
+ica = FastICA(n_components=3, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'tied' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='tied', n_init=10, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_22
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:08] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Agglomerative Clustering with ICA (3 components)
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_23
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:12] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Agglomerative Clustering with 'ward' linkage
+agg_clustering = AgglomerativeClustering(n_clusters=2, linkage='ward')
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_24
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:16] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 5
+ica = FastICA(n_components=5, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run Agglomerative Clustering with 'ward' linkage
+agg_clustering = AgglomerativeClustering(n_clusters=2, linkage='ward')
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_25
+[Stream]: S count:
+[Stream]: 1015
+First operation is S: False
+No consecutive M operations: False
+[Result]: (1015, False, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:20] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to ICA with 3 components
+ica = FastICA(n_components=3, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'tied' covariance type and adjusted parameters
+gmm = GaussianMixture(n_components=2, covariance_type='tied', n_init=20, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_26
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:25] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run GMM clustering with 'full' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=20, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_27
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:30] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA parameters: Increase max_iter to 500 and tolerance to 1e-4
+ica = FastICA(n_components=3, max_iter=500, tol=1e-4, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=20, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_28
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:51:56] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use DBSCAN for clustering with ICA (3 components)
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(reduced_data)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    first_operation_is_s = operation_sequence[0] == 'S'
+    no_consecutive_m = 'MM' not in operation_sequence
+
+    # Print results
+    print("S count:", s_count)
+    print("First operation is S:", first_operation_is_s)
+    print("No consecutive M operations:", no_consecutive_m)
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operation_sequence)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Retrying with adjusted parameters.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_29
+[Stream]: DBSCAN did not produce exactly 2 clusters. Retrying with adjusted parameters.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:01] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to ICA with 3 components
+ica = FastICA(n_components=3, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and adjusted parameters
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_30
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:08] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run GMM clustering with adjusted tolerance (tol=1e-5)
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_31
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:13] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run GMM clustering with 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_32
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:20] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 2
+ica = FastICA(n_components=2, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_33
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:25] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 4
+ica = FastICA(n_components=4, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_34
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:31] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 5
+ica = FastICA(n_components=5, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_35
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 6
+ica = FastICA(n_components=6, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_36
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:43] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 7
+ica = FastICA(n_components=7, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_37
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:50] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 8
+ica = FastICA(n_components=8, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_38
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:52:56] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 9
+ica = FastICA(n_components=9, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_39
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:03] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA components to 10
+ica = FastICA(n_components=10, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_40
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:10] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Spectral Clustering with ICA (10 components)
+spectral = SpectralClustering(n_clusters=2, affinity='nearest_neighbors', random_state=42)
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_41
+[Stream]: S count: 1024
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1024, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:15] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Spectral Clustering with 'rbf' affinity and ICA (10 components)
+spectral = SpectralClustering(n_clusters=2, affinity='rbf', random_state=42)
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_42
+[Stream]: S count: 1532
+First operation is S: False
+No consecutive M operations: True
+[Result]: (1532, False, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:26] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to ICA with 3 components
+ica = FastICA(n_components=3, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_43
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:32] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA tolerance to 1e-6
+ica = FastICA(n_components=3, tol=1e-6, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_44
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:38] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA max_iter to 1000
+ica = FastICA(n_components=3, tol=1e-6, max_iter=1000, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_45
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:44] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA random_state to 0
+ica = FastICA(n_components=3, tol=1e-6, max_iter=1000, random_state=0)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_46
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:52] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust ICA initialization to 'random'
+ica = FastICA(n_components=3, tol=1e-6, max_iter=1000, random_state=42, whiten='arbitrary-variance')
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_47
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:53:59] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run GMM clustering with 'random' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='random', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_48
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:54:05] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run GMM clustering with 'diag' covariance type
+gmm = GaussianMixture(n_components=2, covariance_type='diag', n_init=50, tol=1e-5, init_params='random', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_49
+[Stream]: S count: 1028
+First operation is S: True
+No consecutive M operations: False
+[Result]: (1028, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:54:09] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to ICA with 3 components
+ica = FastICA(n_components=3, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run GMM clustering with 'full' covariance type and 'k-means++' initialization
+gmm = GaussianMixture(n_components=2, covariance_type='full', n_init=50, tol=1e-5, init_params='kmeans', random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+first_operation_is_s = operation_sequence[0] == 'S'
+no_consecutive_m = 'MM' not in operation_sequence
+
+# Print results
+print("S count:", s_count)
+print("First operation is S:", first_operation_is_s)
+print("No consecutive M operations:", no_consecutive_m)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=95095993-826297a86a58d22de73e7167_29932_50
+[Stream]: S count: 1023
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:54:16] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 23:54:22] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

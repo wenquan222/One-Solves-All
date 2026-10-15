@@ -1,0 +1,52 @@
+{
+  "based_on": "处理后/ECC-SC-100740.npy（365 个采集到的操作 × 276 点，展开第 7~371 个）",
+  "key": "128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263",
+  "key_bits": 256,
+  "key_ones": 121,
+  "bit1_ratio": 0.4727,
+  "n_ops": 372,
+  "D": 252,
+  "A": 120,
+  "points_per_op": 278,
+  "total_points": 103416,
+  "filled_operations": [
+    {
+      "position": 0,
+      "type": "D",
+      "copied_from_expansion_index": 7
+    },
+    {
+      "position": 1,
+      "type": "D",
+      "copied_from_expansion_index": 7
+    },
+    {
+      "position": 2,
+      "type": "D",
+      "copied_from_expansion_index": 7
+    },
+    {
+      "position": 3,
+      "type": "A",
+      "copied_from_expansion_index": 11
+    },
+    {
+      "position": 4,
+      "type": "D",
+      "copied_from_expansion_index": 7
+    },
+    {
+      "position": 5,
+      "type": "D",
+      "copied_from_expansion_index": 7
+    },
+    {
+      "position": 6,
+      "type": "A",
+      "copied_from_expansion_index": 11
+    }
+  ],
+  "resampling": "每段线性插值重采样 276 → 278 点",
+  "disclosure_en": "The first 7 operations of the scalar multiplication precede the acquisition window; they are filled with copies of the nearest captured operations of the same type, and every operation is resampled to 278 points.",
+  "date": "2026-10-05"
+}

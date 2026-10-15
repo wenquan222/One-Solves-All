@@ -1,0 +1,345 @@
+初始化 Jupyter Kernel Manager，工作目录 F:/侧信道/SCA-GPT/实验二：一段话解决分段/spa_agent/TCAD大修/exp2_runs_variant_fpga_c\deepseek\RSA-FPGA\run01\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5061)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5061
+Press CTRL+C to quit
+127.0.0.1 - - [08/Oct/2026 23:14:30] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.mixture import GaussianMixture
+from sklearn.preprocessing import StandardScaler
+import warnings
+warnings.filterwarnings('ignore')
+
+# Load the trace data
+trace = np.load('./trace/RSA-FPGA-2443776.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Calculate segment length
+segment_length = len(trace) // 1536
+print(f"Segment length: {segment_length}")
+
+# Verify total length
+total_length = segment_length * 1536
+print(f"Total length after segmentation: {total_length}")
+
+# Segment the waveform
+segments = trace[:total_length].reshape(1536, segment_length)
+print(f"Segments shape: {segments.shape}")
+
+# Plot a sample of segments to visualize patterns
+plt.figure(figsize=(15, 8))
+for i in range(10):
+    plt.plot(segments[i] + i*0.5, label=f'Segment {i}')
+plt.title('Sample of First 10 Segments')
+plt.xlabel('Time')
+plt.ylabel('Power (offset for clarity)')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_231455_904959_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_231455_904959_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e15b0aa1-fbb3261acf552ebb0f462352_5424_1
+[Stream]: Trace shape: (2443776,)
+Trace length: 2443776
+Segment length: 1591
+Total length after segmentation: 2443776
+Segments shape: (1536, 1591)
+[Stream]: {"plot_path": "../images/img_20261008_231455_904959_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [08/Oct/2026 23:14:57] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:15:04] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=10)  # Start with 10 components
+pca_result = pca.fit_transform(segments_scaled)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Cumulative explained variance: {np.cumsum(pca.explained_variance_ratio_)}")
+
+# Plot explained variance
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, 11), np.cumsum(pca.explained_variance_ratio_))
+plt.xlabel('Number of Components')
+plt.ylabel('Cumulative Explained Variance')
+plt.title('PCA Explained Variance')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_231508_659223_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_231508_659223_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e15b0aa1-fbb3261acf552ebb0f462352_5424_2
+[Stream]: Explained variance ratio: [0.3145316  0.21246913 0.15706046 0.10331038 0.07172028 0.04479098
+ 0.02283944 0.01464796 0.009322   0.0063417 ]
+Cumulative explained variance: [0.3145316  0.52700073 0.68406118 0.78737157 0.85909185 0.90388283
+ 0.92672226 0.94137023 0.95069222 0.95703392]
+[Stream]: {"plot_path": "../images/img_20261008_231508_659223_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [08/Oct/2026 23:15:09] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use first 5 components that capture ~86% of variance
+pca_5 = pca_result[:, :5]
+
+# Apply Gaussian Mixture Model with 3 components
+gmm = GaussianMixture(n_components=3, random_state=42, n_init=10)
+gmm_labels = gmm.fit_predict(pca_5)
+
+print(f"Cluster sizes: {np.bincount(gmm_labels)}")
+
+# Check constraints
+s_count = np.sum(gmm_labels == 0) + np.sum(gmm_labels == 1) + np.sum(gmm_labels == 2)
+m_count = 0
+
+# First operation check
+first_op = gmm_labels[0]
+print(f"First operation cluster: {first_op}")
+
+# Check for consecutive M operations
+consecutive_m = False
+for i in range(1, len(gmm_labels)):
+    if gmm_labels[i] == gmm_labels[i-1] and gmm_labels[i] == 2:  # Assuming cluster 2 is M
+        consecutive_m = True
+        break
+
+# Check M group followers
+m_group = 2  # Temporary assumption
+followers = []
+for i in range(len(gmm_labels)-1):
+    if gmm_labels[i] == m_group:
+        followers.append(gmm_labels[i+1])
+
+unique_followers = np.unique(followers)
+print(f"Followers of assumed M group: {unique_followers}")
+
+print("\nConstraint Check:")
+print(f"S count: {s_count}, M count: {m_count}")
+print(f"First operation is S: {first_op != m_group}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group has single follower type: {len(unique_followers) == 1}")
+
+# We need to identify which cluster is M based on the follower pattern
+print("\nAnalyzing follower patterns for each cluster:")
+for cluster in range(3):
+    followers = []
+    for i in range(len(gmm_labels)-1):
+        if gmm_labels[i] == cluster:
+            followers.append(gmm_labels[i+1])
+    unique_followers = np.unique(followers)
+    print(f"Cluster {cluster}: followers = {unique_followers}, count = {len(followers)}")
+============================================================
+
+执行请求已发送, msg_id=e15b0aa1-fbb3261acf552ebb0f462352_5424_3
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster sizes: [512 512 512]
+First operation cluster: 0
+[Stream]: Followers of assumed M group: [0 1]
+
+Constraint Check:
+S count: 1536, M count: 0
+First operation is S: True
+No consecutive M operations: True
+M group has single follower type: False
+
+Analyzing follower patterns for each cluster:
+Cluster 0: followers = [0 1], count = 511
+Cluster 1: followers = [2], count = 512
+[Stream]: Cluster 2: followers = [0 1], count = 512
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:15:36] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Based on follower analysis:
+# Cluster 1 is followed only by cluster 2 → This is M
+# Clusters 0 and 2 are S
+
+m_cluster = 1
+s_clusters = [0, 2]
+
+# Create final labels
+final_labels = []
+for label in gmm_labels:
+    if label == m_cluster:
+        final_labels.append('M')
+    else:
+        final_labels.append('S')
+
+final_labels = np.array(final_labels)
+
+# Count operations
+s_count = np.sum(final_labels == 'S')
+m_count = np.sum(final_labels == 'M')
+
+# Check constraints
+first_op_s = final_labels[0] == 'S'
+
+# Check for consecutive M operations
+consecutive_m = False
+for i in range(1, len(final_labels)):
+    if final_labels[i] == 'M' and final_labels[i-1] == 'M':
+        consecutive_m = True
+        break
+
+# Check M group followers (should all be the same S type)
+m_followers = []
+for i in range(len(final_labels)-1):
+    if final_labels[i] == 'M':
+        m_followers.append(final_labels[i+1])
+
+unique_m_followers = np.unique(m_followers)
+
+print("Constraint Check Results:")
+print(f"S count: {s_count}, M count: {m_count}")
+print(f"Target: S=1024, M=512")
+print(f"First operation is S: {first_op_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group has single follower type: {len(unique_m_followers) == 1}")
+
+if s_count == 1024 and m_count == 512 and first_op_s and not consecutive_m and len(unique_m_followers) == 1:
+    print("\n✓ ALL CONSTRAINTS SATISFIED!")
+else:
+    print("\n✗ CONSTRAINTS NOT SATISFIED - Need to adjust analysis")
+============================================================
+
+执行请求已发送, msg_id=e15b0aa1-fbb3261acf552ebb0f462352_5424_4
+[Stream]: Constraint Check Results:
+S count: 1024, M count: 512
+Target: S=1024, M=512
+First operation is S: True
+No consecutive M operations: True
+M group has single follower type: True
+
+✓ ALL CONSTRAINTS SATISFIED!
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [08/Oct/2026 23:16:02] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Verify the sequence pattern
+print("First 20 operations:")
+print(''.join(final_labels[:20]))
+
+# Verify the pattern: M should always be followed by the same S type
+print("\nVerifying M follower pattern:")
+m_positions = np.where(final_labels == 'M')[0]
+followers = []
+for pos in m_positions:
+    if pos < len(final_labels) - 1:
+        followers.append(final_labels[pos + 1])
+
+print(f"All M operations are followed by: {np.unique(followers)}")
+
+# Save the complete sequence to file
+with open('./result.txt', 'w') as f:
+    f.write(''.join(final_labels))
+
+print(f"\nSequence saved to result.txt")
+print(f"Total operations: {len(final_labels)}")
+print(f"S operations: {s_count}")
+print(f"M operations: {m_count}")
+============================================================
+
+执行请求已发送, msg_id=e15b0aa1-fbb3261acf552ebb0f462352_5424_5
+[Stream]: First 20 operations:
+[Stream]: SMSMSMSMSSSSSMSMSMSM
+
+Verifying M follower pattern:
+All M operations are followed by: ['S']
+[Stream]: Sequence saved to result.txt
+[Stream]: Total operations: 1536
+S operations: 1024
+M operations: 512
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:16:14] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Visualize the clustering in PCA space
+plt.figure(figsize=(12, 8))
+
+# Plot first two PCA components
+colors = ['red' if label == 'M' else 'blue' for label in final_labels]
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=colors, alpha=0.6, s=10)
+plt.xlabel('PCA Component 1')
+plt.ylabel('PCA Component 2')
+plt.title('Operation Classification (Red=M, Blue=S)')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_231627_064134_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_231627_064134_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# Plot the sequence of operations
+plt.figure(figsize=(15, 4))
+operation_numeric = [1 if op == 'M' else 0 for op in final_labels]
+plt.plot(operation_numeric, 'o-', markersize=2, linewidth=0.5)
+plt.xlabel('Operation Index')
+plt.ylabel('Operation Type (0=S, 1=M)')
+plt.title('Sequence of Operations')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_231627_064134_4.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_231627_064134_4.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e15b0aa1-fbb3261acf552ebb0f462352_5424_6
+[Stream]: {"plot_path": "../images/img_20261008_231627_064134_3.png"}
+[Stream]: {"plot_path": "../images/img_20261008_231627_064134_4.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [08/Oct/2026 23:16:27] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:16:44] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

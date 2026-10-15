@@ -1,0 +1,29 @@
+{
+  "model": "gpt4o",
+  "trace": "Kyber",
+  "path": "runs/gpt4o/Kyber/run10",
+  "original_calls_sha256": "5d88196df23f155c1ca3ad31649cd4c6c53355d35e87f1ad82fbc7f9c3a45eb3",
+  "replay_path": "<LOCAL>/run10",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "1c6c64a4ce3eb1a8f794749a020a966ba37ae79e8e78362a4f69c65926ec2920",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 1,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/gpt4o/Kyber/run10\\snapshots\\call001_0001_result.txt",
+        "sequence_sha256": "b4d407457207ff7c819c1acdc69845b5894cfc051f6c85640b96b822b1349ca9"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

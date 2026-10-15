@@ -1,0 +1,61 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-SC",
+  "path": "runs/deepseek/ECC-SC/run09",
+  "original_calls_sha256": "fd4aaf93147c061403c9fa26f70f471399c65af66eddce9049ede58b3ad04d7b",
+  "replay_path": "<LOCAL>/run09",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "1b6bd1c1fae37c3241297cf3092ea9576e7b1928782169ca8d790d1a55c101c9",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 34.67741935483871,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "12dc384895836f4c536149552d499b2eb5f45803ea33cac586b702ca6c7b133c"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 34.67741935483871,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels2",
+        "sequence_sha256": "b77aaefd5cc7fda224dee991ed563adea47507fec7adc85f955b70caaa2826c9"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/ECC-SC/run09\\snapshots\\call005_0001_result.txt",
+        "sequence_sha256": "b32d949a8b858b5fd0f03ac1f5073a30e9c116e4e9b5a658f096ef7007ee881f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

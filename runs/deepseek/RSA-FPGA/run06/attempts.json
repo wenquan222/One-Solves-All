@@ -1,0 +1,483 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-FPGA",
+  "path": "runs/deepseek/RSA-FPGA/run06",
+  "original_calls_sha256": "1af53cc51cd0f5111609b8fca4a545264e611e11a47052699fde494821e04f68",
+  "replay_path": "<LOCAL>/run06",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "22fe78f4f7138d18f3b84d9b070dd2692fcdd7ca6ad2eaf5ca74b610314b4457",
+  "original_final_accuracy": 33.333333333333336,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 9,
+      "fit_names": [
+        "DBSCAN",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 10,
+      "fit_names": [
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 11,
+      "fit_names": [
+        "GaussianMixture",
+        "KMeans",
+        "GaussianMixture",
+        "KMeans",
+        "GaussianMixture",
+        "KMeans",
+        "GaussianMixture",
+        "KMeans"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 12,
+      "fit_names": [],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.53645833333333,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "03d7f1c8fdf477879a3ab79542aa398f30a8f4ffa9663b1d9eb3f95ae6d81c99"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 12,
+      "call": 13,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.40625,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "bccc23fcd34c5c04bb27641d7a0a8c26f0d10c1ca9d538170d74ed378a121578"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 13,
+      "call": 14,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.40625,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "bccc23fcd34c5c04bb27641d7a0a8c26f0d10c1ca9d538170d74ed378a121578"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 14,
+      "call": 15,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.40625,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "bccc23fcd34c5c04bb27641d7a0a8c26f0d10c1ca9d538170d74ed378a121578"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 15,
+      "call": 16,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.40625,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "bccc23fcd34c5c04bb27641d7a0a8c26f0d10c1ca9d538170d74ed378a121578"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 16,
+      "call": 17,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 66.40625,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "bccc23fcd34c5c04bb27641d7a0a8c26f0d10c1ca9d538170d74ed378a121578"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 17,
+      "call": 18,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "7df3cf3a9a5d0cb32fbcc373c1bdadc9ae93b9cac69218f4953358afa02f613a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 18,
+      "call": 19,
+      "fit_names": [
+        "KMeans",
+        "KMeans",
+        "KMeans",
+        "KMeans",
+        "KMeans",
+        "KMeans"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "7df3cf3a9a5d0cb32fbcc373c1bdadc9ae93b9cac69218f4953358afa02f613a"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 19,
+      "call": 20,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "7df3cf3a9a5d0cb32fbcc373c1bdadc9ae93b9cac69218f4953358afa02f613a"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 20,
+      "call": 21,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 99.86979166666667,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "7df3cf3a9a5d0cb32fbcc373c1bdadc9ae93b9cac69218f4953358afa02f613a"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 21,
+      "call": 22,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 55.924479166666664,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "267f3529b0ed0bf7fbbd8d6127f2bd9329e901498696756c2ae2148df2d65d32"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 22,
+      "call": 23,
+      "fit_names": [
+        "Birch"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 55.924479166666664,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "267f3529b0ed0bf7fbbd8d6127f2bd9329e901498696756c2ae2148df2d65d32"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 23,
+      "call": 24,
+      "fit_names": [
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 61.458333333333336,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_labels",
+        "sequence_sha256": "8a7823a314392c8aa8dcdfad00d28a097189c97a20de68eea33405a0b90934de"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 24,
+      "call": 25,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 33.333333333333336,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-FPGA/run06\\snapshots\\call025_0001_result.txt",
+        "sequence_sha256": "334024a8db88de042ece9645b7eb8085f1eba327a628604ba5d320baf7823c81"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    }
+  ]
+}

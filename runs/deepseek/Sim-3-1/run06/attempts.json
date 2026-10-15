@@ -1,0 +1,129 @@
+{
+  "model": "deepseek",
+  "trace": "Sim-3-1",
+  "path": "runs/deepseek/Sim-3-1/run06",
+  "original_calls_sha256": "fcf297dc78656000ee5f6f25497aeef8cdcd0680e34e2070c34e0f47dc530a1f",
+  "replay_path": "<LOCAL>/run06",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "0df0d6ba35ff13d5b96b89c19c343869d388fba41cb40b281c538d0e8fa1e837",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 51.888020833333336,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "585a848c83e93995fbcbb6f8ff093697c48b9fdf4b3c0d37c4b7b006da7e5ca8"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 51.888020833333336,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "f7ffe0d3cdd23c59759ea3b53009345415a1eb16a9c484b46b0908043c0f1cd6"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 51.041666666666664,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "185e5062115767c218b1d149b9fe95a7dda648d85580a191f6a7d8861898e79b"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 50.390625,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "1314066e97369677275e26aa4c33205b62f7fa95c7a60a299fd032e73bc2f5cf"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 46.354166666666664,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "a831ad188c3eadceffefe74888f9f71327888cdc3622b5ef87cc2dfc594224bd"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 52.083333333333336,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "2b5eff30f90c45b8460f40908398fec24e798ceac2f0af433001ca74a6a01908"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/Sim-3-1/run06\\snapshots\\call009_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

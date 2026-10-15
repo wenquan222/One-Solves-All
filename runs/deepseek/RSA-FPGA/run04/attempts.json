@@ -1,0 +1,175 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-FPGA",
+  "path": "runs/deepseek/RSA-FPGA/run04",
+  "original_calls_sha256": "a72ee635d928c9fb85b9a7f493996c68ff165483d2b891728a20461c21dacf0e",
+  "replay_path": "<LOCAL>/run04",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "951c0fddbaca02a71ffbfdd54f47b396d853f2f0f5e1214e637db1c02727fb91",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 3,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 4,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 5,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 7,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 8,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 9,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 10,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 11,
+      "fit_names": [
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 12,
+      "fit_names": [
+        "SpectralClustering",
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 13,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 12,
+      "call": 14,
+      "fit_names": [
+        "GaussianMixture",
+        "GaussianMixture",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 13,
+      "call": 15,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-FPGA/run04\\snapshots\\call016_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

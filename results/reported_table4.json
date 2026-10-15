@@ -1,0 +1,210 @@
+{
+  "rows": [
+    {
+      "trace": "RSA-SC",
+      "hca": 51.12,
+      "random": 51.86418962203716,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "RSA-ASIC",
+      "hca": 55.47,
+      "random": 82.03776041666667,
+      "gpt": 90.73,
+      "ds": 99.92,
+      "budget": 20
+    },
+    {
+      "trace": "RSA-FPGA",
+      "hca": 76.08,
+      "random": 75.36458333333333,
+      "gpt": 93.31,
+      "ds": 93.33,
+      "budget": 10
+    },
+    {
+      "trace": "RSA-STM32F429",
+      "hca": 52.8,
+      "random": 96.55149934810952,
+      "gpt": 99.93,
+      "ds": 99.99,
+      "budget": 28
+    },
+    {
+      "trace": "ECC-AT89S52",
+      "hca": 53.72,
+      "random": 40.74468085106383,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 5
+    },
+    {
+      "trace": "ECC-SC",
+      "hca": 52.15,
+      "random": 89.11290322580645,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 4
+    },
+    {
+      "trace": "Kyber",
+      "hca": 84.38,
+      "random": 29.21875,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-1-1",
+      "hca": 50.18,
+      "random": 50.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-1-10",
+      "hca": 51.88,
+      "random": 100.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 2
+    },
+    {
+      "trace": "Sim-1-20",
+      "hca": 51.15,
+      "random": 70.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-2-1",
+      "hca": 50.83,
+      "random": 80.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-2-10",
+      "hca": 50.57,
+      "random": 70.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-2-20",
+      "hca": 50.71,
+      "random": 70.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-3-1",
+      "hca": 54.2,
+      "random": 90.52083333333333,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 4
+    },
+    {
+      "trace": "Sim-3-10",
+      "hca": 54.33,
+      "random": 100.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 5
+    },
+    {
+      "trace": "Sim-3-20",
+      "hca": 54.06,
+      "random": 100.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 6
+    },
+    {
+      "trace": "Sim-4-1",
+      "hca": 51.03,
+      "random": 60.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-4-10",
+      "hca": 51.37,
+      "random": 60.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-4-20",
+      "hca": 51.02,
+      "random": 50.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-5-1",
+      "hca": 51.1,
+      "random": 80.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-5-10",
+      "hca": 51.13,
+      "random": 80.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-5-20",
+      "hca": 50.84,
+      "random": 79.99348958333333,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-6-1",
+      "hca": 50.68,
+      "random": 100.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 2
+    },
+    {
+      "trace": "Sim-6-10",
+      "hca": 50.96,
+      "random": 70.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    },
+    {
+      "trace": "Sim-6-20",
+      "hca": 51.05,
+      "random": 70.0,
+      "gpt": 100.0,
+      "ds": 100.0,
+      "budget": 1
+    }
+  ],
+  "means": {
+    "hca": 54.1124,
+    "random": 73.81634758854734,
+    "gpt": 99.3588,
+    "ds": 99.7296
+  }
+}

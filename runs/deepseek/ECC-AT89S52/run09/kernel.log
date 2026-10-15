@@ -1,0 +1,517 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/ECC-AT89S52/run09\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5068)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5068
+Press CTRL+C to quit
+127.0.0.1 - - [05/Oct/2026 20:39:56] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+import os
+
+# Load the trace data
+trace_path = "./trace/ECC-AT89S52-32148.npy"
+trace_data = np.load(trace_path)
+print(f"Trace data shape: {trace_data.shape}")
+print(f"Trace data type: {trace_data.dtype}")
+
+# Plot the full trace to visualize it
+plt.figure(figsize=(15, 6))
+plt.plot(trace_data)
+plt.title("Full Power Trace")
+plt.xlabel("Sample Index")
+plt.ylabel("Power Consumption")
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_204013_923318_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_204013_923318_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_1
+[Stream]: Trace data shape: (32148,)
+Trace data type: float64
+[Stream]: {"plot_path": "../images/img_20261005_204013_923318_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:40:15] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Segment the waveform into 188 equal parts
+n_segments = 188
+segment_length = len(trace_data) // n_segments
+print(f"Total samples: {len(trace_data)}")
+print(f"Segment length: {segment_length}")
+print(f"Total segments: {n_segments}")
+
+# Verify segmentation
+if len(trace_data) % n_segments != 0:
+    print(f"Warning: Data length {len(trace_data)} is not perfectly divisible by {n_segments}")
+    print(f"Remainder: {len(trace_data) % n_segments} samples will be truncated")
+
+# Create segments
+segments = []
+for i in range(n_segments):
+    start_idx = i * segment_length
+    end_idx = (i + 1) * segment_length
+    segment = trace_data[start_idx:end_idx]
+    segments.append(segment)
+
+segments = np.array(segments)
+print(f"Segments shape: {segments.shape}")
+
+# Plot a few segments to visualize the patterns
+plt.figure(figsize=(15, 10))
+for i in range(6):
+    plt.subplot(2, 3, i+1)
+    plt.plot(segments[i])
+    plt.title(f"Segment {i+1}")
+    plt.xlabel("Sample Index")
+    plt.ylabel("Power")
+    plt.grid(True)
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_204043_939383_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_204043_939383_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_2
+[Stream]: Total samples: 32148
+[Stream]: Segment length: 171
+Total segments: 188
+Segments shape: (188, 171)
+[Stream]: {"plot_path": "../images/img_20261005_204043_939383_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:40:45] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 1: PCA + KMeans
+
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=2)
+segments_pca = pca.fit_transform(segments_scaled)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(segments_pca)
+
+# Assign larger cluster as D (point doubling)
+cluster_counts = np.bincount(labels)
+print(f"Cluster counts: {cluster_counts}")
+
+if cluster_counts[0] > cluster_counts[1]:
+    d_label, a_label = 0, 1
+else:
+    d_label, a_label = 1, 0
+
+# Convert labels to D/A
+operations = []
+for label in labels:
+    if label == d_label:
+        operations.append('D')
+    else:
+        operations.append('A')
+
+operations = np.array(operations)
+
+# Verify constraints
+d_count = np.sum(operations == 'D')
+first_is_d = operations[0] == 'D'
+
+# Check for consecutive A operations
+consecutive_a = False
+for i in range(1, len(operations)):
+    if operations[i] == 'A' and operations[i-1] == 'A':
+        consecutive_a = True
+        break
+
+print(f"\n=== Attempt 1 Results === ")
+print(f"D count: {d_count} (target: 125)")
+print(f"First operation is D: {first_is_d}")
+print(f"No consecutive A operations: {not consecutive_a}")
+
+# Plot the PCA results
+plt.figure(figsize=(10, 6))
+colors = ['red' if op == 'A' else 'blue' for op in operations]
+plt.scatter(segments_pca[:, 0], segments_pca[:, 1], c=colors, alpha=0.7)
+plt.title("PCA + KMeans Clustering (Attempt 1)")
+plt.xlabel(f"PC1 ({pca.explained_variance_ratio_[0]:.3f} variance)")
+plt.ylabel(f"PC2 ({pca.explained_variance_ratio_[1]:.3f} variance)")
+plt.legend(['A (Addition)', 'D (Doubling)'])
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_204136_959893_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_204136_959893_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# Check if all constraints are satisfied
+constraints_satisfied = (d_count == 125) and first_is_d and (not consecutive_a)
+print(f"All constraints satisfied: {constraints_satisfied}")
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_3
+[Stream]: Explained variance ratio: [0.50780757 0.19247161]
+Total explained variance: 0.700
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster counts: [ 77 111]
+
+=== Attempt 1 Results === 
+D count: 111 (target: 125)
+First operation is D: True
+No consecutive A operations: False
+[Stream]: {"plot_path": "../images/img_20261005_204136_959893_3.png"}
+All constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [05/Oct/2026 20:41:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 2: PCA with more components + KMeans
+
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply PCA with more components
+pca = PCA(n_components=5)  # Try more components
+segments_pca = pca.fit_transform(segments_scaled)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(segments_pca)
+
+# Assign larger cluster as D (point doubling)
+cluster_counts = np.bincount(labels)
+print(f"Cluster counts: {cluster_counts}")
+
+if cluster_counts[0] > cluster_counts[1]:
+    d_label, a_label = 0, 1
+else:
+    d_label, a_label = 1, 0
+
+# Convert labels to D/A
+operations = []
+for label in labels:
+    if label == d_label:
+        operations.append('D')
+    else:
+        operations.append('A')
+
+operations = np.array(operations)
+
+# Verify constraints
+d_count = np.sum(operations == 'D')
+first_is_d = operations[0] == 'D'
+
+# Check for consecutive A operations
+consecutive_a = False
+for i in range(1, len(operations)):
+    if operations[i] == 'A' and operations[i-1] == 'A':
+        consecutive_a = True
+        break
+
+print(f"\n=== Attempt 2 Results === ")
+print(f"D count: {d_count} (target: 125)")
+print(f"First operation is D: {first_is_d}")
+print(f"No consecutive A operations: {not consecutive_a}")
+
+# Check if all constraints are satisfied
+constraints_satisfied = (d_count == 125) and first_is_d and (not consecutive_a)
+print(f"All constraints satisfied: {constraints_satisfied}")
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_4
+[Stream]: Explained variance ratio: [0.50780757 0.19247161 0.06954601 0.04251653 0.0273414 ]
+Total explained variance: 0.840
+[Stream]: Cluster counts: [ 77 111]
+
+=== Attempt 2 Results === 
+D count: 111 (target: 125)
+First operation is D: True
+No consecutive A operations: False
+All constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:42:18] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 3: t-SNE + KMeans
+from sklearn.manifold import TSNE
+
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply t-SNE
+tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+segments_tsne = tsne.fit_transform(segments_scaled)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(segments_tsne)
+
+# Assign larger cluster as D (point doubling)
+cluster_counts = np.bincount(labels)
+print(f"Cluster counts: {cluster_counts}")
+
+if cluster_counts[0] > cluster_counts[1]:
+    d_label, a_label = 0, 1
+else:
+    d_label, a_label = 1, 0
+
+# Convert labels to D/A
+operations = []
+for label in labels:
+    if label == d_label:
+        operations.append('D')
+    else:
+        operations.append('A')
+
+operations = np.array(operations)
+
+# Verify constraints
+d_count = np.sum(operations == 'D')
+first_is_d = operations[0] == 'D'
+
+# Check for consecutive A operations
+consecutive_a = False
+for i in range(1, len(operations)):
+    if operations[i] == 'A' and operations[i-1] == 'A':
+        consecutive_a = True
+        break
+
+print(f"\n=== Attempt 3 Results === ")
+print(f"D count: {d_count} (target: 125)")
+print(f"First operation is D: {first_is_d}")
+print(f"No consecutive A operations: {not consecutive_a}")
+
+# Plot the t-SNE results
+plt.figure(figsize=(10, 6))
+colors = ['red' if op == 'A' else 'blue' for op in operations]
+plt.scatter(segments_tsne[:, 0], segments_tsne[:, 1], c=colors, alpha=0.7)
+plt.title("t-SNE + KMeans Clustering (Attempt 3)")
+plt.xlabel("t-SNE Component 1")
+plt.ylabel("t-SNE Component 2")
+plt.legend(['A (Addition)', 'D (Doubling)'])
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_204310_763523_4.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_204310_763523_4.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# Check if all constraints are satisfied
+constraints_satisfied = (d_count == 125) and first_is_d and (not consecutive_a)
+print(f"All constraints satisfied: {constraints_satisfied}")
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_5
+[Stream]: Cluster counts: [ 77 111]
+
+=== Attempt 3 Results === 
+D count: 111 (target: 125)
+First operation is D: True
+No consecutive A operations: False
+[Stream]: {"plot_path": "../images/img_20261005_204310_763523_4.png"}
+All constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:43:11] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 4: UMAP + KMeans
+try:
+    import umap
+except ImportError:
+    print("UMAP not available, installing...")
+    import subprocess
+    subprocess.check_call(["pip", "install", "umap-learn"])
+    import umap
+
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply UMAP
+reducer = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1)
+segments_umap = reducer.fit_transform(segments_scaled)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(segments_umap)
+
+# Assign larger cluster as D (point doubling)
+cluster_counts = np.bincount(labels)
+print(f"Cluster counts: {cluster_counts}")
+
+if cluster_counts[0] > cluster_counts[1]:
+    d_label, a_label = 0, 1
+else:
+    d_label, a_label = 1, 0
+
+# Convert labels to D/A
+operations = []
+for label in labels:
+    if label == d_label:
+        operations.append('D')
+    else:
+        operations.append('A')
+
+operations = np.array(operations)
+
+# Verify constraints
+d_count = np.sum(operations == 'D')
+first_is_d = operations[0] == 'D'
+
+# Check for consecutive A operations
+consecutive_a = False
+for i in range(1, len(operations)):
+    if operations[i] == 'A' and operations[i-1] == 'A':
+        consecutive_a = True
+        break
+
+print(f"\n=== Attempt 4 Results === ")
+print(f"D count: {d_count} (target: 125)")
+print(f"First operation is D: {first_is_d}")
+print(f"No consecutive A operations: {not consecutive_a}")
+
+# Plot the UMAP results
+plt.figure(figsize=(10, 6))
+colors = ['red' if op == 'A' else 'blue' for op in operations]
+plt.scatter(segments_umap[:, 0], segments_umap[:, 1], c=colors, alpha=0.7)
+plt.title("UMAP + KMeans Clustering (Attempt 4)")
+plt.xlabel("UMAP Component 1")
+plt.ylabel("UMAP Component 2")
+plt.legend(['A (Addition)', 'D (Doubling)'])
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_204405_218664_5.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_204405_218664_5.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# Check if all constraints are satisfied
+constraints_satisfied = (d_count == 125) and first_is_d and (not consecutive_a)
+print(f"All constraints satisfied: {constraints_satisfied}")
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_6
+[Stream]: <LOCAL>/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: Cluster counts: [ 63 125]
+
+=== Attempt 4 Results === 
+D count: 125 (target: 125)
+First operation is D: True
+No consecutive A operations: True
+[Stream]: {"plot_path": "../images/img_20261005_204405_218664_5.png"}
+All constraints satisfied: True
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [05/Oct/2026 20:44:13] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Verify the final sequence in detail
+print("=== Final Verification ===")
+print(f"Total operations: {len(operations)}")
+print(f"D operations: {d_count}")
+print(f"A operations: {len(operations) - d_count}")
+print(f"First operation: {operations[0]}")
+print(f"Last operation: {operations[-1]}")
+
+# Double-check for consecutive A operations
+consecutive_a_positions = []
+for i in range(1, len(operations)):
+    if operations[i] == 'A' and operations[i-1] == 'A':
+        consecutive_a_positions.append(i)
+
+print(f"Consecutive A operations found at positions: {consecutive_a_positions}")
+print(f"No consecutive A operations: {len(consecutive_a_positions) == 0}")
+
+# Display first 20 operations for visual inspection
+print(f"First 20 operations: {''.join(operations[:20])}")
+
+# Save the result to file
+result_path = "./result.txt"
+with open(result_path, 'w') as f:
+    f.write(''.join(operations))
+
+print(f"\nResult saved to: {result_path}")
+print(f"Operation sequence: {''.join(operations)}")
+============================================================
+
+执行请求已发送, msg_id=eaeff0f3-55bca449c15ddb9ce50fef13_32872_7
+[Stream]: === Final Verification ===
+Total operations: 188
+D operations: 125
+A operations: 63
+First operation: D
+Last operation: A
+Consecutive A operations found at positions: []
+No consecutive A operations: True
+First 20 operations: DDADADDADDDADDADADDA
+[Stream]: Result saved to: ./result.txt
+[Stream]: Operation sequence: DDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDADDDADDADADDA
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:44:37] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [05/Oct/2026 20:44:43] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

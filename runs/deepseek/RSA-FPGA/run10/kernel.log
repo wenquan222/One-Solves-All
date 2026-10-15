@@ -1,0 +1,2053 @@
+初始化 Jupyter Kernel Manager，工作目录 F:/侧信道/SCA-GPT/实验二：一段话解决分段/spa_agent/TCAD大修/exp2_runs_variant_fpga_c\deepseek\RSA-FPGA\run10\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5066)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5066
+Press CTRL+C to quit
+127.0.0.1 - - [08/Oct/2026 23:46:06] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.mixture import GaussianMixture
+from sklearn.preprocessing import StandardScaler
+import warnings
+warnings.filterwarnings('ignore')
+
+# Load the trace data
+trace = np.load('./trace/RSA-FPGA-2443776.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Calculate segment length
+segment_length = len(trace) // 1536
+print(f"Segment length: {segment_length}")
+
+# Verify total length
+total_length = segment_length * 1536
+print(f"Total length after segmentation: {total_length}")
+
+# Segment the waveform
+segments = []
+for i in range(1536):
+    start_idx = i * segment_length
+    end_idx = (i + 1) * segment_length
+    segments.append(trace[start_idx:end_idx])
+
+segments = np.array(segments)
+print(f"Segments shape: {segments.shape}")
+
+# Plot first 20 segments to visualize patterns
+plt.figure(figsize=(15, 10))
+for i in range(20):
+    plt.subplot(4, 5, i+1)
+    plt.plot(segments[i])
+    plt.title(f'Segment {i+1}')
+    plt.xticks([])
+    plt.yticks([])
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_234643_360337_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_234643_360337_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_1
+[Stream]: Trace shape: (2443776,)
+Trace length: 2443776
+Segment length: 1591
+Total length after segmentation: 2443776
+[Stream]: Segments shape: (1536, 1591)
+[Stream]: {"plot_path": "../images/img_20261008_234643_360337_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [08/Oct/2026 23:46:44] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 1: Standardize the data
+scaler = StandardScaler()
+segments_standardized = scaler.fit_transform(segments)
+
+# Step 2: Apply PCA
+pca = PCA(n_components=10)  # Start with 10 components
+pca_result = pca.fit_transform(segments_standardized)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Cumulative explained variance: {np.cumsum(pca.explained_variance_ratio_)}")
+
+# Step 3: Apply Gaussian Mixture Model with 3 components
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Check constraints
+s_count = 0
+m_count = 0
+first_is_s = False
+consecutive_m = False
+m_followed_by_same_group = True
+
+# Count S and M (we'll determine which is which later)
+# For now, let's check the sequence constraints
+
+# Check first operation
+first_is_s = True  # We'll verify this after determining S/M mapping
+
+# Check for consecutive M operations
+for i in range(len(labels)-1):
+    if labels[i] == labels[i+1]:
+        # Check if this is the M group (we'll verify after mapping)
+        consecutive_m = True
+        break
+
+# Check M group followed by same group
+# First, identify which group is M based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                break
+
+if m_group is not None:
+    # Count S and M
+    m_count = np.sum(labels == m_group)
+    s_count = len(labels) - m_count
+
+    # Verify first operation is S
+    first_is_s = (labels[0] != m_group)
+
+    # Verify no consecutive M operations
+    consecutive_m = False
+    for i in range(len(labels)-1):
+        if labels[i] == m_group and labels[i+1] == m_group:
+            consecutive_m = True
+            break
+
+    # Verify M group followed by same group
+    m_indices = np.where(labels == m_group)[0]
+    following_groups = []
+    for idx in m_indices:
+        if idx < len(labels) - 1:
+            following_groups.append(labels[idx+1])
+
+    if len(following_groups) > 0:
+        unique_following = np.unique(following_groups)
+        m_followed_by_same_group = (len(unique_following) == 1)
+
+print("\n=== ATTEMPT 1 RESULTS ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_2
+[Stream]: Explained variance ratio: [0.3145316  0.21246913 0.15706046 0.10331038 0.07172028 0.04479098
+ 0.02283944 0.01464796 0.009322   0.0063417 ]
+Cumulative explained variance: [0.3145316  0.52700073 0.68406118 0.78737157 0.85909185 0.90388283
+ 0.92672226 0.94137023 0.95069222 0.95703392]
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster counts: {0: 841, 1: 505, 2: 190}
+[Stream]: === ATTEMPT 1 RESULTS ===
+S count: 0
+M count: 0
+First operation is S: True
+No consecutive M operations: False
+M group followed by same group: True
+All constraints satisfied: False
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [08/Oct/2026 23:47:32] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Let's try with more PCA components and better M group identification
+pca = PCA(n_components=20)  # Increase components
+pca_result = pca.fit_transform(segments_standardized)
+
+print(f"Cumulative explained variance (20 components): {np.cumsum(pca.explained_variance_ratio_)[-1]}")
+
+# Apply Gaussian Mixture Model
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern: M is followed by the same group in every case
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Now determine S groups
+s_groups = [g for g in range(3) if g != m_group]
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 2 RESULTS ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + GMM Clustering (Attempt 2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_234822_395106_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_234822_395106_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_3
+[Stream]: Cumulative explained variance (20 components): 0.9783725448766126
+[Stream]: Cluster counts: {0: 743, 1: 505, 2: 288}
+[Stream]: Could not identify M group based on pattern
+Using count-based approach: Group 1 as M (count: 505)
+
+=== ATTEMPT 2 RESULTS ===
+S count: 1031
+M count: 505
+First operation is S: True
+No consecutive M operations: True
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_234822_395106_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:48:23] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Try t-SNE for better separation
+tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+tsne_result = tsne.fit_transform(segments_standardized)
+
+# Apply Gaussian Mixture Model
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(tsne_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 3 RESULTS (t-SNE) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(tsne_result[:, 0], tsne_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('t-SNE + GMM Clustering (Attempt 3)')
+plt.xlabel('t-SNE 1')
+plt.ylabel('t-SNE 2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_234908_465020_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_234908_465020_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_4
+[Stream]: Cluster counts: {0: 510, 1: 510, 2: 516}
+[Stream]: Could not identify M group based on pattern
+[Stream]: Using count-based approach: Group 0 as M (count: 510)
+
+=== ATTEMPT 3 RESULTS (t-SNE) ===
+S count: 1026
+M count: 510
+First operation is S: True
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_234908_465020_3.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:49:11] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+try:
+    import umap
+
+    # Try UMAP for better separation
+    reducer = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1)
+    umap_result = reducer.fit_transform(segments_standardized)
+
+    # Apply Gaussian Mixture Model
+    gmm = GaussianMixture(n_components=3, random_state=42)
+    labels = gmm.fit_predict(umap_result)
+
+    # Count occurrences
+    unique, counts = np.unique(labels, return_counts=True)
+    print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+    # Identify M group based on the pattern
+    m_group = None
+    for group in range(3):
+        group_indices = np.where(labels == group)[0]
+        if len(group_indices) > 0:
+            # Check what follows this group
+            following_groups = []
+            for idx in group_indices:
+                if idx < len(labels) - 1:
+                    following_groups.append(labels[idx+1])
+
+            if len(following_groups) > 0:
+                unique_following = np.unique(following_groups)
+                if len(unique_following) == 1:
+                    m_group = group
+                    print(f"Group {group} is M (followed by group {unique_following[0]})")
+                    break
+
+    if m_group is None:
+        print("Could not identify M group based on pattern")
+        # Try alternative: group with count closest to 512
+        target_count = 512
+        m_group = unique[np.argmin(np.abs(counts - target_count))]
+        print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+    # Count operations
+    m_count = np.sum(labels == m_group)
+    s_count = len(labels) - m_count
+
+    # Check constraints
+    first_is_s = (labels[0] != m_group)
+
+    consecutive_m = False
+    for i in range(len(labels)-1):
+        if labels[i] == m_group and labels[i+1] == m_group:
+            consecutive_m = True
+            break
+
+    # Verify M group followed by same group
+    m_indices = np.where(labels == m_group)[0]
+    following_groups = []
+    for idx in m_indices:
+        if idx < len(labels) - 1:
+            following_groups.append(labels[idx+1])
+
+    if len(following_groups) > 0:
+        unique_following = np.unique(following_groups)
+        m_followed_by_same_group = (len(unique_following) == 1)
+    else:
+        m_followed_by_same_group = False
+
+    print("\n=== ATTEMPT 4 RESULTS (UMAP) ===")
+    print(f"S count: {s_count}")
+    print(f"M count: {m_count}")
+    print(f"First operation is S: {first_is_s}")
+    print(f"No consecutive M operations: {not consecutive_m}")
+    print(f"M group followed by same group: {m_followed_by_same_group}")
+    print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+    # Visualize the clustering result
+    plt.figure(figsize=(12, 6))
+    plt.scatter(umap_result[:, 0], umap_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+    plt.title('UMAP + GMM Clustering (Attempt 4)')
+    plt.xlabel('UMAP 1')
+    plt.ylabel('UMAP 2')
+    plt.colorbar(label='Cluster')
+
+    try:
+        import matplotlib.pyplot as plt
+        import json as _json
+        plt.savefig("../images/img_20261008_235004_440827_4.png", dpi=160, bbox_inches='tight')
+        plt.close()
+        print(_json.dumps({"plot_path": "../images/img_20261008_235004_440827_4.png"}, ensure_ascii=False))
+    except Exception as e:
+        print("图片保存失败:", str(e))
+except ImportError:
+    print("UMAP not available, trying alternative approach")
+    # Fallback to PCA with different parameters
+    pca = PCA(n_components=50)
+    pca_result = pca.fit_transform(segments_standardized)
+
+    gmm = GaussianMixture(n_components=3, random_state=42)
+    labels = gmm.fit_predict(pca_result)
+
+    # ... rest of the code similar to above
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_5
+[Stream]: Cluster counts: {0: 513, 1: 560, 2: 463}
+[Stream]: Could not identify M group based on pattern
+[Stream]: Using count-based approach: Group 0 as M (count: 513)
+
+=== ATTEMPT 4 RESULTS (UMAP) ===
+S count: 1023
+M count: 513
+First operation is S: False
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_235004_440827_4.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:50:14] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import KMeans
+
+# Try KMeans clustering with PCA
+pca = PCA(n_components=10)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+labels = kmeans.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 5 RESULTS (KMeans) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + KMeans Clustering (Attempt 5)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_235050_334451_5.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_235050_334451_5.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_6
+[Stream]: Cluster counts: {0: 605, 1: 388, 2: 543}
+[Stream]: Could not identify M group based on pattern
+Using count-based approach: Group 2 as M (count: 543)
+[Stream]: === ATTEMPT 5 RESULTS (KMeans) ===
+S count: 993
+M count: 543
+First operation is S: True
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_235050_334451_5.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [08/Oct/2026 23:50:51] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:51:17] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import AgglomerativeClustering
+
+# Try Agglomerative clustering with PCA
+pca = PCA(n_components=15)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Apply Agglomerative clustering
+agg = AgglomerativeClustering(n_clusters=3)
+labels = agg.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 6 RESULTS (Agglomerative) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + Agglomerative Clustering (Attempt 6)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_235135_897062_6.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_235135_897062_6.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_7
+[Stream]: Cluster counts: {0: 696, 1: 511, 2: 329}
+[Stream]: 
+[Stream]: Could not identify M group based on pattern
+[Stream]: Using count-based approach: Group 1 as M (count: 511)
+[Stream]: === ATTEMPT 6 RESULTS (Agglomerative) ===
+[Stream]: S count: 1025
+M count: 511
+First operation is S: False
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_235135_897062_6.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 7 条输出。
+127.0.0.1 - - [08/Oct/2026 23:51:36] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Extract features from each segment
+features = []
+for segment in segments:
+    feature_vector = [
+        np.mean(segment),           # Mean
+        np.std(segment),            # Standard deviation
+        np.max(segment),            # Maximum
+        np.min(segment),            # Minimum
+        np.median(segment),         # Median
+        np.percentile(segment, 25), # 25th percentile
+        np.percentile(segment, 75), # 75th percentile
+        np.sum(np.diff(segment) > 0), # Number of increasing transitions
+        np.sum(np.diff(segment) < 0), # Number of decreasing transitions
+        np.sum(np.abs(np.diff(segment))), # Total variation
+        np.var(segment),            # Variance
+        np.sum(segment**2),         # Energy
+    ]
+    features.append(feature_vector)
+
+features = np.array(features)
+
+# Standardize features
+scaler = StandardScaler()
+features_standardized = scaler.fit_transform(features)
+
+# Apply PCA
+pca = PCA(n_components=8)
+pca_result = pca.fit_transform(features_standardized)
+
+print(f"Cumulative explained variance: {np.cumsum(pca.explained_variance_ratio_)[-1]}")
+
+# Apply Gaussian Mixture Model
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 7 RESULTS (Feature Engineering) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('Feature Engineering + PCA + GMM (Attempt 7)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_235232_895214_7.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_235232_895214_7.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_8
+[Stream]: Cumulative explained variance: 0.9990497168110083
+[Stream]: Cluster counts: {0: 352, 1: 638, 2: 546}
+[Stream]: Could not identify M group based on pattern
+[Stream]: Using count-based approach: Group 2 as M (count: 546)
+
+=== ATTEMPT 7 RESULTS (Feature Engineering) ===
+S count: 990
+M count: 546
+First operation is S: False
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_235232_895214_7.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [08/Oct/2026 23:52:33] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import DBSCAN
+
+# Try DBSCAN clustering
+# First, let's use PCA for dimensionality reduction
+pca = PCA(n_components=10)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Apply DBSCAN
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"DBSCAN cluster counts: {dict(zip(unique, counts))}")
+
+# If DBSCAN finds more than 3 clusters or noise, we need to adjust
+if len(unique) > 3 or -1 in unique:
+    print("DBSCAN found noise or too many clusters, trying GMM instead")
+    # Fall back to GMM
+    gmm = GaussianMixture(n_components=3, random_state=42)
+    labels = gmm.fit_predict(pca_result)
+    unique, counts = np.unique(labels, return_counts=True)
+    print(f"GMM cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 8 RESULTS (DBSCAN/GMM) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + DBSCAN/GMM (Attempt 8)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_235323_493658_8.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_235323_493658_8.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_9
+[Stream]: DBSCAN cluster counts: {-1: 1536}
+DBSCAN found noise or too many clusters, trying GMM instead
+[Stream]: GMM cluster counts: {0: 841, 1: 505, 2: 190}
+[Stream]: Could not identify M group based on pattern
+Using count-based approach: Group 1 as M (count: 505)
+[Stream]: === ATTEMPT 8 RESULTS (DBSCAN/GMM) ===
+S count: 1031
+M count: 505
+First operation is S: True
+No consecutive M operations: True
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_235323_493658_8.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [08/Oct/2026 23:53:24] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Let's try a different strategy: use the raw segments with minimal processing
+# and focus on finding the pattern where M is always followed by the same group
+
+# Use raw segments with standardization
+scaler = StandardScaler()
+segments_standardized = scaler.fit_transform(segments)
+
+# Try PCA with optimal number of components based on explained variance
+pca = PCA()
+pca_result_full = pca.fit_transform(segments_standardized)
+
+# Find optimal number of components (explain > 95% variance)
+cumulative_variance = np.cumsum(pca.explained_variance_ratio_)
+n_components = np.argmax(cumulative_variance >= 0.95) + 1
+print(f"Optimal number of components for 95% variance: {n_components}")
+
+# Use optimal number of components
+pca_result = pca_result_full[:, :n_components]
+
+# Try multiple clustering algorithms and select the best one
+from sklearn.metrics import silhouette_score
+
+best_score = -1
+best_labels = None
+best_method = ""
+
+# Try GMM
+for n_comp in [2, 3, 4]:
+    gmm = GaussianMixture(n_components=n_comp, random_state=42)
+    labels = gmm.fit_predict(pca_result)
+    if len(np.unique(labels)) > 1:  # Need at least 2 clusters for silhouette score
+        score = silhouette_score(pca_result, labels)
+        if score > best_score and len(np.unique(labels)) == 3:
+            best_score = score
+            best_labels = labels
+            best_method = f"GMM-{n_comp}"
+
+# Try KMeans
+for n_clust in [2, 3, 4]:
+    kmeans = KMeans(n_clusters=n_clust, random_state=42, n_init=10)
+    labels = kmeans.fit_predict(pca_result)
+    score = silhouette_score(pca_result, labels)
+    if score > best_score and len(np.unique(labels)) == 3:
+        best_score = score
+        best_labels = labels
+        best_method = f"KMeans-{n_clust}"
+
+print(f"Best method: {best_method} with silhouette score: {best_score}")
+
+if best_labels is not None:
+    labels = best_labels
+else:
+    # Fallback to GMM with 3 components
+    gmm = GaussianMixture(n_components=3, random_state=42)
+    labels = gmm.fit_predict(pca_result)
+    best_method = "GMM-3 (fallback)"
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 9 RESULTS (Optimized) ===")
+print(f"Method: {best_method}")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title(f'PCA + {best_method} (Attempt 9)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_235423_623075_9.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_235423_623075_9.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_10
+[Stream]: Optimal number of components for 95% variance: 9
+[Stream]: 
+[Stream]: Best method: KMeans-3 with silhouette score: 0.19208172300424461
+[Stream]: Cluster counts: {0: 543, 1: 381, 2: 612}
+[Stream]: Could not identify M group based on pattern
+Using count-based approach: Group 0 as M (count: 543)
+[Stream]: === ATTEMPT 9 RESULTS (Optimized) ===
+[Stream]: Method: KMeans-3
+S count: 993
+M count: 543
+First operation is S: True
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261008_235423_623075_9.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 9 条输出。
+127.0.0.1 - - [08/Oct/2026 23:54:26] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import SpectralClustering
+
+# Try Spectral Clustering
+# Use PCA for dimensionality reduction first
+pca = PCA(n_components=10)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Apply Spectral Clustering
+spectral = SpectralClustering(n_clusters=3, random_state=42, affinity='rbf', gamma=1.0)
+labels = spectral.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 10 RESULTS (Spectral) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + Spectral Clustering (Attempt 10)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261008_235508_599505_10.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261008_235508_599505_10.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_11
+消息接收异常: 
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 00:00:09] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Let's try a simpler approach: analyze the raw power patterns directly
+# We know there should be 3 distinct patterns: M, S1, S2
+
+# Calculate mean pattern for each segment
+mean_patterns = np.mean(segments, axis=1)
+std_patterns = np.std(segments, axis=1)
+max_patterns = np.max(segments, axis=1)
+min_patterns = np.min(segments, axis=1)
+
+# Create feature matrix with simple statistics
+features_simple = np.column_stack([mean_patterns, std_patterns, max_patterns, min_patterns])
+
+# Standardize
+scaler = StandardScaler()
+features_simple_std = scaler.fit_transform(features_simple)
+
+# Apply PCA
+pca = PCA(n_components=2)
+pca_result = pca.fit_transform(features_simple_std)
+
+# Apply GMM
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            if len(unique_following) == 1:
+                m_group = group
+                print(f"Group {group} is M (followed by group {unique_following[0]})")
+                break
+
+if m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 11 RESULTS (Simple Features) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('Simple Features + PCA + GMM (Attempt 11)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261009_000105_044766_11.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261009_000105_044766_11.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_12
+跳过不匹配的消息: stream
+跳过不匹配的消息: stream
+跳过不匹配的消息: stream
+跳过不匹配的消息: stream
+跳过不匹配的消息: status
+[Stream]: Cluster counts: {0: 432, 1: 654, 2: 450}
+[Stream]: Could not identify M group based on pattern
+Using count-based approach: Group 2 as M (count: 450)
+
+=== ATTEMPT 11 RESULTS (Simple Features) ===
+S count: 1086
+M count: 450
+First operation is S: True
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261009_000105_044766_11.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [09/Oct/2026 00:01:27] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Final attempt: Use the raw segments with careful preprocessing and GMM
+# Let's try to identify the pattern more carefully
+
+# Use standardized segments
+scaler = StandardScaler()
+segments_standardized = scaler.fit_transform(segments)
+
+# Apply PCA with optimal components
+pca = PCA(n_components=15)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Try GMM with different covariance types
+best_labels = None
+best_score = -1
+
+for cov_type in ['full', 'tied', 'diag', 'spherical']:
+    gmm = GaussianMixture(n_components=3, covariance_type=cov_type, random_state=42)
+    labels = gmm.fit_predict(pca_result)
+
+    # Calculate silhouette score
+    if len(np.unique(labels)) > 1:
+        score = silhouette_score(pca_result, labels)
+        if score > best_score:
+            best_score = score
+            best_labels = labels
+            print(f"Best covariance type: {cov_type}, score: {score}")
+
+labels = best_labels
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern - be more careful about this
+m_group = None
+m_candidates = []
+
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            # Count how many times each following group appears
+            following_counts = {}
+            for fg in following_groups:
+                following_counts[fg] = following_counts.get(fg, 0) + 1
+
+            # Find the most common following group
+            most_common_following = max(following_counts, key=following_counts.get)
+            proportion = following_counts[most_common_following] / len(following_groups)
+
+            print(f"Group {group}: follows with {proportion:.3f} consistency to group {most_common_following}")
+
+            if proportion > 0.95:  # Very high consistency
+                m_group = group
+                print(f"Group {group} is M (followed by group {most_common_following} with {proportion:.3f} consistency)")
+                break
+            elif proportion > 0.8:  # Good consistency
+                m_candidates.append((group, proportion, most_common_following))
+
+if m_group is None and m_candidates:
+    # Use the candidate with highest consistency
+    m_group = max(m_candidates, key=lambda x: x[1])[0]
+    print(f"Using best candidate: Group {m_group} as M")
+elif m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 12 RESULTS (Final) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + GMM with Covariance Selection (Attempt 12)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261009_000317_118454_12.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261009_000317_118454_12.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# If constraints are satisfied, save the result
+if s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group:
+    # Convert labels to S/M sequence
+    sequence = []
+    for label in labels:
+        if label == m_group:
+            sequence.append('M')
+        else:
+            sequence.append('S')
+
+    # Save to file
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(sequence))
+    print("\nResult saved to ./result.txt")
+    print(f"First 50 operations: {''.join(sequence[:50])}")
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_13
+[Stream]: Best covariance type: full, score: 0.1631103912049974
+[Stream]: Best covariance type: tied, score: 0.20540615985269864
+[Stream]: Cluster counts: {0: 510, 1: 512, 2: 514}
+[Stream]: Group 0: follows with 0.750 consistency to group 0
+Group 1: follows with 0.752 consistency to group 2
+[Stream]: Group 2: follows with 0.996 consistency to group 1
+Group 2 is M (followed by group 1 with 0.996 consistency)
+
+=== ATTEMPT 12 RESULTS (Final) ===
+S count: 1022
+M count: 514
+First operation is S: False
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261009_000317_118454_12.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 6 条输出。
+127.0.0.1 - - [09/Oct/2026 00:03:18] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Let's try with the "tied" covariance type which had the best score
+# and adjust the pattern identification logic
+
+scaler = StandardScaler()
+segments_standardized = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=20)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Use GMM with tied covariance (best score)
+gmm = GaussianMixture(n_components=3, covariance_type='tied', random_state=42)
+labels = gmm.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+m_candidates = []
+
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            # Count how many times each following group appears
+            following_counts = {}
+            for fg in following_groups:
+                following_counts[fg] = following_counts.get(fg, 0) + 1
+
+            # Find the most common following group
+            most_common_following = max(following_counts, key=following_counts.get)
+            proportion = following_counts[most_common_following] / len(following_groups)
+
+            print(f"Group {group}: follows with {proportion:.3f} consistency to group {most_common_following}")
+
+            if proportion > 0.99:  # Very high consistency
+                m_group = group
+                print(f"Group {group} is M (followed by group {most_common_following} with {proportion:.3f} consistency)")
+                break
+            elif proportion > 0.9:  # Good consistency
+                m_candidates.append((group, proportion, most_common_following))
+
+if m_group is None and m_candidates:
+    # Use the candidate with highest consistency
+    m_group = max(m_candidates, key=lambda x: x[1])[0]
+    print(f"Using best candidate: Group {m_group} as M")
+elif m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 13 RESULTS ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + GMM Tied Covariance (Attempt 13)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261009_000417_352822_13.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261009_000417_352822_13.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_14
+[Stream]: Cluster counts: {0: 510, 1: 512, 2: 514}
+[Stream]: Group 0: follows with 0.750 consistency to group 0
+[Stream]: Group 1: follows with 0.752 consistency to group 2
+Group 2: follows with 0.996 consistency to group 1
+Group 2 is M (followed by group 1 with 0.996 consistency)
+[Stream]: === ATTEMPT 13 RESULTS ===
+S count: 1022
+M count: 514
+First operation is S: False
+No consecutive M operations: False
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261009_000417_352822_13.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [09/Oct/2026 00:04:18] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Let's try Birch clustering which can handle the data better
+from sklearn.cluster import Birch
+
+scaler = StandardScaler()
+segments_standardized = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=10)
+pca_result = pca.fit_transform(segments_standardized)
+
+# Try Birch clustering
+birch = Birch(n_clusters=3, threshold=0.5, branching_factor=50)
+labels = birch.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# If Birch doesn't give exactly 3 clusters, use GMM
+if len(unique) != 3:
+    print("Birch didn't produce 3 clusters, using GMM instead")
+    gmm = GaussianMixture(n_components=3, random_state=42)
+    labels = gmm.fit_predict(pca_result)
+    unique, counts = np.unique(labels, return_counts=True)
+    print(f"GMM cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern
+m_group = None
+m_candidates = []
+
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            # Count how many times each following group appears
+            following_counts = {}
+            for fg in following_groups:
+                following_counts[fg] = following_counts.get(fg, 0) + 1
+
+            # Find the most common following group
+            most_common_following = max(following_counts, key=following_counts.get)
+            proportion = following_counts[most_common_following] / len(following_groups)
+
+            print(f"Group {group}: follows with {proportion:.3f} consistency to group {most_common_following}")
+
+            if proportion > 0.995:  # Very high consistency
+                m_group = group
+                print(f"Group {group} is M (followed by group {most_common_following} with {proportion:.3f} consistency)")
+                break
+            elif proportion > 0.95:  # Good consistency
+                m_candidates.append((group, proportion, most_common_following))
+
+if m_group is None and m_candidates:
+    # Use the candidate with highest consistency
+    m_group = max(m_candidates, key=lambda x: x[1])[0]
+    print(f"Using best candidate: Group {m_group} as M")
+elif m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 14 RESULTS (Birch/GMM) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + Birch/GMM (Attempt 14)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261009_000521_830282_14.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261009_000521_830282_14.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_15
+[Stream]: Cluster counts: {0: 578, 1: 510, 2: 448}
+[Stream]: Group 0: follows with 0.882 consistency to group 1
+[Stream]: 
+[Stream]: Group 1: follows with 0.822 consistency to group 0
+[Stream]: Group 2: follows with 0.669 consistency to group 2
+Could not identify M group based on pattern
+Using count-based approach: Group 1 as M (count: 510)
+
+=== ATTEMPT 14 RESULTS (Birch/GMM) ===
+S count: 1026
+M count: 510
+First operation is S: True
+No consecutive M operations: True
+M group followed by same group: False
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261009_000521_830282_14.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 6 条输出。
+127.0.0.1 - - [09/Oct/2026 00:05:22] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Final attempt with careful parameter tuning and validation
+
+scaler = StandardScaler()
+segments_standardized = scaler.fit_transform(segments)
+
+# Apply PCA with optimal components
+pca = PCA(n_components=8)  # Reduced components for better separation
+pca_result = pca.fit_transform(segments_standardized)
+
+# Try GMM with careful initialization
+gmm = GaussianMixture(
+    n_components=3, 
+    covariance_type='tied', 
+    random_state=42,
+    init_params='kmeans',  # Use kmeans for better initialization
+    n_init=5
+)
+labels = gmm.fit_predict(pca_result)
+
+# Count occurrences
+unique, counts = np.unique(labels, return_counts=True)
+print(f"Cluster counts: {dict(zip(unique, counts))}")
+
+# Identify M group based on the pattern with strict criteria
+m_group = None
+m_candidates = []
+
+for group in range(3):
+    group_indices = np.where(labels == group)[0]
+    if len(group_indices) > 0:
+        # Check what follows this group
+        following_groups = []
+        for idx in group_indices:
+            if idx < len(labels) - 1:
+                following_groups.append(labels[idx+1])
+
+        if len(following_groups) > 0:
+            unique_following = np.unique(following_groups)
+            # Count how many times each following group appears
+            following_counts = {}
+            for fg in following_groups:
+                following_counts[fg] = following_counts.get(fg, 0) + 1
+
+            # Find the most common following group
+            most_common_following = max(following_counts, key=following_counts.get)
+            proportion = following_counts[most_common_following] / len(following_groups)
+
+            print(f"Group {group}: follows with {proportion:.3f} consistency to group {most_common_following}")
+
+            if proportion > 0.998:  # Extremely high consistency
+                m_group = group
+                print(f"Group {group} is M (followed by group {most_common_following} with {proportion:.3f} consistency)")
+                break
+            elif proportion > 0.99:  # Very high consistency
+                m_candidates.append((group, proportion, most_common_following))
+
+if m_group is None and m_candidates:
+    # Use the candidate with highest consistency
+    m_group = max(m_candidates, key=lambda x: x[1])[0]
+    print(f"Using best candidate: Group {m_group} as M")
+elif m_group is None:
+    print("Could not identify M group based on pattern")
+    # Try alternative: group with count closest to 512
+    target_count = 512
+    m_group = unique[np.argmin(np.abs(counts - target_count))]
+    print(f"Using count-based approach: Group {m_group} as M (count: {counts[np.where(unique == m_group)[0][0]]})")
+
+# Count operations
+m_count = np.sum(labels == m_group)
+s_count = len(labels) - m_count
+
+# Check constraints
+first_is_s = (labels[0] != m_group)
+
+consecutive_m = False
+for i in range(len(labels)-1):
+    if labels[i] == m_group and labels[i+1] == m_group:
+        consecutive_m = True
+        break
+
+# Verify M group followed by same group
+m_indices = np.where(labels == m_group)[0]
+following_groups = []
+for idx in m_indices:
+    if idx < len(labels) - 1:
+        following_groups.append(labels[idx+1])
+
+if len(following_groups) > 0:
+    unique_following = np.unique(following_groups)
+    m_followed_by_same_group = (len(unique_following) == 1)
+else:
+    m_followed_by_same_group = False
+
+print("\n=== ATTEMPT 15 RESULTS (Final Tuned) ===")
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_is_s}")
+print(f"No consecutive M operations: {not consecutive_m}")
+print(f"M group followed by same group: {m_followed_by_same_group}")
+print(f"All constraints satisfied: {s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group}")
+
+# Visualize the clustering result
+plt.figure(figsize=(12, 6))
+plt.scatter(pca_result[:, 0], pca_result[:, 1], c=labels, cmap='viridis', alpha=0.6)
+plt.title('PCA + GMM Tuned (Attempt 15)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.colorbar(label='Cluster')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261009_000632_130996_15.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261009_000632_130996_15.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# If constraints are satisfied, save the result
+if s_count == 1024 and m_count == 512 and first_is_s and not consecutive_m and m_followed_by_same_group:
+    # Convert labels to S/M sequence
+    sequence = []
+    for label in labels:
+        if label == m_group:
+            sequence.append('M')
+        else:
+            sequence.append('S')
+
+    # Save to file
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(sequence))
+    print("\nResult saved to ./result.txt")
+    print(f"First 50 operations: {''.join(sequence[:50])}")
+else:
+    print("\nConstraints not satisfied. The clustering did not produce the expected pattern.")
+    print("This suggests the data may have noise or the clustering approach needs further refinement.")
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_16
+[Stream]: Cluster counts: {0: 512, 1: 512, 2: 512}
+[Stream]: Group 0: follows with 0.750 consistency to group 0
+Group 1: follows with 0.750 consistency to group 2
+[Stream]: Group 2: follows with 1.000 consistency to group 1
+Group 2 is M (followed by group 1 with 1.000 consistency)
+
+=== ATTEMPT 15 RESULTS (Final Tuned) ===
+S count: 1024
+M count: 512
+First operation is S: True
+No consecutive M operations: True
+M group followed by same group: True
+All constraints satisfied: True
+[Stream]: {"plot_path": "../images/img_20261009_000632_130996_15.png"}
+[Stream]: Result saved to ./result.txt
+First 50 operations: SMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSM
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [09/Oct/2026 00:06:33] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Verify the result file
+with open('./result.txt', 'r') as f:
+    sequence = f.read().strip()
+
+print(f"Sequence length: {len(sequence)}")
+print(f"Number of S: {sequence.count('S')}")
+print(f"Number of M: {sequence.count('M')}")
+print(f"First operation: {sequence[0]}")
+print(f"Last operation: {sequence[-1]}")
+
+# Check for consecutive M operations
+consecutive_m_found = False
+for i in range(len(sequence)-1):
+    if sequence[i] == 'M' and sequence[i+1] == 'M':
+        consecutive_m_found = True
+        print(f"Found consecutive M at position {i}")
+        break
+
+if not consecutive_m_found:
+    print("No consecutive M operations found")
+
+# Check M followed by same operation
+m_positions = [i for i, op in enumerate(sequence) if op == 'M']
+following_ops = []
+for pos in m_positions:
+    if pos < len(sequence) - 1:
+        following_ops.append(sequence[pos+1])
+
+unique_following = set(following_ops)
+print(f"M operations are followed by: {unique_following}")
+
+print("\n=== FINAL VERIFICATION ===")
+print(f"All constraints satisfied: {len(sequence) == 1536 and sequence.count('S') == 1024 and sequence.count('M') == 512 and sequence[0] == 'S' and len(unique_following) == 1 and not consecutive_m_found}")
+============================================================
+
+执行请求已发送, msg_id=e7eb703a-571c361bde7286c3bfa6af11_36416_17
+[Stream]: Sequence length: 1536
+[Stream]: Number of S: 1024
+Number of M: 512
+First operation: S
+Last operation: S
+No consecutive M operations found
+M operations are followed by: {'S'}
+
+=== FINAL VERIFICATION ===
+All constraints satisfied: True
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [09/Oct/2026 00:06:55] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 00:07:13] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

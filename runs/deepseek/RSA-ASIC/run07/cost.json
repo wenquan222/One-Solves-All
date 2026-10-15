@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-ASIC",
+  "path": "runs/deepseek/RSA-ASIC/run07",
+  "metadata_sha256": "c6f36b54f3286c48c8db4f358a1eccea4de69ad8183b08e589587e4bd5b14db6",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 495.9,
+  "tool_sec": 34.05,
+  "other_elapsed_sec": 461.84999999999997,
+  "llm_calls": 21,
+  "tool_calls": 20,
+  "clustering_attempts": 16,
+  "input_tokens": 151184,
+  "output_tokens": 10673,
+  "cached_tokens": 133120,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.25358,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

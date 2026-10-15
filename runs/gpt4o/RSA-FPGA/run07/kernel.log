@@ -1,0 +1,1000 @@
+初始化 Jupyter Kernel Manager，工作目录 F:/侧信道/SCA-GPT/实验二：一段话解决分段/spa_agent/TCAD大修/exp2_runs_variant_fpga_c\gpt4o\RSA-FPGA\run07\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5062)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5062
+Press CTRL+C to quit
+127.0.0.1 - - [09/Oct/2026 00:59:18] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.mixture import GaussianMixture
+
+# Load the trace file
+trace_file = './trace/RSA-FPGA-2443776.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_segments = 1536
+segment_length = len(waveform) // num_segments
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_segments)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=5)  # Start with 5 components
+reduced_segments = pca.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1:  # This group is always followed by one same group
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels[M_group])) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mKeyError[0m                                  Traceback (most recent call last)
+Cell [1;32mIn[2], line 55...
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [09/Oct/2026 00:59:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.mixture import GaussianMixture
+
+# Load the trace file
+trace_file = './trace/RSA-FPGA-2443776.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_segments = 1536
+segment_length = len(waveform) // num_segments
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_segments)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=5)  # Start with 5 components
+reduced_segments = pca.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_2
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[3], line 40...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 00:59:56] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Apply t-SNE for dimensionality reduction
+tsne = TSNE(n_components=2, random_state=42)
+reduced_segments_tsne = tsne.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments_tsne)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_3
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[4], line 28...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:00:20] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import KMeans
+
+# Apply KMeans for clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(reduced_segments_tsne)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_4
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[5], line 24...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:00:49] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from umap import UMAP
+
+# Apply UMAP for dimensionality reduction
+umap = UMAP(n_components=2, random_state=42)
+reduced_segments_umap = umap.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments_umap)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_5
+[Stream]: <LOCAL>/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[6], line 28...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [09/Oct/2026 01:01:33] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.decomposition import KernelPCA
+
+# Apply Kernel PCA for dimensionality reduction
+kpca = KernelPCA(n_components=5, kernel='rbf', random_state=42)
+reduced_segments_kpca = kpca.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments_kpca)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_6
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[7], line 28...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:02:03] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import DBSCAN
+
+# Apply DBSCAN for clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(reduced_segments_umap)
+
+# Check if DBSCAN identified exactly 3 clusters
+unique_labels = set(labels)
+if len(unique_labels - {-1}) != 3:  # Exclude noise points labeled as -1
+    raise ValueError("DBSCAN did not identify exactly 3 clusters. Adjust parameters.")
+
+# Relabel clusters to 0, 1, 2 for consistency
+label_mapping = {old_label: new_label for new_label, old_label in enumerate(unique_labels - {-1})}
+labels = [label_mapping[label] if label != -1 else -1 for label in labels]
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    if labels[i] != -1:  # Ignore noise points
+        following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels if label != -1]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_7
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[8], line 10...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:02:27] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust DBSCAN parameters and retry
+dbscan = DBSCAN(eps=1.0, min_samples=5)  # Increased eps value
+labels = dbscan.fit_predict(reduced_segments_umap)
+
+# Check if DBSCAN identified exactly 3 clusters
+unique_labels = set(labels)
+if len(unique_labels - {-1}) != 3:  # Exclude noise points labeled as -1
+    raise ValueError("DBSCAN did not identify exactly 3 clusters. Adjust parameters.")
+
+# Relabel clusters to 0, 1, 2 for consistency
+label_mapping = {old_label: new_label for new_label, old_label in enumerate(unique_labels - {-1})}
+labels = [label_mapping[label] if label != -1 else -1 for label in labels]
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    if labels[i] != -1:  # Ignore noise points
+        following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels if label != -1]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_8
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[9], line 8...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:02:42] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA parameters and retry
+pca = PCA(n_components=10)  # Increase the number of components
+reduced_segments_pca = pca.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments_pca)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_9
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[10], line 2...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:02:55] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Apply UMAP with adjusted parameters for dimensionality reduction
+umap = UMAP(n_components=2, n_neighbors=50, random_state=42)  # Increased n_neighbors
+reduced_segments_umap = umap.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments_umap)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_10
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[11], line 2...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [09/Oct/2026 01:03:10] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import AgglomerativeClustering
+
+# Apply Agglomerative Clustering
+agg_clustering = AgglomerativeClustering(n_clusters=3)
+labels = agg_clustering.fit_predict(reduced_segments_umap)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_11
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[12], line 2...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:03:25] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Apply Gaussian Mixture Model with 4 components for clustering
+gmm = GaussianMixture(n_components=4, random_state=42)
+labels = gmm.fit_predict(reduced_segments_umap)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(4)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_12
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[13], line 2...
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:03:34] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.decomposition import FastICA
+
+# Apply ICA for dimensionality reduction
+ica = FastICA(n_components=5, random_state=42)
+reduced_segments_ica = ica.fit_transform(segments)
+
+# Apply Gaussian Mixture Model for clustering
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments_ica)
+
+# Label the groups by sequence structure
+# Collect the group labels of the segments that immediately follow each segment
+following_labels = {i: [] for i in range(3)}
+for i in range(len(labels) - 1):
+    following_labels[labels[i]].append(labels[i + 1])
+
+# Determine M and S groups
+M_group = None
+S_groups = []
+for group, follows in following_labels.items():
+    if len(set(follows)) == 1 and len(follows) > 0:  # Ensure the group is followed by one same group and has followers
+        M_group = group
+    else:
+        S_groups.append(group)
+
+# Check if M_group was identified correctly
+if M_group is None:
+    raise ValueError("Failed to identify M_group. Adjust clustering or dimensionality reduction.")
+
+# Map labels to S and M
+operation_sequence = ['M' if label == M_group else 'S' for label in labels]
+
+# Step 3: Constraint Verification
+S_count = operation_sequence.count('S')
+M_count = operation_sequence.count('M')
+
+# Constraint 1: Exactly 1024 S operations and 512 M operations
+constraint_1 = (S_count == 1024 and M_count == 512)
+
+# Constraint 2: First operation is S
+constraint_2 = (operation_sequence[0] == 'S')
+
+# Constraint 3: No two consecutive M operations
+constraint_3 = all(not (operation_sequence[i] == 'M' and operation_sequence[i + 1] == 'M') for i in range(len(operation_sequence) - 1))
+
+# Constraint 4: For the group labeled M, the segments immediately after its segments all belong to one same group
+constraint_4 = (len(set(following_labels.get(M_group, []))) == 1)
+
+# Print results
+constraints_satisfied = all([constraint_1, constraint_2, constraint_3, constraint_4])
+print("S count:", S_count)
+print("M count:", M_count)
+print("Constraint 1 (1024 S, 512 M):", constraint_1)
+print("Constraint 2 (First operation S):", constraint_2)
+print("Constraint 3 (No consecutive M):", constraint_3)
+print("Constraint 4 (M followed by one group):", constraint_4)
+print("All constraints satisfied:", constraints_satisfied)
+
+# If all constraints are satisfied, save the operation sequence to a file
+if constraints_satisfied:
+    with open('./result.txt', 'w') as f:
+        f.write(''.join(operation_sequence))
+============================================================
+
+执行请求已发送, msg_id=9a9060e2-797749b139a46a7ed870e094_27232_13
+[Stream]: S count: 1024
+M count: 512
+Constraint 1 (1024 S, 512 M): True
+Constraint 2 (First operation S): True
+Constraint 3 (No consecutive M): True
+Constraint 4 (M followed by one group): True
+All constraints satisfied: True
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [09/Oct/2026 01:03:46] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [09/Oct/2026 01:03:48] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

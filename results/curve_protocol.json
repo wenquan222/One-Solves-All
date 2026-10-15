@@ -1,0 +1,9 @@
+{
+  "protocol": "Existing reconstructed intermediate states, archived original final choices, and archived random-search scores",
+  "success_metric": "Fraction of the same 70 runs whose current chosen complete label sequence exactly matches its reference",
+  "accuracy_metric": "Mean current operation-label accuracy across the same 70 runs",
+  "selection": "Latest valid model-labelled candidate; original full outputs take precedence; no truth-based best selection",
+  "error_rule": "Carry latest valid candidate after invalid calls; zero until one exists",
+  "termination": "Use original final snapshot at terminal attempt and carry it to later budgets",
+  "provenance_limit": "Some intermediate states differ in offline replay. They are reconstructed previews, not verified original trajectories."
+}

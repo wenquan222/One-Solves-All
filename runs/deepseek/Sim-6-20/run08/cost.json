@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "Sim-6-20",
+  "path": "runs/deepseek/Sim-6-20/run08",
+  "metadata_sha256": "e29b51d49b8cf754aa123b9b8e0d77d89211bbb0b277230cf9aa416f2e507d81",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 65.7,
+  "tool_sec": 2.08,
+  "other_elapsed_sec": 63.620000000000005,
+  "llm_calls": 4,
+  "tool_calls": 3,
+  "clustering_attempts": 1,
+  "input_tokens": 6861,
+  "output_tokens": 1283,
+  "cached_tokens": 2176,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0350064,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

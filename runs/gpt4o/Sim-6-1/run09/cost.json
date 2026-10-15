@@ -1,0 +1,22 @@
+{
+  "model": "gpt4o",
+  "trace": "Sim-6-1",
+  "path": "runs/gpt4o/Sim-6-1/run09",
+  "metadata_sha256": "10772d6ce33c5ba1edea59451de1a3e0469d3a9bca5c60de9b533ffe220f64cc",
+  "model_id": "openai/gpt-4o-2024-11-20",
+  "temperature": 0,
+  "duration_sec": 16.4,
+  "tool_sec": 0.98,
+  "other_elapsed_sec": 15.419999999999998,
+  "llm_calls": 2,
+  "tool_calls": 1,
+  "clustering_attempts": 1,
+  "input_tokens": 2305,
+  "output_tokens": 542,
+  "cached_tokens": 1024,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0099025,
+  "currency": "USD",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

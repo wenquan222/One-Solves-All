@@ -1,0 +1,22 @@
+{
+  "model": "gpt4o",
+  "trace": "ECC-SC",
+  "path": "runs/gpt4o/ECC-SC/run08",
+  "metadata_sha256": "ff2d5407027fcadf1c4f81074acaf6e54f325a2473c11e38cf46ca6231c13fb8",
+  "model_id": "openai/gpt-4o-2024-11-20",
+  "temperature": 0,
+  "duration_sec": 128.3,
+  "tool_sec": 2.5,
+  "other_elapsed_sec": 125.80000000000001,
+  "llm_calls": 4,
+  "tool_calls": 3,
+  "clustering_attempts": 3,
+  "input_tokens": 6443,
+  "output_tokens": 1212,
+  "cached_tokens": 3968,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0232675,
+  "currency": "USD",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

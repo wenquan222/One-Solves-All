@@ -1,0 +1,172 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/gpt4o/ECC-AT89S52/run08\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5064)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5064
+Press CTRL+C to quit
+127.0.0.1 - - [07/Oct/2026 00:27:57] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace file
+trace_file = './trace/ECC-AT89S52-32148.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_segments = 188
+segment_length = len(waveform) // num_segments
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_segments)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=2)  # Start with 2 components
+reduced_data = pca.fit_transform(segments)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign clusters to operations
+# Assume the larger cluster corresponds to 'D'
+cluster_counts = np.bincount(labels)
+D_label = np.argmax(cluster_counts)
+operation_sequence = ''.join(['D' if label == D_label else 'A' for label in labels])
+
+# Step 3: Constraint Verification
+D_count = operation_sequence.count('D')
+first_operation_is_D = operation_sequence[0] == 'D'
+no_consecutive_A = 'AA' not in operation_sequence
+
+# Print results
+print("D count:", D_count)
+print("First operation is D:", first_operation_is_D)
+print("No consecutive A operations:", no_consecutive_A)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+D_count, first_operation_is_D, no_consecutive_A
+============================================================
+
+执行请求已发送, msg_id=c7c07a48-1ba662bee72a5df63692d429_35108_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: D count: 111
+First operation is D: True
+No consecutive A operations: False
+[Result]: (111, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [07/Oct/2026 00:28:06] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA parameters and re-run clustering
+pca = PCA(n_components=5)  # Increase to 5 components
+reduced_data = pca.fit_transform(segments)
+
+# Re-apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign clusters to operations
+cluster_counts = np.bincount(labels)
+D_label = np.argmax(cluster_counts)
+operation_sequence = ''.join(['D' if label == D_label else 'A' for label in labels])
+
+# Step 3: Constraint Verification
+D_count = operation_sequence.count('D')
+first_operation_is_D = operation_sequence[0] == 'D'
+no_consecutive_A = 'AA' not in operation_sequence
+
+# Print results
+print("D count:", D_count)
+print("First operation is D:", first_operation_is_D)
+print("No consecutive A operations:", no_consecutive_A)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+D_count, first_operation_is_D, no_consecutive_A
+============================================================
+
+执行请求已发送, msg_id=c7c07a48-1ba662bee72a5df63692d429_35108_2
+[Stream]: D count: 111
+First operation is D: True
+No consecutive A operations: False
+[Result]: (111, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [07/Oct/2026 00:28:11] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Replace PCA with t-SNE for dimensionality reduction
+tsne = TSNE(n_components=2, random_state=42)
+reduced_data = tsne.fit_transform(segments)
+
+# Re-apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign clusters to operations
+cluster_counts = np.bincount(labels)
+D_label = np.argmax(cluster_counts)
+operation_sequence = ''.join(['D' if label == D_label else 'A' for label in labels])
+
+# Step 3: Constraint Verification
+D_count = operation_sequence.count('D')
+first_operation_is_D = operation_sequence[0] == 'D'
+no_consecutive_A = 'AA' not in operation_sequence
+
+# Print results
+print("D count:", D_count)
+print("First operation is D:", first_operation_is_D)
+print("No consecutive A operations:", no_consecutive_A)
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operation_sequence)
+
+# Output results for verification
+D_count, first_operation_is_D, no_consecutive_A
+============================================================
+
+执行请求已发送, msg_id=c7c07a48-1ba662bee72a5df63692d429_35108_3
+[Stream]: D count: 125
+First operation is D: True
+No consecutive A operations: True
+[Result]: (125, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [07/Oct/2026 00:28:17] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 00:28:18] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

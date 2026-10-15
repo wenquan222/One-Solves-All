@@ -1,0 +1,5 @@
+method,runs,successes,success_rate
+hca,250,0,0.0
+random,250,154,61.6
+gpt4o,250,235,94.0
+deepseek,250,245,98.0

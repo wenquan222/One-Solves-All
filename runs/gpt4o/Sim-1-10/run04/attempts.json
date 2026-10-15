@@ -1,0 +1,29 @@
+{
+  "model": "gpt4o",
+  "trace": "Sim-1-10",
+  "path": "runs/gpt4o/Sim-1-10/run04",
+  "original_calls_sha256": "0e4fb35bed232ddbf4645f69a0a4f88b1f9bc11e98ce7538ac5071553c0cb3f4",
+  "replay_path": "<LOCAL>/run04",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "d3ec9a8b552a9ef4874a5f2a6a6fc1f6084d7d9cf3940f96ccf7514348e2474f",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 1,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/gpt4o/Sim-1-10/run04\\snapshots\\call001_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

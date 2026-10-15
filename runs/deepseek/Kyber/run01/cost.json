@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "Kyber",
+  "path": "runs/deepseek/Kyber/run01",
+  "metadata_sha256": "e95ad9e14bfafe9e91786fa31e51618352275a53ccbc96d355bf2ba13d0687ef",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 110.7,
+  "tool_sec": 3.97,
+  "other_elapsed_sec": 106.73,
+  "llm_calls": 6,
+  "tool_calls": 5,
+  "clustering_attempts": 1,
+  "input_tokens": 9926,
+  "output_tokens": 1803,
+  "cached_tokens": 4608,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0447512,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

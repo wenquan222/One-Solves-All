@@ -1,0 +1,170 @@
+{
+  "model": "gpt4o",
+  "trace": "RSA-FPGA",
+  "path": "runs/gpt4o/RSA-FPGA/run05",
+  "original_calls_sha256": "1ddc0aa669d0f4f5a9002ca45740bac70c5d5ca51f5867eafbed45437f7706ba",
+  "replay_path": "<LOCAL>/run05",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "6f70dffcc386c2a76c9a6d962f8f4aeed6376ef44714240d959d88ca74b69fa1",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 1,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 2,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 3,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 4,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 5,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 6,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 7,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": null,
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 8,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 60.677083333333336,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "83d9bb4b3096d20f39df530301fcb93697b46ae634fb12c8bb525bc475a57790"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 9,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 60.7421875,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "9915ea98f33dd0c537fc3eff87d050d7400d030e260a54799cb7c2f4431cd50e"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 10,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 60.7421875,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "9915ea98f33dd0c537fc3eff87d050d7400d030e260a54799cb7c2f4431cd50e"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 11,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 60.7421875,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "9915ea98f33dd0c537fc3eff87d050d7400d030e260a54799cb7c2f4431cd50e"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 12,
+      "call": 12,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/gpt4o/RSA-FPGA/run05\\snapshots\\call012_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

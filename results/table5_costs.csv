@@ -1,0 +1,3 @@
+model,runtime_sec,input_tokens,output_tokens,cached_input_percent,estimated_api_cost,currency
+gpt4o,55.4608,43790.088,2222.42,91.91077213637935,0.08138966,USD
+deepseek,183.6328,28845.584,3636.528,72.59443247881548,0.0836356352,CNY

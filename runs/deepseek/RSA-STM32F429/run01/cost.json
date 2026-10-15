@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-STM32F429",
+  "path": "runs/deepseek/RSA-STM32F429/run01",
+  "metadata_sha256": "42604bf59d788800ee517343c41df5d99829f664114e654948020ab688e1e50a",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 329.7,
+  "tool_sec": 23.849999999999998,
+  "other_elapsed_sec": 305.84999999999997,
+  "llm_calls": 11,
+  "tool_calls": 10,
+  "clustering_attempts": 8,
+  "input_tokens": 56880,
+  "output_tokens": 7402,
+  "cached_tokens": 44800,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.155064,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

@@ -1,0 +1,811 @@
+{
+  "model": "gpt4o",
+  "trace": "RSA-STM32F429",
+  "path": "runs/gpt4o/RSA-STM32F429/run05",
+  "original_calls_sha256": "9113c109c2095337bb0dd3711d799656a05176434b9d2f028a40946972dff647",
+  "replay_path": "<LOCAL>/run05",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "fa0bd38192aa9ad5f49b81309cc37232a7ee3f4d2fdc3055ae6f447b873897cf",
+  "original_final_accuracy": 99.9348109517601,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 1,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call001_0001_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.54367666232073,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call003_0002_result.txt",
+        "sequence_sha256": "2be314730bfb790ba9bcfd9edaf4e9740d96c862151b92339d011ed1f8eafb21"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 4,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call004_0003_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 5,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 6,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 7,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 8,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 9,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 10,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 11,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 12,
+      "call": 12,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 13,
+      "call": 13,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 0.0651890482398957,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call013_0004_result.txt",
+        "sequence_sha256": "0a969aa485ab3e5b3571bb583b8bd0e03923ab897cc1c8974f74eaa77be42a23"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 14,
+      "call": 14,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.62320730117341,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call014_0005_result.txt",
+        "sequence_sha256": "f60d4f2ecb279b1d36ad79ed3b0391dffda9cac8e756f7fb6e8bfe307d562c3c"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 15,
+      "call": 15,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call015_0006_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 16,
+      "call": 16,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 17,
+      "call": 17,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 18,
+      "call": 18,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 19,
+      "call": 19,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 20,
+      "call": 20,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 21,
+      "call": 21,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 22,
+      "call": 22,
+      "fit_names": [
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 23,
+      "call": 23,
+      "fit_names": [
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 24,
+      "call": 24,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 25,
+      "call": 25,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 32.98565840938722,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call025_0007_result.txt",
+        "sequence_sha256": "7c24bbb950719b2c979088c693d67bea125b23a8e435a287c177bdbef2bfeec7"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 26,
+      "call": 26,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call026_0008_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 27,
+      "call": 27,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 28,
+      "call": 28,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 70.99087353324641,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call028_0009_result.txt",
+        "sequence_sha256": "febc9afd2c6c65b07fa8bfe3093f7d878dbab0c4cee330e575b0673cd1bb64c2"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 29,
+      "call": 29,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call029_0010_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 30,
+      "call": 30,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 31,
+      "call": 31,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 32,
+      "call": 32,
+      "fit_names": [],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 33,
+      "call": 33,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 35.13689700130378,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call033_0011_result.txt",
+        "sequence_sha256": "cfcd0f83e0b703804c42f5506fe32f952a1671b2cdf1df77b5cee9a6fa203d57"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 34,
+      "call": 34,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call034_0012_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 35,
+      "call": 35,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 36,
+      "call": 36,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.62320730117341,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call036_0013_result.txt",
+        "sequence_sha256": "f60d4f2ecb279b1d36ad79ed3b0391dffda9cac8e756f7fb6e8bfe307d562c3c"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 37,
+      "call": 37,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call037_0014_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 38,
+      "call": 38,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 39,
+      "call": 39,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 40,
+      "call": 40,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 41,
+      "call": 41,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 42,
+      "call": 42,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 43,
+      "call": 43,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 44,
+      "call": 44,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 45,
+      "call": 45,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 46,
+      "call": 46,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 47,
+      "call": 47,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 48,
+      "call": 48,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 49,
+      "call": 49,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 50,
+      "call": 50,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "original_final_snapshot",
+        "variable": "runs/gpt4o/RSA-STM32F429/run05\\snapshots\\call037_0014_result.txt",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

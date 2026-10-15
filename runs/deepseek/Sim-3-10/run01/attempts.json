@@ -1,0 +1,175 @@
+{
+  "model": "deepseek",
+  "trace": "Sim-3-10",
+  "path": "runs/deepseek/Sim-3-10/run01",
+  "original_calls_sha256": "501978d8bd336be53e2a05456c582cc450d5aeaf19b54b1fc13dd5a2536bd5fc",
+  "replay_path": "<LOCAL>/run01",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "02aaf3e6233131bc7180217a624b12c8b2bf8574a369f1a0c7c66f0caa90427e",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 57.096354166666664,
+        "source": "archived_replay_diverged",
+        "variable": "operations",
+        "sequence_sha256": "5d2353bd89b650e7df573be03b5a37c141f5894101c5820fc42e823f7cb638dc"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 55.989583333333336,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "e53067922aec0870028f4522e12a7435faeed6eeb070bd7f9179b4cd51215911"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 49.21875,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "f3d45fd088d2f770c5f4975e6a6bc1cd21cf618ea61664b677bd21402e161734"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 56.119791666666664,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "31744028a519cf03447e75953a1f6dd4aaa273f5563772022724a533a0f89539"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 51.432291666666664,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "aab1d1b12984b4e20d5027cc3341597fee89509f77a724200ba344d5366989f0"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "DBSCAN",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 51.432291666666664,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "aab1d1b12984b4e20d5027cc3341597fee89509f77a724200ba344d5366989f0"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "DBSCAN",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 64.32291666666667,
+        "source": "archived_replay_diverged",
+        "variable": "labels",
+        "sequence_sha256": "ad3800507d3d06c84804d638d27550ea1c6dac6aeccaf6e5b73cfd842f82e511"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": true
+    },
+    {
+      "attempt": 8,
+      "call": 9,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "ecb5a86d3cf5872cc0dd928c6ce5bf5e28adb811af6a1b8d902de8204b288bb3"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 10,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.93489583333333,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "ecb5a86d3cf5872cc0dd928c6ce5bf5e28adb811af6a1b8d902de8204b288bb3"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 11,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/Sim-3-10/run01\\snapshots\\call012_0001_result.txt",
+        "sequence_sha256": "48ba89d0941766fb5ed667c929b2fdc50933636a604e0b0a0e55e3be8580fdd4"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

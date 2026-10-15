@@ -1,0 +1,22 @@
+{
+  "model": "gpt4o",
+  "trace": "ECC-AT89S52",
+  "path": "runs/gpt4o/ECC-AT89S52/run04",
+  "metadata_sha256": "6d2b0584ab01491aaa2364fe663cd85942df28ed63cbbf380f9fbb3b01cdb2aa",
+  "model_id": "openai/gpt-4o-2024-11-20",
+  "temperature": 0,
+  "duration_sec": 22.2,
+  "tool_sec": 2.3200000000000003,
+  "other_elapsed_sec": 19.88,
+  "llm_calls": 4,
+  "tool_calls": 3,
+  "clustering_attempts": 3,
+  "input_tokens": 6529,
+  "output_tokens": 1249,
+  "cached_tokens": 4992,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0225725,
+  "currency": "USD",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

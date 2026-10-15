@@ -1,0 +1,17 @@
+{
+  "based_on": "处理后/ECC-AT89S52-33840.npy（188 个操作 × 180 点，完整覆盖）",
+  "key": "2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D",
+  "key_bits": 128,
+  "key_ones": 64,
+  "bit1_ratio": 0.5,
+  "key_source": "无设备密钥记录：按作者规则逐段识别（段中间尖峰 1 个为 D、2 个为 A）读出 125 位，按 8 位周期重复；256 个单字节重复 16 次的 128 位密钥中，仅 0x2D×16 去前导 0 与最高位 1 后与之完全一致",
+  "n_ops": 188,
+  "D": 125,
+  "A": 63,
+  "points_per_op": 171,
+  "total_points": 32148,
+  "filled_operations": [],
+  "resampling": "每段线性插值重采样 180 → 171 点",
+  "disclosure_en": "The reference key of this trace (0x2D repeated, 128 bits) is identified from the trace by expert inspection, as no device record is available; every operation is resampled to 171 points.",
+  "date": "2026-10-05"
+}

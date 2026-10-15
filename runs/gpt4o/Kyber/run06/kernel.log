@@ -1,0 +1,73 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/gpt4o/Kyber/run06\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5064)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5064
+Press CTRL+C to quit
+127.0.0.1 - - [07/Oct/2026 00:14:18] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the waveform
+trace_file = './trace/Kyber-34560.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_segments = 256
+segment_length = len(waveform) // num_segments
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_segments)])
+
+# Step 2: Dimensionality Reduction using PCA
+pca = PCA(n_components=1)  # Reduce to 1 dimension
+reduced_segments = pca.fit_transform(segments)
+
+# Step 3: Clustering using KMeans
+kmeans = KMeans(n_clusters=2, random_state=0)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster to 0 (assuming 0 is more frequent)
+if np.sum(labels) > len(labels) / 2:
+    labels = 1 - labels  # Invert labels if necessary
+
+# Convert labels to a single bit sequence
+bit_sequence = ''.join(map(str, labels))
+
+# Save the bit sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(bit_sequence)
+
+# Output the bit sequence for verification
+bit_sequence
+============================================================
+
+执行请求已发送, msg_id=8a640a7a-e11465f6b78abd7d1772a4f8_33716_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Result]: '001000010000001000001100100000001000100101010000100111001000100100000000100110100001101011100110000...
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [07/Oct/2026 00:14:22] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 00:14:23] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

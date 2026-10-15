@@ -1,0 +1,1332 @@
+初始化 Jupyter Kernel Manager，工作目录 <LOCAL>/work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5062)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5062
+Press CTRL+C to quit
+127.0.0.1 - - [06/Oct/2026 23:21:22] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace file
+trace_file = './trace/RSA-ASIC-502272.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_segments = 1536
+segment_length = len(waveform) // num_segments
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_segments)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=2)  # Start with 2 components
+reduced_data = pca.fit_transform(segments)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: S count: 776, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 23:21:29] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA parameters: Increase the number of components to 5
+pca = PCA(n_components=5)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_2
+[Stream]: S count: 776, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:21:35] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Replace PCA with t-SNE for dimensionality reduction
+tsne = TSNE(n_components=2, random_state=42)
+reduced_data = tsne.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_3
+[Stream]: S count: 775, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:21:42] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from umap import UMAP
+
+# Replace t-SNE with UMAP for dimensionality reduction
+umap = UMAP(n_components=2, random_state=42)
+reduced_data = umap.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_4
+[Stream]: <LOCAL>/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1025, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:21:58] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.mixture import GaussianMixture
+
+# Use GMM for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_5
+[Stream]: S count: 1025, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:04] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 23:22:07] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import DBSCAN
+
+# Use DBSCAN for clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(reduced_data)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_6
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjust parameters and retry.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:10] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust DBSCAN parameters: Increase eps to 0.7
+dbscan = DBSCAN(eps=0.7, min_samples=5)
+labels = dbscan.fit_predict(reduced_data)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_7
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjust parameters and retry.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:15] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust DBSCAN parameters: Increase eps to 1.0
+dbscan = DBSCAN(eps=1.0, min_samples=5)
+labels = dbscan.fit_predict(reduced_data)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_8
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjust parameters and retry.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:19] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import AgglomerativeClustering
+
+# Use Agglomerative Clustering for clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_9
+[Stream]: S count: 1025, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:23] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.decomposition import KernelPCA
+
+# Replace UMAP with Kernel PCA for dimensionality reduction
+kernel_pca = KernelPCA(n_components=2, kernel='rbf', random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_10
+[Stream]: S count: 776, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:27] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Increase the number of components in Kernel PCA to 5
+kernel_pca = KernelPCA(n_components=5, kernel='rbf', random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_11
+[Stream]: S count: 776, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:31] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Kernel PCA with a polynomial kernel
+kernel_pca = KernelPCA(n_components=2, kernel='poly', random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_12
+[Stream]: S count: 774, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Kernel PCA with a sigmoid kernel
+kernel_pca = KernelPCA(n_components=2, kernel='sigmoid', random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_13
+[Stream]: S count: 776, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:42] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Kernel PCA with a linear kernel
+kernel_pca = KernelPCA(n_components=2, kernel='linear', random_state=42)
+reduced_data = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_14
+[Stream]: S count: 776, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:47] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import SpectralClustering
+
+# Use PCA for dimensionality reduction
+pca = PCA(n_components=2)
+reduced_data = pca.fit_transform(segments)
+
+# Use Spectral Clustering for clustering
+spectral = SpectralClustering(n_clusters=2, random_state=42, affinity='nearest_neighbors')
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_15
+[Stream]: S count: 1028, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:22:52] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Increase the number of PCA components to 5
+pca = PCA(n_components=5)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run Spectral Clustering
+spectral = SpectralClustering(n_clusters=2, random_state=42, affinity='nearest_neighbors')
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_16
+[Stream]: <LOCAL>/_spectral_embedding.py:301: UserWarning: Graph is not fully connected, spectral embedding may not work as expected.
+  warnings.warn(
+[Stream]: S count: 1025, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:00] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Use Spectral Clustering with RBF kernel affinity
+spectral = SpectralClustering(n_clusters=2, random_state=42, affinity='rbf')
+labels = spectral.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_17
+[Stream]: S count: 768, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:04] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import OPTICS
+
+# Use OPTICS for clustering
+optics = OPTICS(min_samples=5)
+labels = optics.fit_predict(reduced_data)
+
+# Check if OPTICS produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("OPTICS did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_18
+[Stream]: OPTICS did not produce exactly 2 clusters. Adjust parameters and retry.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:10] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust OPTICS parameters: Increase min_samples to 10
+optics = OPTICS(min_samples=10)
+labels = optics.fit_predict(reduced_data)
+
+# Check if OPTICS produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("OPTICS did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_19
+[Stream]: OPTICS did not produce exactly 2 clusters. Adjust parameters and retry.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:14] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust OPTICS parameters: Increase min_samples to 20
+optics = OPTICS(min_samples=20)
+labels = optics.fit_predict(reduced_data)
+
+# Check if OPTICS produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("OPTICS did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_20
+[Stream]: OPTICS did not produce exactly 2 clusters. Adjust parameters and retry.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:20] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to UMAP for dimensionality reduction
+umap = UMAP(n_components=2, random_state=42)
+reduced_data = umap.fit_transform(segments)
+
+# Adjust KMeans parameters: Increase max_iter to 500
+kmeans = KMeans(n_clusters=2, random_state=42, max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_21
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1025, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:26] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Increase the number of UMAP components to 5
+umap = UMAP(n_components=5, random_state=42)
+reduced_data = umap.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_22
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023, Constraint 1: False, Constraint 2: False, Constraint 3: True
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:33] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.decomposition import FastICA
+
+# Use ICA for dimensionality reduction
+ica = FastICA(n_components=2, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_23
+[Stream]: S count: 785, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:37] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Increase the number of ICA components to 5
+ica = FastICA(n_components=5, random_state=42)
+reduced_data = ica.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_24
+[Stream]: S count: 806, Constraint 1: False, Constraint 2: False, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:43] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Combine PCA and ICA for dimensionality reduction
+pca = PCA(n_components=5)
+pca_reduced_data = pca.fit_transform(segments)
+
+ica = FastICA(n_components=2, random_state=42)
+reduced_data = ica.fit_transform(pca_reduced_data)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_25
+[Stream]: S count: 785, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:49] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import Birch
+
+# Use PCA for dimensionality reduction
+pca = PCA(n_components=2)
+reduced_data = pca.fit_transform(segments)
+
+# Use Birch for clustering
+birch = Birch(n_clusters=2)
+labels = birch.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_26
+[Stream]: <LOCAL>/_birch.py:725: ConvergenceWarning: Number of subclusters found (1) by BIRCH is less than (2). Decrease the threshold.
+  warnings.warn(
+[Stream]: S count: 1536, Constraint 1: False, Constraint 2: True, Constraint 3: True
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:23:55] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust Birch parameters: Decrease threshold to 0.3
+birch = Birch(n_clusters=2, threshold=0.3)
+labels = birch.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_27
+[Stream]: <LOCAL>/_birch.py:725: ConvergenceWarning: Number of subclusters found (1) by BIRCH is less than (2). Decrease the threshold.
+  warnings.warn(
+[Stream]: S count: 1536, Constraint 1: False, Constraint 2: True, Constraint 3: True
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:01] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Further decrease Birch threshold to 0.1
+birch = Birch(n_clusters=2, threshold=0.1)
+labels = birch.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_28
+[Stream]: S count: 1015, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:06] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import AffinityPropagation
+
+# Use Affinity Propagation for clustering
+affinity_propagation = AffinityPropagation(random_state=42)
+labels = affinity_propagation.fit_predict(reduced_data)
+
+# Check if Affinity Propagation produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("Affinity Propagation did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_29
+[Stream]: <LOCAL>/_affinity_propagation.py:142: ConvergenceWarning: Affinity propagation did not converge, this model may return degenerate cluster centers and labels.
+  warnings.warn(
+[Stream]: Affinity Propagation did not produce exactly 2 clusters. Adjust parameters and retry.
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:16] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust Affinity Propagation parameters: Increase damping to 0.9
+affinity_propagation = AffinityPropagation(random_state=42, damping=0.9)
+labels = affinity_propagation.fit_predict(reduced_data)
+
+# Check if Affinity Propagation produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("Affinity Propagation did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_30
+[Stream]: Affinity Propagation did not produce exactly 2 clusters. Adjust parameters and retry.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:23] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import MeanShift
+
+# Use Mean Shift for clustering
+mean_shift = MeanShift()
+labels = mean_shift.fit_predict(reduced_data)
+
+# Check if Mean Shift produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("Mean Shift did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_31
+[Stream]: S count: 794, Constraint 1: False, Constraint 2: False, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:33] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust Mean Shift parameters: Set bandwidth to 2.0
+mean_shift = MeanShift(bandwidth=2.0)
+labels = mean_shift.fit_predict(reduced_data)
+
+# Check if Mean Shift produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("Mean Shift did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_32
+[Stream]: Mean Shift did not produce exactly 2 clusters. Adjust parameters and retry.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:41] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Further adjust Mean Shift parameters: Set bandwidth to 5.0
+mean_shift = MeanShift(bandwidth=5.0)
+labels = mean_shift.fit_predict(reduced_data)
+
+# Check if Mean Shift produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign labels: Larger cluster is S
+    cluster_sizes = np.bincount(labels)
+    s_label = np.argmax(cluster_sizes)  # Label for S
+    m_label = 1 - s_label  # Label for M
+    operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+    # Step 3: Constraint Verification
+    s_count = operation_sequence.count('S')
+    constraint_1 = (s_count == 1024)
+    constraint_2 = (operation_sequence[0] == 'S')
+    constraint_3 = ('MM' not in operation_sequence)
+
+    # Print results
+    print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+    # Save the operation sequence to a file
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+else:
+    print("Mean Shift did not produce exactly 2 clusters. Adjust parameters and retry.")
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_33
+[Stream]: Mean Shift did not produce exactly 2 clusters. Adjust parameters and retry.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:48] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to UMAP for dimensionality reduction
+umap = UMAP(n_components=2, random_state=42)
+reduced_data = umap.fit_transform(segments)
+
+# Adjust KMeans parameters: Use k-means++ initialization
+kmeans = KMeans(n_clusters=2, random_state=42, init='k-means++', max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_34
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1025, Constraint 1: False, Constraint 2: True, Constraint 3: False
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:24:56] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Increase the number of UMAP components to 5
+umap = UMAP(n_components=5, random_state=42)
+reduced_data = umap.fit_transform(segments)
+
+# Re-run KMeans clustering with k-means++ initialization
+kmeans = KMeans(n_clusters=2, random_state=42, init='k-means++', max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_35
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023, Constraint 1: False, Constraint 2: False, Constraint 3: True
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:25:03] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Re-run KMeans clustering with random initialization
+kmeans = KMeans(n_clusters=2, random_state=42, init='random', max_iter=500)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign labels: Larger cluster is S
+cluster_sizes = np.bincount(labels)
+s_label = np.argmax(cluster_sizes)  # Label for S
+m_label = 1 - s_label  # Label for M
+operation_sequence = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operation_sequence.count('S')
+constraint_1 = (s_count == 1024)
+constraint_2 = (operation_sequence[0] == 'S')
+constraint_3 = ('MM' not in operation_sequence)
+
+# Print results
+print(f"S count: {s_count}, Constraint 1: {constraint_1}, Constraint 2: {constraint_2}, Constraint 3: {constraint_3}")
+
+# Save the operation sequence to a file
+with open('./result.txt', 'w') as f:
+    f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=44ed682d-74eabcfddd092cd724a964d1_9448_36
+[Stream]: S count: 1024, Constraint 1: True, Constraint 2: True, Constraint 3: True
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:25:10] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 23:25:13] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

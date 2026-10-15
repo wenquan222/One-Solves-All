@@ -1,0 +1,45 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-SC",
+  "path": "runs/deepseek/ECC-SC/run06",
+  "original_calls_sha256": "0ba2dea3fc4ac975433518479a5b563c571781f4ecd1824de8437b44e896a1e7",
+  "replay_path": "<LOCAL>/run06",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "71b00501601f83944b23f2fd7ef467bb34fa5215b7e92db1824cb6b5e2b7d2a4",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 91.39784946236558,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cbf7d08bde5c8ba706bef3f47cddf2deb954793a0ee36fcc06958fb8e061b919"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/ECC-SC/run06\\snapshots\\call005_0001_result.txt",
+        "sequence_sha256": "b32d949a8b858b5fd0f03ac1f5073a30e9c116e4e9b5a658f096ef7007ee881f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

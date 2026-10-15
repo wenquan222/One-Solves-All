@@ -1,0 +1,144 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-STM32F429",
+  "path": "runs/deepseek/RSA-STM32F429/run01",
+  "original_calls_sha256": "1221d29c0079736de2f71e4df35efd903ae008910e402d38800b647ea9053ac1",
+  "replay_path": "<LOCAL>/run01",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "531786001b76fc50bf80cd0315893ade5651f456b285079b9590f661ac5864d2",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.21773142112126,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "948afe247ea839e21a2ab1b45e45d874d6fd93db30254bdfd61775ce9c49a56f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.34810951760105,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "75405ee720185aa7a38f443febfeb27e91d704a9d9ee72454846510f6985a814"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN"
+      ],
+      "new_valid_candidate": false,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": true,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.9348109517601,
+        "source": "archived_replay_matching_output",
+        "variable": "labels",
+        "sequence_sha256": "cd1f53a4e9193cbd8937439caf36383371c6fec119ea026d8c01d841c40f2941"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 9,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/RSA-STM32F429/run01\\snapshots\\call010_0001_result.txt",
+        "sequence_sha256": "b07f33fd246c301a28d32edba6e6adfa9bccecb9e0582363cc1d945e516db9fa"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

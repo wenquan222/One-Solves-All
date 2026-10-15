@@ -1,0 +1,280 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/Kyber/run03\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5065)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5065
+Press CTRL+C to quit
+127.0.0.1 - - [05/Oct/2026 20:25:05] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace file
+trace = np.load('./trace/Kyber-34560.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Plot the full trace to visualize it
+plt.figure(figsize=(12, 6))
+plt.plot(trace)
+plt.title('Full Kyber Trace')
+plt.xlabel('Sample Index')
+plt.ylabel('Amplitude')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202513_441478_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202513_441478_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=a7d89567-fdc13c633aef110ad18933c2_27104_1
+[Stream]: Trace shape: (34560,)
+Trace length: 34560
+[Stream]: {"plot_path": "../images/img_20261005_202513_441478_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:25:14] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Calculate segment length
+segment_length = len(trace) // 256
+print(f"Segment length: {segment_length}")
+
+# Segment the trace into 256 equal parts
+segments = np.array_split(trace, 256)
+print(f"Number of segments: {len(segments)}")
+print(f"Shape of first segment: {segments[0].shape}")
+
+# Verify all segments have the same length
+segment_lengths = [len(seg) for seg in segments]
+print(f"Min segment length: {min(segment_lengths)}")
+print(f"Max segment length: {max(segment_lengths)}")
+print(f"All segments equal length: {len(set(segment_lengths)) == 1}")
+
+# Plot a few sample segments to visualize the patterns
+plt.figure(figsize=(15, 8))
+for i in range(6):
+    plt.subplot(2, 3, i+1)
+    plt.plot(segments[i])
+    plt.title(f'Segment {i}')
+    plt.xlabel('Sample Index')
+    plt.ylabel('Amplitude')
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202545_372352_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202545_372352_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=a7d89567-fdc13c633aef110ad18933c2_27104_2
+[Stream]: Segment length: 135
+Number of segments: 256
+Shape of first segment: (135,)
+Min segment length: 135
+Max segment length: 135
+All segments equal length: True
+[Stream]: {"plot_path": "../images/img_20261005_202545_372352_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:25:46] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Convert segments to a 2D array (256 segments × 135 samples)
+segment_matrix = np.array(segments)
+print(f"Segment matrix shape: {segment_matrix.shape}")
+
+# Apply PCA without standardization
+pca = PCA(n_components=2)
+pca_result = pca.fit_transform(segment_matrix)
+print(f"PCA explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca.explained_variance_ratio_):.4f}")
+
+# Apply KMeans clustering with k=2
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+cluster_labels = kmeans.fit_predict(segment_matrix)
+
+print(f"Cluster labels: {cluster_labels}")
+print(f"Cluster sizes: {np.bincount(cluster_labels)}")
+
+# Plot the PCA results with clustering
+plt.figure(figsize=(10, 8))
+scatter = plt.scatter(pca_result[:, 0], pca_result[:, 1], c=cluster_labels, cmap='viridis')
+plt.colorbar(scatter)
+plt.title('PCA of Segments with KMeans Clustering (k=2)')
+plt.xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.2%} variance)')
+plt.ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.2%} variance)')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202601_375803_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202601_375803_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=a7d89567-fdc13c633aef110ad18933c2_27104_3
+[Stream]: Segment matrix shape: (256, 135)
+[Stream]: 
+[Stream]: PCA explained variance ratio: [0.48553438 0.22420488]
+Total explained variance: 0.7097
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster labels: [0 0 1 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 1 0 0 0 1
+ 0 0 1 0 1 0 1 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 1 0
+ 0 1 1 0 1 0 0 0 0 1 1 0 1 0 1 1 1 0 0 1 1 0 0 0 0 0 0 1 0 0 0 0 0 1 1 0 0
+ 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 1 0 1 1 0 1 0 0 0 1 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 1 1 0 1 0 1 1 0 0 0 0 1 0 0 0 0 0 0 0 1 0
+ 0 1 1 1 0 1 1 0 0 1 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 0 0 1 1 0 0 0 1 0 1 0
+ 0 0 0 0 0 1 1 0 0 0 1 0 0 0 1 0 0 1 0 0 0 1 1 0 1 0 0 0 0 0 0 1 0 0]
+Cluster sizes: [182  74]
+[Stream]: {"plot_path": "../images/img_20261005_202601_375803_3.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 9 条输出。
+127.0.0.1 - - [05/Oct/2026 20:26:02] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Determine which cluster is larger
+cluster_counts = np.bincount(cluster_labels)
+print(f"Cluster counts: {cluster_counts}")
+
+# The larger cluster should be 0 (more frequent)
+if cluster_counts[0] > cluster_counts[1]:
+    # Cluster 0 is larger, so cluster 0 = 0, cluster 1 = 1
+    bit_mapping = {0: '0', 1: '1'}
+else:
+    # Cluster 1 is larger, so cluster 1 = 0, cluster 0 = 1
+    bit_mapping = {1: '0', 0: '1'}
+
+print(f"Bit mapping: {bit_mapping}")
+
+# Convert cluster labels to bits
+bit_sequence = ''.join([bit_mapping[label] for label in cluster_labels])
+print(f"First 50 bits: {bit_sequence[:50]}")
+print(f"Last 50 bits: {bit_sequence[-50:]}")
+print(f"Total bits: {len(bit_sequence)}")
+
+# Count 0s and 1s
+count_0 = bit_sequence.count('0')
+count_1 = bit_sequence.count('1')
+print(f"Number of 0s: {count_0}")
+print(f"Number of 1s: {count_1}")
+============================================================
+
+执行请求已发送, msg_id=a7d89567-fdc13c633aef110ad18933c2_27104_4
+[Stream]: Cluster counts: [182  74]
+Bit mapping: {0: '0', 1: '1'}
+First 50 bits: 00100001000000100000110010000000100010010101000010
+Last 50 bits: 01000001100010100000011000100010010001101000000100
+Total bits: 256
+Number of 0s: 182
+Number of 1s: 74
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [05/Oct/2026 20:26:17] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Save the complete bit sequence to result.txt
+with open('./result.txt', 'w') as f:
+    f.write(bit_sequence)
+
+print("Bit sequence successfully saved to ./result.txt")
+print(f"Complete bit sequence: {bit_sequence}")
+
+# Verify the file was written correctly
+with open('./result.txt', 'r') as f:
+    saved_bits = f.read().strip()
+
+print(f"Bits read back from file: {saved_bits}")
+print(f"File content matches: {saved_bits == bit_sequence}")
+print(f"Length of saved bits: {len(saved_bits)}")
+============================================================
+
+执行请求已发送, msg_id=a7d89567-fdc13c633aef110ad18933c2_27104_5
+[Stream]: Bit sequence successfully saved to ./result.txt
+Complete bit sequence: 0010000100000010000011001000000010001001010100001001110010001001000000001001101000011010111001100000010000011000100010000100001001000001011010001000000000000010001011010110000100000001001110110010000101000001000001100010100000011000100010010001101000000100
+[Stream]: Bits read back from file: 0010000100000010000011001000000010001001010100001001110010001001000000001001101000011010111001100000010000011000100010000100001001000001011010001000000000000010001011010110000100000001001110110010000101000001000001100010100000011000100010010001101000000100
+File content matches: True
+Length of saved bits: 256
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [05/Oct/2026 20:26:28] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Visualize the bit sequence as a binary plot
+plt.figure(figsize=(15, 4))
+bit_values = [int(bit) for bit in bit_sequence]
+plt.step(range(len(bit_values)), bit_values, where='mid')
+plt.title('Bit Sequence (0s and 1s)')
+plt.xlabel('Bit Position')
+plt.ylabel('Bit Value')
+plt.yticks([0, 1])
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202639_257462_4.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202639_257462_4.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+# Also show the distribution of bits
+plt.figure(figsize=(8, 6))
+plt.bar(['0', '1'], [count_0, count_1], color=['blue', 'red'])
+plt.title('Distribution of Bits')
+plt.ylabel('Count')
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_202639_257462_5.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_202639_257462_5.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=a7d89567-fdc13c633aef110ad18933c2_27104_6
+[Stream]: {"plot_path": "../images/img_20261005_202639_257462_4.png"}
+[Stream]: {"plot_path": "../images/img_20261005_202639_257462_5.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:26:39] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [05/Oct/2026 20:26:55] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

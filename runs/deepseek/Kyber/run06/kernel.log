@@ -1,0 +1,203 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/Kyber/run06\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5065)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5065
+Press CTRL+C to quit
+127.0.0.1 - - [05/Oct/2026 20:30:55] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace data
+print("Loading trace data...")
+trace = np.load('./trace/Kyber-34560.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Calculate segment length for 256 equal parts
+segment_length = len(trace) // 256
+print(f"Segment length: {segment_length}")
+print(f"Total segments: {256}")
+
+# Verify the segmentation
+if len(trace) % 256 != 0:
+    print(f"Warning: Trace length {len(trace)} is not perfectly divisible by 256")
+    print(f"Remainder: {len(trace) % 256}")
+
+# Reshape into 256 segments
+trace_segments = trace[:256 * segment_length].reshape(256, segment_length)
+print(f"Segments shape: {trace_segments.shape}")
+
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_203107_354908_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_203107_354908_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+
+============================================================
+
+执行请求已发送, msg_id=11fe4c78-c5ab8ec374128348c9600aaa_26796_1
+[Stream]: Loading trace data...
+[Stream]: Trace shape: (34560,)
+Trace length: 34560
+Segment length: 135
+Total segments: 256
+Segments shape: (256, 135)
+[Stream]: {"plot_path": "../images/img_20261005_203107_354908_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:31:08] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Apply PCA for dimensionality reduction
+print("Applying PCA...")
+pca = PCA(n_components=2)
+pca_result = pca.fit_transform(trace_segments)
+print(f"PCA result shape: {pca_result.shape}")
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+
+# Apply KMeans clustering with k=2
+print("\nApplying KMeans clustering...")
+kmeans = KMeans(n_clusters=2, random_state=42)
+cluster_labels = kmeans.fit_predict(trace_segments)
+print(f"Cluster labels shape: {cluster_labels.shape}")
+
+# Count the number of points in each cluster
+unique, counts = np.unique(cluster_labels, return_counts=True)
+print(f"Cluster distribution: {dict(zip(unique, counts))}")
+
+# Identify which cluster is larger (should be assigned as 0)
+larger_cluster = unique[np.argmax(counts)]
+smaller_cluster = unique[np.argmin(counts)]
+print(f"Larger cluster (will be assigned as 0): {larger_cluster}")
+print(f"Smaller cluster (will be assigned as 1): {smaller_cluster}")
+============================================================
+
+执行请求已发送, msg_id=11fe4c78-c5ab8ec374128348c9600aaa_26796_2
+[Stream]: Applying PCA...
+[Stream]: PCA result shape: (256, 2)
+Explained variance ratio: [0.48553438 0.22420488]
+
+Applying KMeans clustering...
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster labels shape: (256,)
+[Stream]: Cluster distribution: {0: 182, 1: 74}
+Larger cluster (will be assigned as 0): 0
+Smaller cluster (will be assigned as 1): 1
+收到 idle 状态，执行完成
+代码执行完成，返回 7 条输出。
+127.0.0.1 - - [05/Oct/2026 20:31:24] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Map cluster labels to bit values (larger cluster = 0, smaller cluster = 1)
+bit_mapping = {larger_cluster: '0', smaller_cluster: '1'}
+bit_sequence = [bit_mapping[label] for label in cluster_labels]
+
+print("First 50 bits of the sequence:")
+print(''.join(bit_sequence[:50]))
+print(f"\nTotal bits: {len(bit_sequence)}")
+print(f"Number of 0s: {bit_sequence.count('0')}")
+print(f"Number of 1s: {bit_sequence.count('1')}")
+
+# Visualize the clustering results
+plt.figure(figsize=(12, 5))
+
+# Plot 1: PCA visualization
+plt.subplot(1, 2, 1)
+scatter = plt.scatter(pca_result[:, 0], pca_result[:, 1], c=cluster_labels, cmap='viridis', alpha=0.7)
+plt.colorbar(scatter)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.title('PCA Projection with Clustering')
+
+# Plot 2: Bit sequence visualization
+plt.subplot(1, 2, 2)
+bit_values = [int(bit) for bit in bit_sequence]
+plt.plot(bit_values, 'o-', markersize=3)
+plt.xlabel('Bit Index')
+plt.ylabel('Bit Value')
+plt.title('Bit Sequence')
+plt.yticks([0, 1])
+
+plt.tight_layout()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261005_203140_865180_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261005_203140_865180_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=11fe4c78-c5ab8ec374128348c9600aaa_26796_3
+[Stream]: First 50 bits of the sequence:
+[Stream]: 00100001000000100000110010000000100010010101000010
+
+Total bits: 256
+Number of 0s: 182
+Number of 1s: 74
+[Stream]: {"plot_path": "../images/img_20261005_203140_865180_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:31:41] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Save the complete bit sequence to file
+with open('./result.txt', 'w') as f:
+    f.write(''.join(bit_sequence))
+
+print("Bit sequence successfully saved to ./result.txt")
+print("\nComplete bit sequence (256 bits):")
+print(''.join(bit_sequence))
+
+# Verify the file was written correctly
+with open('./result.txt', 'r') as f:
+    saved_content = f.read()
+
+print(f"\nVerification - File contains {len(saved_content)} characters")
+print(f"First 50 characters from file: {saved_content[:50]}")
+print(f"Last 50 characters from file: {saved_content[-50:]}")
+============================================================
+
+执行请求已发送, msg_id=11fe4c78-c5ab8ec374128348c9600aaa_26796_4
+[Stream]: Bit sequence successfully saved to ./result.txt
+
+Complete bit sequence (256 bits):
+0010000100000010000011001000000010001001010100001001110010001001000000001001101000011010111001100000010000011000100010000100001001000001011010001000000000000010001011010110000100000001001110110010000101000001000001100010100000011000100010010001101000000100
+[Stream]: Verification - File contains 256 characters
+[Stream]: First 50 characters from file: 00100001000000100000110010000000100010010101000010
+Last 50 characters from file: 01000001100010100000011000100010010001101000000100
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [05/Oct/2026 20:31:50] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [05/Oct/2026 20:32:03] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

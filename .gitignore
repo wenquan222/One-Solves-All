@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.env
+api_keys.txt
+local_runs/
+local_baseline.json
+results/recomputed/
+.venv/
+venv/
+

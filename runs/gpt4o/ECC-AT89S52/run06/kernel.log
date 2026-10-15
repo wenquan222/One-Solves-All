@@ -1,0 +1,169 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/gpt4o/ECC-AT89S52/run06\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5062)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5062
+Press CTRL+C to quit
+127.0.0.1 - - [07/Oct/2026 00:07:46] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace file
+trace_file = './trace/ECC-AT89S52-32148.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_segments = 188
+segment_length = len(waveform) // num_segments
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_segments)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=2)  # Start with 2 components
+reduced_data = pca.fit_transform(segments)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign clusters to operations
+# Assume the larger cluster corresponds to 'D'
+cluster_counts = np.bincount(labels)
+D_label = np.argmax(cluster_counts)
+operation_sequence = ''.join(['D' if label == D_label else 'A' for label in labels])
+
+# Step 3: Constraint Verification
+D_count = operation_sequence.count('D')
+constraint_1 = (D_count == 125)
+constraint_2 = (operation_sequence[0] == 'D')
+constraint_3 = ('AA' not in operation_sequence)
+
+# Print results
+print("D count:", D_count)
+print("Constraint 1 (125 D operations):", "Pass" if constraint_1 else "Fail")
+print("Constraint 2 (First operation is D):", "Pass" if constraint_2 else "Fail")
+print("Constraint 3 (No consecutive A operations):", "Pass" if constraint_3 else "Fail")
+
+# Save the operation sequence to a file if all constraints are satisfied
+if constraint_1 and constraint_2 and constraint_3:
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=0b58bc2a-fea0522d59b9597700480b3e_24468_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: D count: 111
+Constraint 1 (125 D operations): Fail
+Constraint 2 (First operation is D): Pass
+Constraint 3 (No consecutive A operations): Fail
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [07/Oct/2026 00:07:51] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA parameters: Increase the number of components to 3
+pca = PCA(n_components=3)
+reduced_data = pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign clusters to operations
+cluster_counts = np.bincount(labels)
+D_label = np.argmax(cluster_counts)
+operation_sequence = ''.join(['D' if label == D_label else 'A' for label in labels])
+
+# Constraint Verification
+D_count = operation_sequence.count('D')
+constraint_1 = (D_count == 125)
+constraint_2 = (operation_sequence[0] == 'D')
+constraint_3 = ('AA' not in operation_sequence)
+
+# Print results
+print("D count:", D_count)
+print("Constraint 1 (125 D operations):", "Pass" if constraint_1 else "Fail")
+print("Constraint 2 (First operation is D):", "Pass" if constraint_2 else "Fail")
+print("Constraint 3 (No consecutive A operations):", "Pass" if constraint_3 else "Fail")
+
+# Save the operation sequence to a file if all constraints are satisfied
+if constraint_1 and constraint_2 and constraint_3:
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=0b58bc2a-fea0522d59b9597700480b3e_24468_2
+[Stream]: D count: 111
+Constraint 1 (125 D operations): Fail
+Constraint 2 (First operation is D): Pass
+Constraint 3 (No consecutive A operations): Fail
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [07/Oct/2026 00:07:54] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Replace PCA with t-SNE for dimensionality reduction
+tsne = TSNE(n_components=2, random_state=42)
+reduced_data = tsne.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_data)
+
+# Assign clusters to operations
+cluster_counts = np.bincount(labels)
+D_label = np.argmax(cluster_counts)
+operation_sequence = ''.join(['D' if label == D_label else 'A' for label in labels])
+
+# Constraint Verification
+D_count = operation_sequence.count('D')
+constraint_1 = (D_count == 125)
+constraint_2 = (operation_sequence[0] == 'D')
+constraint_3 = ('AA' not in operation_sequence)
+
+# Print results
+print("D count:", D_count)
+print("Constraint 1 (125 D operations):", "Pass" if constraint_1 else "Fail")
+print("Constraint 2 (First operation is D):", "Pass" if constraint_2 else "Fail")
+print("Constraint 3 (No consecutive A operations):", "Pass" if constraint_3 else "Fail")
+
+# Save the operation sequence to a file if all constraints are satisfied
+if constraint_1 and constraint_2 and constraint_3:
+    with open('./result.txt', 'w') as f:
+        f.write(operation_sequence)
+============================================================
+
+执行请求已发送, msg_id=0b58bc2a-fea0522d59b9597700480b3e_24468_3
+[Stream]: D count: 125
+Constraint 1 (125 D operations): Pass
+Constraint 2 (First operation is D): Pass
+Constraint 3 (No consecutive A operations): Pass
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [07/Oct/2026 00:07:59] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2026 00:08:00] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

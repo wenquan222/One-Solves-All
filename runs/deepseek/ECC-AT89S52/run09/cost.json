@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-AT89S52",
+  "path": "runs/deepseek/ECC-AT89S52/run09",
+  "metadata_sha256": "9bffeab9b532d9075eaeedfc09a1904261e977a70b81ba982d269bbd7b7dc04a",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 293.7,
+  "tool_sec": 14.040000000000001,
+  "other_elapsed_sec": 279.65999999999997,
+  "llm_calls": 8,
+  "tool_calls": 7,
+  "clustering_attempts": 4,
+  "input_tokens": 35040,
+  "output_tokens": 6667,
+  "cached_tokens": 22400,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.139524,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

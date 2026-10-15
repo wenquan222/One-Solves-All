@@ -1,0 +1,1762 @@
+初始化 Jupyter Kernel Manager，工作目录 <LOCAL>/work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5063)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5063
+Press CTRL+C to quit
+127.0.0.1 - - [06/Oct/2026 23:55:28] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Load the trace file
+trace_file = './trace/RSA-STM32F429-418782.npy'
+waveform = np.load(trace_file)
+
+# Step 1: Segmentation
+num_operations = 1534
+segment_length = len(waveform) // num_operations
+segments = np.array([waveform[i * segment_length:(i + 1) * segment_length] for i in range(num_operations)])
+
+# Step 2: Dimensionality Reduction and Clustering
+# Apply PCA for dimensionality reduction
+pca = PCA(n_components=2)  # Start with 2 components
+reduced_segments = pca.fit_transform(segments)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_1
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [06/Oct/2026 23:55:34] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust PCA parameters: Increase the number of components to 3
+pca = PCA(n_components=3)
+reduced_segments = pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_2
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:55:39] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.manifold import TSNE
+
+# Replace PCA with t-SNE for dimensionality reduction
+tsne = TSNE(n_components=2, random_state=42)
+reduced_segments = tsne.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_3
+[Stream]: S count: 1017
+M count: 517
+First operation is S: True
+No consecutive M operations: False
+[Result]: (1017, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:55:45] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import umap
+
+# Replace t-SNE with UMAP for dimensionality reduction
+umap_reducer = umap.UMAP(n_components=2, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_4
+[Stream]: <LOCAL>/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:01] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.mixture import GaussianMixture
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_5
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:06] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import DBSCAN
+
+# Use DBSCAN for clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(reduced_segments)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign the larger cluster as S and the smaller as M
+    label_counts = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(label_counts)  # Label for S
+    m_label = 1 - s_label  # Label for M
+
+    # Map labels to operations
+    operations = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operations.count('S')
+    m_count = operations.count('M')
+    first_operation_is_s = operations[0] == 'S'
+    no_consecutive_m = 'MM' not in operations
+
+    # Print results
+    print(f"S count: {s_count}")
+    print(f"M count: {m_count}")
+    print(f"First operation is S: {first_operation_is_s}")
+    print(f"No consecutive M operations: {no_consecutive_m}")
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operations)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_6
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:11] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust DBSCAN parameters: Increase eps and decrease min_samples
+dbscan = DBSCAN(eps=0.7, min_samples=3)
+labels = dbscan.fit_predict(reduced_segments)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign the larger cluster as S and the smaller as M
+    label_counts = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(label_counts)  # Label for S
+    m_label = 1 - s_label  # Label for M
+
+    # Map labels to operations
+    operations = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operations.count('S')
+    m_count = operations.count('M')
+    first_operation_is_s = operations[0] == 'S'
+    no_consecutive_m = 'MM' not in operations
+
+    # Print results
+    print(f"S count: {s_count}")
+    print(f"M count: {m_count}")
+    print(f"First operation is S: {first_operation_is_s}")
+    print(f"No consecutive M operations: {no_consecutive_m}")
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operations)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_7
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:17] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+from sklearn.cluster import AgglomerativeClustering
+
+# Use Agglomerative Clustering for clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_8
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:21] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt Kernel PCA as a new dimensionality reduction method
+from sklearn.decomposition import KernelPCA
+
+# Replace UMAP with Kernel PCA for dimensionality reduction
+kernel_pca = KernelPCA(n_components=2, kernel='rbf', gamma=0.1)
+reduced_segments = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_9
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:26] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust Kernel PCA parameters: Change kernel to 'poly' and increase gamma
+kernel_pca = KernelPCA(n_components=2, kernel='poly', gamma=0.5)
+reduced_segments = kernel_pca.fit_transform(segments)
+
+# Re-run KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_10
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:30] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt a combination of Kernel PCA with a different kernel ('sigmoid') and GMM clustering
+kernel_pca = KernelPCA(n_components=2, kernel='sigmoid', gamma=0.1)
+reduced_segments = kernel_pca.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_11
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:35] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt increasing the number of components in Kernel PCA with the sigmoid kernel
+kernel_pca = KernelPCA(n_components=3, kernel='sigmoid', gamma=0.1)
+reduced_segments = kernel_pca.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_12
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:39] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt a completely different dimensionality reduction method: Independent Component Analysis (ICA)
+from sklearn.decomposition import FastICA
+
+# Replace Kernel PCA with ICA for dimensionality reduction
+ica = FastICA(n_components=2, random_state=42)
+reduced_segments = ica.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_13
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:44] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt ICA with Gaussian Mixture Models (GMM) clustering
+ica = FastICA(n_components=2, random_state=42)
+reduced_segments = ica.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_14
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:48] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt ICA with Agglomerative Clustering
+ica = FastICA(n_components=2, random_state=42)
+reduced_segments = ica.fit_transform(segments)
+
+# Use Agglomerative Clustering for clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_15
+[Stream]: S count: 1021
+M count: 513
+First operation is S: False
+No consecutive M operations: False
+[Result]: (1021, False, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:53] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt ICA with DBSCAN clustering
+ica = FastICA(n_components=2, random_state=42)
+reduced_segments = ica.fit_transform(segments)
+
+# Use DBSCAN for clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(reduced_segments)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign the larger cluster as S and the smaller as M
+    label_counts = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(label_counts)  # Label for S
+    m_label = 1 - s_label  # Label for M
+
+    # Map labels to operations
+    operations = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operations.count('S')
+    m_count = operations.count('M')
+    first_operation_is_s = operations[0] == 'S'
+    no_consecutive_m = 'MM' not in operations
+
+    # Print results
+    print(f"S count: {s_count}")
+    print(f"M count: {m_count}")
+    print(f"First operation is S: {first_operation_is_s}")
+    print(f"No consecutive M operations: {no_consecutive_m}")
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operations)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_16
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:56:57] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Adjust DBSCAN parameters: Increase eps and decrease min_samples
+dbscan = DBSCAN(eps=0.7, min_samples=3)
+labels = dbscan.fit_predict(reduced_segments)
+
+# Check if DBSCAN produced exactly 2 clusters
+if len(set(labels)) == 2:
+    # Assign the larger cluster as S and the smaller as M
+    label_counts = np.bincount(labels[labels >= 0])  # Exclude noise points (-1)
+    s_label = np.argmax(label_counts)  # Label for S
+    m_label = 1 - s_label  # Label for M
+
+    # Map labels to operations
+    operations = ''.join(['S' if label == s_label else 'M' for label in labels if label >= 0])
+
+    # Step 3: Constraint Verification
+    s_count = operations.count('S')
+    m_count = operations.count('M')
+    first_operation_is_s = operations[0] == 'S'
+    no_consecutive_m = 'MM' not in operations
+
+    # Print results
+    print(f"S count: {s_count}")
+    print(f"M count: {m_count}")
+    print(f"First operation is S: {first_operation_is_s}")
+    print(f"No consecutive M operations: {no_consecutive_m}")
+
+    # Save the operation sequence to a file
+    output_file = './result.txt'
+    with open(output_file, 'w') as f:
+        f.write(operations)
+
+    # Output results for verification
+    s_count, first_operation_is_s, no_consecutive_m
+else:
+    print("DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.")
+    s_count, False, False
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_17
+[Stream]: DBSCAN did not produce exactly 2 clusters. Adjusting parameters is required.
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:02] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Revert to KMeans clustering with ICA and adjust the number of components in ICA
+ica = FastICA(n_components=3, random_state=42)
+reduced_segments = ica.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_18
+[Stream]: S count: 1016
+M count: 518
+First operation is S: False
+No consecutive M operations: False
+[Result]: (1016, False, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:07] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased number of components and KMeans clustering
+umap_reducer = umap.UMAP(n_components=3, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_19
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:14] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased components and Gaussian Mixture Models (GMM) clustering
+umap_reducer = umap.UMAP(n_components=3, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_20
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+[Stream]: M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:21] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased components and Agglomerative Clustering
+umap_reducer = umap.UMAP(n_components=3, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Agglomerative Clustering for clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_21
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:27] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with a different random state and KMeans clustering
+umap_reducer = umap.UMAP(n_components=2, random_state=99)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_22
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:35] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with a different random state and Gaussian Mixture Models (GMM) clustering
+umap_reducer = umap.UMAP(n_components=2, random_state=123)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_23
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:42] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with a different random state and Agglomerative Clustering
+umap_reducer = umap.UMAP(n_components=2, random_state=456)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Agglomerative Clustering for clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_24
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:49] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors and KMeans clustering
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=50, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_25
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:57:57] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased min_dist and KMeans clustering
+umap_reducer = umap.UMAP(n_components=2, min_dist=0.5, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_26
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:04] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with both increased n_neighbors and min_dist, and KMeans clustering
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=50, min_dist=0.5, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_27
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 895
+M count: 639
+First operation is S: True
+No consecutive M operations: False
+[Result]: (895, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:13] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with default parameters and increase the number of clusters in KMeans
+umap_reducer = umap.UMAP(n_components=2, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering with increased clusters
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the largest cluster as S and the others as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_28
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 517
+M count: 1017
+First operation is S: True
+No consecutive M operations: False
+[Result]: (517, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:22] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with default parameters and Gaussian Mixture Models (GMM) clustering with increased components
+umap_reducer = umap.UMAP(n_components=2, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) with increased components
+gmm = GaussianMixture(n_components=3, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the largest cluster as S and the others as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_29
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 517
+M count: 1017
+First operation is S: True
+No consecutive M operations: False
+[Result]: (517, True, False)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:29] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors and Gaussian Mixture Models (GMM) clustering
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=100, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_30
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:39] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors and min_dist, and Gaussian Mixture Models (GMM) clustering
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=100, min_dist=0.5, random_state=42)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_31
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:47] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors, min_dist, and a different random state, and Gaussian Mixture Models (GMM) clustering
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=100, min_dist=0.5, random_state=99)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Gaussian Mixture Models (GMM) for clustering
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels = gmm.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_32
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:58:58] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors, min_dist, and a different random state, and Agglomerative Clustering
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=100, min_dist=0.5, random_state=123)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use Agglomerative Clustering for clustering
+agg_clustering = AgglomerativeClustering(n_clusters=2)
+labels = agg_clustering.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_33
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:59:06] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors, min_dist, and a different random state, and KMeans clustering with adjusted initialization
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=100, min_dist=0.5, random_state=456)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering with adjusted initialization
+kmeans = KMeans(n_clusters=2, init='random', random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_34
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:59:15] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt UMAP with increased n_neighbors, min_dist, and a different random state, and KMeans clustering with more iterations
+umap_reducer = umap.UMAP(n_components=2, n_neighbors=100, min_dist=0.5, random_state=789)
+reduced_segments = umap_reducer.fit_transform(segments)
+
+# Use KMeans clustering with increased max_iter
+kmeans = KMeans(n_clusters=2, max_iter=500, random_state=42)
+labels = kmeans.fit_predict(reduced_segments)
+
+# Assign the larger cluster as S and the smaller as M
+label_counts = np.bincount(labels)
+s_label = np.argmax(label_counts)  # Label for S
+m_label = 1 - s_label  # Label for M
+
+# Map labels to operations
+operations = ''.join(['S' if label == s_label else 'M' for label in labels])
+
+# Step 3: Constraint Verification
+s_count = operations.count('S')
+m_count = operations.count('M')
+first_operation_is_s = operations[0] == 'S'
+no_consecutive_m = 'MM' not in operations
+
+# Print results
+print(f"S count: {s_count}")
+print(f"M count: {m_count}")
+print(f"First operation is S: {first_operation_is_s}")
+print(f"No consecutive M operations: {no_consecutive_m}")
+
+# Save the operation sequence to a file
+output_file = './result.txt'
+with open(output_file, 'w') as f:
+    f.write(operations)
+
+# Output results for verification
+s_count, first_operation_is_s, no_consecutive_m
+============================================================
+
+执行请求已发送, msg_id=139748b1-d3941f91c0f04332515e3251_13680_35
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: S count: 1023
+M count: 511
+First operation is S: True
+No consecutive M operations: True
+[Result]: (1023, True, True)...
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 23:59:24] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 23:59:25] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

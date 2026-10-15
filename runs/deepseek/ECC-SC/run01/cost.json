@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-SC",
+  "path": "runs/deepseek/ECC-SC/run01",
+  "metadata_sha256": "75326baf1f7f97bdfa59b0d466435fe7467537714e3571c7dda1bbb43f4a64c1",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 130.7,
+  "tool_sec": 5.34,
+  "other_elapsed_sec": 125.35999999999999,
+  "llm_calls": 7,
+  "tool_calls": 6,
+  "clustering_attempts": 3,
+  "input_tokens": 17240,
+  "output_tokens": 2643,
+  "cached_tokens": 9344,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.0670376,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

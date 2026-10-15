@@ -1,0 +1,130 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-AT89S52",
+  "path": "runs/deepseek/ECC-AT89S52/run02",
+  "original_calls_sha256": "e7a6198962938d62c480d54c837e0daaf519332fe47e0232d6481813eb0c8604",
+  "replay_path": "<LOCAL>/run02",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "062e45cab8aaa89a7a5230f4010b68d288bc1edd26a024034e9a025ccc0aa370",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "operations2",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "operations3",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 6,
+      "fit_names": [
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "DBSCAN",
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "operations4",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 7,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "operations5",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 8,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 40.95744680851064,
+        "source": "archived_replay_matching_output",
+        "variable": "operations6",
+        "sequence_sha256": "357394f32c8246efe0a15a46e28a4e7541c1d1b4ae78b579b528dbd75be9a957"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 9,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/ECC-AT89S52/run02\\snapshots\\call010_0001_result.txt",
+        "sequence_sha256": "36675a0f4fff8521bc0107f32d3f14c81b7e321fdbdeb2ab10ea4e3d2b78d61a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

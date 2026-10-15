@@ -1,0 +1,22 @@
+{
+  "model": "deepseek",
+  "trace": "RSA-FPGA",
+  "path": "runs/deepseek/RSA-FPGA/run06",
+  "metadata_sha256": "afb671d2d4a339c524c7eb2eecb2a4a6cadd4cdb231b5c5856742b10fadad767",
+  "model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+  "temperature": 0,
+  "duration_sec": 1358.8,
+  "tool_sec": 47.28,
+  "other_elapsed_sec": 1311.52,
+  "llm_calls": 26,
+  "tool_calls": 25,
+  "clustering_attempts": 24,
+  "input_tokens": 465760,
+  "output_tokens": 26102,
+  "cached_tokens": 426240,
+  "calls_without_usage": 0,
+  "estimated_fee": 0.6418,
+  "currency": "CNY",
+  "estimate_status": "Public rate reference, not a historical invoice",
+  "usage_complete": true
+}

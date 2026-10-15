@@ -1,0 +1,1170 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/Sim-3-10/run08\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5069)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5069
+Press CTRL+C to quit
+127.0.0.1 - - [06/Oct/2026 16:55:51] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+# Load the trace data
+trace = np.load('./trace/Simulated-3-10.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Step 1: Segment the waveform into 1536 equal parts
+num_segments = 1536
+segment_length = len(trace) // num_segments
+print(f"Segment length: {segment_length}")
+
+# Reshape the trace into segments
+segments = trace[:num_segments * segment_length].reshape(num_segments, segment_length)
+print(f"Segments shape: {segments.shape}")
+
+# Plot a few segments to visualize
+plt.figure(figsize=(12, 6))
+for i in range(5):
+    plt.plot(segments[i], label=f'Segment {i}')
+plt.title('First 5 Segments of the Power Trace')
+plt.xlabel('Time')
+plt.ylabel('Power Consumption')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_165602_961961_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_165602_961961_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_1
+[Stream]: Trace shape: (153600,)
+Trace length: 153600
+Segment length: 100
+Segments shape: (1536, 100)
+[Stream]: {"plot_path": "../images/img_20261006_165602_961961_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 16:56:04] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 2: Dimensionality Reduction and Clustering
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=2)
+segments_pca = pca.fit_transform(segments_scaled)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(segments_pca)
+
+# Assign larger cluster as S (squaring)
+cluster_counts = np.bincount(labels)
+print(f"Cluster counts: {cluster_counts}")
+
+# Determine which cluster is larger
+if cluster_counts[0] > cluster_counts[1]:
+    s_cluster = 0
+    m_cluster = 1
+else:
+    s_cluster = 1
+    m_cluster = 0
+
+# Create operation sequence
+operations = []
+for label in labels:
+    if label == s_cluster:
+        operations.append('S')
+    else:
+        operations.append('M')
+
+operations = np.array(operations)
+
+# Step 3: Constraint Verification
+s_count = np.sum(operations == 'S')
+first_op = operations[0]
+
+# Check for consecutive M operations
+consecutive_m = False
+for i in range(1, len(operations)):
+    if operations[i] == 'M' and operations[i-1] == 'M':
+        consecutive_m = True
+        break
+
+print("\n=== ATTEMPT 1: PCA (2 components) + KMeans ===")
+print(f"S count: {s_count} (target: 1024)")
+print(f"First operation: {first_op} (target: S)")
+print(f"Consecutive M operations: {consecutive_m} (target: False)")
+print(f"All constraints satisfied: {s_count == 1024 and first_op == 'S' and not consecutive_m}")
+
+# Plot the clustering results
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca[operations == 'S', 0], segments_pca[operations == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca[operations == 'M', 0], segments_pca[operations == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA + KMeans Clustering Results')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_165628_195979_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_165628_195979_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_2
+[Stream]: Explained variance ratio: [0.01499076 0.0146012 ]
+Total explained variance: 0.030
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster counts: [760 776]
+
+=== ATTEMPT 1: PCA (2 components) + KMeans ===
+S count: 776 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_165628_195979_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 6 条输出。
+127.0.0.1 - - [06/Oct/2026 16:56:28] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 2: Increase PCA components to capture more variance
+pca2 = PCA(n_components=10)
+segments_pca2 = pca2.fit_transform(segments_scaled)
+
+print(f"Explained variance ratio (first 10 components): {pca2.explained_variance_ratio_}")
+print(f"Total explained variance: {sum(pca2.explained_variance_ratio_):.3f}")
+
+# Apply KMeans clustering
+kmeans2 = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels2 = kmeans2.fit_predict(segments_pca2)
+
+# Assign larger cluster as S (squaring)
+cluster_counts2 = np.bincount(labels2)
+print(f"Cluster counts: {cluster_counts2}")
+
+# Determine which cluster is larger
+if cluster_counts2[0] > cluster_counts2[1]:
+    s_cluster2 = 0
+    m_cluster2 = 1
+else:
+    s_cluster2 = 1
+    m_cluster2 = 0
+
+# Create operation sequence
+operations2 = []
+for label in labels2:
+    if label == s_cluster2:
+        operations2.append('S')
+    else:
+        operations2.append('M')
+
+operations2 = np.array(operations2)
+
+# Step 3: Constraint Verification
+s_count2 = np.sum(operations2 == 'S')
+first_op2 = operations2[0]
+
+# Check for consecutive M operations
+consecutive_m2 = False
+for i in range(1, len(operations2)):
+    if operations2[i] == 'M' and operations2[i-1] == 'M':
+        consecutive_m2 = True
+        break
+
+print("\n=== ATTEMPT 2: PCA (10 components) + KMeans ===")
+print(f"S count: {s_count2} (target: 1024)")
+print(f"First operation: {first_op2} (target: S)")
+print(f"Consecutive M operations: {consecutive_m2} (target: False)")
+print(f"All constraints satisfied: {s_count2 == 1024 and first_op2 == 'S' and not consecutive_m2}")
+
+# Plot the first two components for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca2[operations2 == 'S', 0], segments_pca2[operations2 == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca2[operations2 == 'M', 0], segments_pca2[operations2 == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA (10 components) + KMeans Clustering Results (PC1 vs PC2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_165654_142771_3.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_165654_142771_3.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_3
+[Stream]: Explained variance ratio (first 10 components): [0.01485073 0.01451113 0.01431939 0.01411039 0.01385669 0.01374842
+ 0.01345158 0.0132601  0.01303089 0.01297857]
+Total explained variance: 0.138
+[Stream]: Cluster counts: [755 781]
+[Stream]: === ATTEMPT 2: PCA (10 components) + KMeans ===
+S count: 781 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_165654_142771_3.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 16:56:54] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 3: Try t-SNE for dimensionality reduction
+from sklearn.manifold import TSNE
+
+# Use t-SNE with a subset of data for faster computation (t-SNE is computationally expensive)
+# We'll use a random subset first to test
+np.random.seed(42)
+sample_indices = np.random.choice(len(segments_scaled), size=1000, replace=False)
+sample_data = segments_scaled[sample_indices]
+
+tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+segments_tsne_sample = tsne.fit_transform(sample_data)
+
+# Apply KMeans to the t-SNE reduced sample
+kmeans_tsne = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels_tsne_sample = kmeans_tsne.fit_predict(segments_tsne_sample)
+
+# Now apply the clustering to the full dataset using the centroids from the sample
+# We'll use the centroids to classify the full dataset
+full_data_tsne = tsne.fit_transform(segments_scaled)
+labels_tsne_full = kmeans_tsne.predict(full_data_tsne)
+
+# Assign larger cluster as S (squaring)
+cluster_counts_tsne = np.bincount(labels_tsne_full)
+print(f"Cluster counts: {cluster_counts_tsne}")
+
+# Determine which cluster is larger
+if cluster_counts_tsne[0] > cluster_counts_tsne[1]:
+    s_cluster_tsne = 0
+    m_cluster_tsne = 1
+else:
+    s_cluster_tsne = 1
+    m_cluster_tsne = 0
+
+# Create operation sequence
+operations_tsne = []
+for label in labels_tsne_full:
+    if label == s_cluster_tsne:
+        operations_tsne.append('S')
+    else:
+        operations_tsne.append('M')
+
+operations_tsne = np.array(operations_tsne)
+
+# Step 3: Constraint Verification
+s_count_tsne = np.sum(operations_tsne == 'S')
+first_op_tsne = operations_tsne[0]
+
+# Check for consecutive M operations
+consecutive_m_tsne = False
+for i in range(1, len(operations_tsne)):
+    if operations_tsne[i] == 'M' and operations_tsne[i-1] == 'M':
+        consecutive_m_tsne = True
+        break
+
+print("\n=== ATTEMPT 3: t-SNE + KMeans ===")
+print(f"S count: {s_count_tsne} (target: 1024)")
+print(f"First operation: {first_op_tsne} (target: S)")
+print(f"Consecutive M operations: {consecutive_m_tsne} (target: False)")
+print(f"All constraints satisfied: {s_count_tsne == 1024 and first_op_tsne == 'S' and not consecutive_m_tsne}")
+
+# Plot the t-SNE results
+plt.figure(figsize=(10, 6))
+plt.scatter(full_data_tsne[operations_tsne == 'S', 0], full_data_tsne[operations_tsne == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(full_data_tsne[operations_tsne == 'M', 0], full_data_tsne[operations_tsne == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('t-SNE + KMeans Clustering Results')
+plt.xlabel('t-SNE Component 1')
+plt.ylabel('t-SNE Component 2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_165728_887078_4.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_165728_887078_4.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_4
+[Stream]: Cluster counts: [797 739]
+[Stream]: === ATTEMPT 3: t-SNE + KMeans ===
+S count: 797 (target: 1024)
+First operation: M (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_165728_887078_4.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 16:57:33] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 4: Try UMAP for dimensionality reduction
+try:
+    import umap
+
+    # Apply UMAP
+    reducer = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1)
+    segments_umap = reducer.fit_transform(segments_scaled)
+
+    # Apply KMeans clustering
+    kmeans_umap = KMeans(n_clusters=2, random_state=42, n_init=10)
+    labels_umap = kmeans_umap.fit_predict(segments_umap)
+
+    # Assign larger cluster as S (squaring)
+    cluster_counts_umap = np.bincount(labels_umap)
+    print(f"Cluster counts: {cluster_counts_umap}")
+
+    # Determine which cluster is larger
+    if cluster_counts_umap[0] > cluster_counts_umap[1]:
+        s_cluster_umap = 0
+        m_cluster_umap = 1
+    else:
+        s_cluster_umap = 1
+        m_cluster_umap = 0
+
+    # Create operation sequence
+    operations_umap = []
+    for label in labels_umap:
+        if label == s_cluster_umap:
+            operations_umap.append('S')
+        else:
+            operations_umap.append('M')
+
+    operations_umap = np.array(operations_umap)
+
+    # Step 3: Constraint Verification
+    s_count_umap = np.sum(operations_umap == 'S')
+    first_op_umap = operations_umap[0]
+
+    # Check for consecutive M operations
+    consecutive_m_umap = False
+    for i in range(1, len(operations_umap)):
+        if operations_umap[i] == 'M' and operations_umap[i-1] == 'M':
+            consecutive_m_umap = True
+            break
+
+    print("\n=== ATTEMPT 4: UMAP + KMeans ===")
+    print(f"S count: {s_count_umap} (target: 1024)")
+    print(f"First operation: {first_op_umap} (target: S)")
+    print(f"Consecutive M operations: {consecutive_m_umap} (target: False)")
+    print(f"All constraints satisfied: {s_count_umap == 1024 and first_op_umap == 'S' and not consecutive_m_umap}")
+
+    # Plot the UMAP results
+    plt.figure(figsize=(10, 6))
+    plt.scatter(segments_umap[operations_umap == 'S', 0], segments_umap[operations_umap == 'S', 1], 
+                c='blue', label='S (Squaring)', alpha=0.6)
+    plt.scatter(segments_umap[operations_umap == 'M', 0], segments_umap[operations_umap == 'M', 1], 
+                c='red', label='M (Multiplication)', alpha=0.6)
+    plt.title('UMAP + KMeans Clustering Results')
+    plt.xlabel('UMAP Component 1')
+    plt.ylabel('UMAP Component 2')
+    plt.legend()
+
+    try:
+        import matplotlib.pyplot as plt
+        import json as _json
+        plt.savefig("../images/img_20261006_165836_248708_5.png", dpi=160, bbox_inches='tight')
+        plt.close()
+        print(_json.dumps({"plot_path": "../images/img_20261006_165836_248708_5.png"}, ensure_ascii=False))
+    except Exception as e:
+        print("图片保存失败:", str(e))
+except ImportError:
+    print("UMAP not available, skipping...")
+    # Try Kernel PCA instead
+    from sklearn.decomposition import KernelPCA
+
+    # Apply Kernel PCA
+    kpca = KernelPCA(n_components=2, kernel='rbf', random_state=42)
+    segments_kpca = kpca.fit_transform(segments_scaled)
+
+    # Apply KMeans clustering
+    kmeans_kpca = KMeans(n_clusters=2, random_state=42, n_init=10)
+    labels_kpca = kmeans_kpca.fit_predict(segments_kpca)
+
+    # Assign larger cluster as S (squaring)
+    cluster_counts_kpca = np.bincount(labels_kpca)
+    print(f"Cluster counts: {cluster_counts_kpca}")
+
+    # Determine which cluster is larger
+    if cluster_counts_kpca[0] > cluster_counts_kpca[1]:
+        s_cluster_kpca = 0
+        m_cluster_kpca = 1
+    else:
+        s_cluster_kpca = 1
+        m_cluster_kpca = 0
+
+    # Create operation sequence
+    operations_kpca = []
+    for label in labels_kpca:
+        if label == s_cluster_kpca:
+            operations_kpca.append('S')
+        else:
+            operations_kpca.append('M')
+
+    operations_kpca = np.array(operations_kpca)
+
+    # Step 3: Constraint Verification
+    s_count_kpca = np.sum(operations_kpca == 'S')
+    first_op_kpca = operations_kpca[0]
+
+    # Check for consecutive M operations
+    consecutive_m_kpca = False
+    for i in range(1, len(operations_kpca)):
+        if operations_kpca[i] == 'M' and operations_kpca[i-1] == 'M':
+            consecutive_m_kpca = True
+            break
+
+    print("\n=== ATTEMPT 4: Kernel PCA + KMeans ===")
+    print(f"S count: {s_count_kpca} (target: 1024)")
+    print(f"First operation: {first_op_kpca} (target: S)")
+    print(f"Consecutive M operations: {consecutive_m_kpca} (target: False)")
+    print(f"All constraints satisfied: {s_count_kpca == 1024 and first_op_kpca == 'S' and not consecutive_m_kpca}")
+
+    # Plot the Kernel PCA results
+    plt.figure(figsize=(10, 6))
+    plt.scatter(segments_kpca[operations_kpca == 'S', 0], segments_kpca[operations_kpca == 'S', 1], 
+                c='blue', label='S (Squaring)', alpha=0.6)
+    plt.scatter(segments_kpca[operations_kpca == 'M', 0], segments_kpca[operations_kpca == 'M', 1], 
+                c='red', label='M (Multiplication)', alpha=0.6)
+    plt.title('Kernel PCA + KMeans Clustering Results')
+    plt.xlabel('Kernel PC1')
+    plt.ylabel('Kernel PC2')
+    plt.legend()
+
+    try:
+        import matplotlib.pyplot as plt
+        import json as _json
+        plt.savefig("../images/img_20261006_165836_248708_6.png", dpi=160, bbox_inches='tight')
+        plt.close()
+        print(_json.dumps({"plot_path": "../images/img_20261006_165836_248708_6.png"}, ensure_ascii=False))
+    except Exception as e:
+        print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_5
+[Stream]: <LOCAL>/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+[Stream]: <LOCAL>/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+[Stream]: Cluster counts: [771 765]
+[Stream]: === ATTEMPT 4: UMAP + KMeans ===
+S count: 771 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_165836_248708_5.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 5 条输出。
+127.0.0.1 - - [06/Oct/2026 16:58:46] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 5: Try Gaussian Mixture Model clustering with PCA features
+from sklearn.mixture import GaussianMixture
+
+# Use PCA with more components
+pca_gmm = PCA(n_components=20)
+segments_pca_gmm = pca_gmm.fit_transform(segments_scaled)
+
+print(f"Total explained variance (20 components): {sum(pca_gmm.explained_variance_ratio_):.3f}")
+
+# Apply Gaussian Mixture Model
+gmm = GaussianMixture(n_components=2, random_state=42)
+labels_gmm = gmm.fit_predict(segments_pca_gmm)
+
+# Assign larger cluster as S (squaring)
+cluster_counts_gmm = np.bincount(labels_gmm)
+print(f"Cluster counts: {cluster_counts_gmm}")
+
+# Determine which cluster is larger
+if cluster_counts_gmm[0] > cluster_counts_gmm[1]:
+    s_cluster_gmm = 0
+    m_cluster_gmm = 1
+else:
+    s_cluster_gmm = 1
+    m_cluster_gmm = 0
+
+# Create operation sequence
+operations_gmm = []
+for label in labels_gmm:
+    if label == s_cluster_gmm:
+        operations_gmm.append('S')
+    else:
+        operations_gmm.append('M')
+
+operations_gmm = np.array(operations_gmm)
+
+# Step 3: Constraint Verification
+s_count_gmm = np.sum(operations_gmm == 'S')
+first_op_gmm = operations_gmm[0]
+
+# Check for consecutive M operations
+consecutive_m_gmm = False
+for i in range(1, len(operations_gmm)):
+    if operations_gmm[i] == 'M' and operations_gmm[i-1] == 'M':
+        consecutive_m_gmm = True
+        break
+
+print("\n=== ATTEMPT 5: PCA (20 components) + Gaussian Mixture Model ===")
+print(f"S count: {s_count_gmm} (target: 1024)")
+print(f"First operation: {first_op_gmm} (target: S)")
+print(f"Consecutive M operations: {consecutive_m_gmm} (target: False)")
+print(f"All constraints satisfied: {s_count_gmm == 1024 and first_op_gmm == 'S' and not consecutive_m_gmm}")
+
+# Plot the first two components for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca_gmm[operations_gmm == 'S', 0], segments_pca_gmm[operations_gmm == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca_gmm[operations_gmm == 'M', 0], segments_pca_gmm[operations_gmm == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA + Gaussian Mixture Model Clustering Results (PC1 vs PC2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_165922_869252_7.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_165922_869252_7.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_6
+[Stream]: Total explained variance (20 components): 0.266
+[Stream]: Cluster counts: [734 802]
+[Stream]: === ATTEMPT 5: PCA (20 components) + Gaussian Mixture Model ===
+S count: 802 (target: 1024)
+First operation: M (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_165922_869252_7.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 16:59:23] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 6: Try DBSCAN clustering
+from sklearn.cluster import DBSCAN
+
+# Use PCA with moderate number of components
+pca_dbscan = PCA(n_components=10)
+segments_pca_dbscan = pca_dbscan.fit_transform(segments_scaled)
+
+# Apply DBSCAN
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels_dbscan = dbscan.fit_predict(segments_pca_dbscan)
+
+print(f"Unique labels from DBSCAN: {np.unique(labels_dbscan)}")
+print(f"Label counts: {np.bincount(labels_dbscan + 1)} ")  # +1 to handle -1 (noise)
+
+# If DBSCAN finds more than 2 clusters or noise, we need to handle it
+if len(np.unique(labels_dbscan)) > 2:
+    # Use the two largest clusters
+    unique_labels, counts = np.unique(labels_dbscan, return_counts=True)
+    # Sort by count (descending) and take top 2 (excluding noise if present)
+    top_labels = unique_labels[np.argsort(-counts)[:2]]
+
+    # Create binary labels (0 and 1) for the two largest clusters
+    binary_labels = np.zeros_like(labels_dbscan)
+    binary_labels[labels_dbscan == top_labels[0]] = 0
+    binary_labels[labels_dbscan == top_labels[1]] = 1
+
+    # Assign noise points to the nearest cluster
+    noise_mask = labels_dbscan == -1
+    if np.any(noise_mask):
+        from sklearn.neighbors import NearestNeighbors
+        # Find nearest neighbors for noise points
+        nn = NearestNeighbors(n_neighbors=1)
+        nn.fit(segments_pca_dbscan[~noise_mask])
+        _, indices = nn.kneighbors(segments_pca_dbscan[noise_mask])
+        binary_labels[noise_mask] = binary_labels[~noise_mask][indices.flatten()]
+
+    labels_dbscan_binary = binary_labels
+else:
+    # If exactly 2 clusters (including noise as one cluster)
+    if -1 in labels_dbscan:
+        # Handle noise by assigning to nearest cluster
+        noise_mask = labels_dbscan == -1
+        non_noise_labels = labels_dbscan[~noise_mask]
+        if len(np.unique(non_noise_labels)) == 1:
+            # Only one non-noise cluster, assign noise to that cluster
+            labels_dbscan_binary = np.zeros_like(labels_dbscan)
+            labels_dbscan_binary[~noise_mask] = 0
+            labels_dbscan_binary[noise_mask] = 0
+        else:
+            # Two non-noise clusters, assign noise to nearest
+            from sklearn.neighbors import NearestNeighbors
+            nn = NearestNeighbors(n_neighbors=1)
+            nn.fit(segments_pca_dbscan[~noise_mask])
+            _, indices = nn.kneighbors(segments_pca_dbscan[noise_mask])
+            labels_dbscan_binary = labels_dbscan.copy()
+            labels_dbscan_binary[noise_mask] = labels_dbscan[~noise_mask][indices.flatten()]
+    else:
+        labels_dbscan_binary = labels_dbscan
+
+# Assign larger cluster as S (squaring)
+cluster_counts_dbscan = np.bincount(labels_dbscan_binary)
+print(f"Final cluster counts: {cluster_counts_dbscan}")
+
+# Determine which cluster is larger
+if cluster_counts_dbscan[0] > cluster_counts_dbscan[1]:
+    s_cluster_dbscan = 0
+    m_cluster_dbscan = 1
+else:
+    s_cluster_dbscan = 1
+    m_cluster_dbscan = 0
+
+# Create operation sequence
+operations_dbscan = []
+for label in labels_dbscan_binary:
+    if label == s_cluster_dbscan:
+        operations_dbscan.append('S')
+    else:
+        operations_dbscan.append('M')
+
+operations_dbscan = np.array(operations_dbscan)
+
+# Step 3: Constraint Verification
+s_count_dbscan = np.sum(operations_dbscan == 'S')
+first_op_dbscan = operations_dbscan[0]
+
+# Check for consecutive M operations
+consecutive_m_dbscan = False
+for i in range(1, len(operations_dbscan)):
+    if operations_dbscan[i] == 'M' and operations_dbscan[i-1] == 'M':
+        consecutive_m_dbscan = True
+        break
+
+print("\n=== ATTEMPT 6: PCA (10 components) + DBSCAN ===")
+print(f"S count: {s_count_dbscan} (target: 1024)")
+print(f"First operation: {first_op_dbscan} (target: S)")
+print(f"Consecutive M operations: {consecutive_m_dbscan} (target: False)")
+print(f"All constraints satisfied: {s_count_dbscan == 1024 and first_op_dbscan == 'S' and not consecutive_m_dbscan}")
+
+# Plot the first two components for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca_dbscan[operations_dbscan == 'S', 0], segments_pca_dbscan[operations_dbscan == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca_dbscan[operations_dbscan == 'M', 0], segments_pca_dbscan[operations_dbscan == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA + DBSCAN Clustering Results (PC1 vs PC2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_170018_667610_8.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_170018_667610_8.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_7
+[Stream]: Unique labels from DBSCAN: [-1]
+Label counts: [1536]
+[Error]: [1;31m---------------------------------------------------------------------------[0m
+[1;31mValueError[0m                                Traceback (most recent call last)
+Cell [1;32mIn[8], line 53...
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 17:00:19] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 7: Try Agglomerative Clustering
+from sklearn.cluster import AgglomerativeClustering
+
+# Use PCA with moderate number of components
+pca_agg = PCA(n_components=15)
+segments_pca_agg = pca_agg.fit_transform(segments_scaled)
+
+print(f"Total explained variance (15 components): {sum(pca_agg.explained_variance_ratio_):.3f}")
+
+# Apply Agglomerative Clustering
+agg = AgglomerativeClustering(n_clusters=2)
+labels_agg = agg.fit_predict(segments_pca_agg)
+
+# Assign larger cluster as S (squaring)
+cluster_counts_agg = np.bincount(labels_agg)
+print(f"Cluster counts: {cluster_counts_agg}")
+
+# Determine which cluster is larger
+if cluster_counts_agg[0] > cluster_counts_agg[1]:
+    s_cluster_agg = 0
+    m_cluster_agg = 1
+else:
+    s_cluster_agg = 1
+    m_cluster_agg = 0
+
+# Create operation sequence
+operations_agg = []
+for label in labels_agg:
+    if label == s_cluster_agg:
+        operations_agg.append('S')
+    else:
+        operations_agg.append('M')
+
+operations_agg = np.array(operations_agg)
+
+# Step 3: Constraint Verification
+s_count_agg = np.sum(operations_agg == 'S')
+first_op_agg = operations_agg[0]
+
+# Check for consecutive M operations
+consecutive_m_agg = False
+for i in range(1, len(operations_agg)):
+    if operations_agg[i] == 'M' and operations_agg[i-1] == 'M':
+        consecutive_m_agg = True
+        break
+
+print("\n=== ATTEMPT 7: PCA (15 components) + Agglomerative Clustering ===")
+print(f"S count: {s_count_agg} (target: 1024)")
+print(f"First operation: {first_op_agg} (target: S)")
+print(f"Consecutive M operations: {consecutive_m_agg} (target: False)")
+print(f"All constraints satisfied: {s_count_agg == 1024 and first_op_agg == 'S' and not consecutive_m_agg}")
+
+# Plot the first two components for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca_agg[operations_agg == 'S', 0], segments_pca_agg[operations_agg == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca_agg[operations_agg == 'M', 0], segments_pca_agg[operations_agg == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA + Agglomerative Clustering Results (PC1 vs PC2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_170048_999487_9.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_170048_999487_9.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_8
+[Stream]: Total explained variance (15 components): 0.203
+[Stream]: Cluster counts: [928 608]
+
+=== ATTEMPT 7: PCA (15 components) + Agglomerative Clustering ===
+S count: 928 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_170048_999487_9.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 17:00:49] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 8: Try PCA with more components and different clustering approach
+pca8 = PCA(n_components=30)
+segments_pca8 = pca8.fit_transform(segments_scaled)
+
+print(f"Total explained variance (30 components): {sum(pca8.explained_variance_ratio_):.3f}")
+
+# Try KMeans with different initialization
+kmeans8 = KMeans(n_clusters=2, random_state=42, n_init=20, init='k-means++')
+labels8 = kmeans8.fit_predict(segments_pca8)
+
+# Assign larger cluster as S (squaring)
+cluster_counts8 = np.bincount(labels8)
+print(f"Cluster counts: {cluster_counts8}")
+
+# Determine which cluster is larger
+if cluster_counts8[0] > cluster_counts8[1]:
+    s_cluster8 = 0
+    m_cluster8 = 1
+else:
+    s_cluster8 = 1
+    m_cluster8 = 0
+
+# Create operation sequence
+operations8 = []
+for label in labels8:
+    if label == s_cluster8:
+        operations8.append('S')
+    else:
+        operations8.append('M')
+
+operations8 = np.array(operations8)
+
+# Step 3: Constraint Verification
+s_count8 = np.sum(operations8 == 'S')
+first_op8 = operations8[0]
+
+# Check for consecutive M operations
+consecutive_m8 = False
+for i in range(1, len(operations8)):
+    if operations8[i] == 'M' and operations8[i-1] == 'M':
+        consecutive_m8 = True
+        break
+
+print("\n=== ATTEMPT 8: PCA (30 components) + KMeans (k-means++ init) ===")
+print(f"S count: {s_count8} (target: 1024)")
+print(f"First operation: {first_op8} (target: S)")
+print(f"Consecutive M operations: {consecutive_m8} (target: False)")
+print(f"All constraints satisfied: {s_count8 == 1024 and first_op8 == 'S' and not consecutive_m8}")
+
+# Plot the first two components for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca8[operations8 == 'S', 0], segments_pca8[operations8 == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca8[operations8 == 'M', 0], segments_pca8[operations8 == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA (30 components) + KMeans Results (PC1 vs PC2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_170122_119391_10.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_170122_119391_10.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_9
+[Stream]: Total explained variance (30 components): 0.385
+[Stream]: Cluster counts: [769 767]
+[Stream]: === ATTEMPT 8: PCA (30 components) + KMeans (k-means++ init) ===
+S count: 769 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: True (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_170122_119391_10.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 4 条输出。
+127.0.0.1 - - [06/Oct/2026 17:01:23] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 9: Try Spectral Clustering
+from sklearn.cluster import SpectralClustering
+
+# Use PCA with moderate components for spectral clustering
+pca_spectral = PCA(n_components=20)
+segments_pca_spectral = pca_spectral.fit_transform(segments_scaled)
+
+print(f"Total explained variance (20 components): {sum(pca_spectral.explained_variance_ratio_):.3f}")
+
+# Apply Spectral Clustering
+spectral = SpectralClustering(n_clusters=2, random_state=42, affinity='rbf', n_init=10)
+labels_spectral = spectral.fit_predict(segments_pca_spectral)
+
+# Assign larger cluster as S (squaring)
+cluster_counts_spectral = np.bincount(labels_spectral)
+print(f"Cluster counts: {cluster_counts_spectral}")
+
+# Determine which cluster is larger
+if cluster_counts_spectral[0] > cluster_counts_spectral[1]:
+    s_cluster_spectral = 0
+    m_cluster_spectral = 1
+else:
+    s_cluster_spectral = 1
+    m_cluster_spectral = 0
+
+# Create operation sequence
+operations_spectral = []
+for label in labels_spectral:
+    if label == s_cluster_spectral:
+        operations_spectral.append('S')
+    else:
+        operations_spectral.append('M')
+
+operations_spectral = np.array(operations_spectral)
+
+# Step 3: Constraint Verification
+s_count_spectral = np.sum(operations_spectral == 'S')
+first_op_spectral = operations_spectral[0]
+
+# Check for consecutive M operations
+consecutive_m_spectral = False
+for i in range(1, len(operations_spectral)):
+    if operations_spectral[i] == 'M' and operations_spectral[i-1] == 'M':
+        consecutive_m_spectral = True
+        break
+
+print("\n=== ATTEMPT 9: PCA (20 components) + Spectral Clustering ===")
+print(f"S count: {s_count_spectral} (target: 1024)")
+print(f"First operation: {first_op_spectral} (target: S)")
+print(f"Consecutive M operations: {consecutive_m_spectral} (target: False)")
+print(f"All constraints satisfied: {s_count_spectral == 1024 and first_op_spectral == 'S' and not consecutive_m_spectral}")
+
+# Plot the first two components for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(segments_pca_spectral[operations_spectral == 'S', 0], segments_pca_spectral[operations_spectral == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(segments_pca_spectral[operations_spectral == 'M', 0], segments_pca_spectral[operations_spectral == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('PCA + Spectral Clustering Results (PC1 vs PC2)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_170154_969107_11.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_170154_969107_11.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_10
+[Stream]: Total explained variance (20 components): 0.265
+[Stream]: Cluster counts: [1532    4]
+
+=== ATTEMPT 9: PCA (20 components) + Spectral Clustering ===
+S count: 1532 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: False (target: False)
+All constraints satisfied: False
+[Stream]: {"plot_path": "../images/img_20261006_170154_969107_11.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 17:01:57] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Attempt 10: Try using time-domain features instead of PCA
+# Extract simple time-domain features from each segment
+features = []
+for segment in segments:
+    # Extract multiple features
+    features.append([
+        np.mean(segment),      # Mean
+        np.std(segment),       # Standard deviation
+        np.max(segment),       # Maximum
+        np.min(segment),       # Minimum
+        np.ptp(segment),       # Peak-to-peak
+        np.sum(np.abs(segment)),  # Absolute sum
+        np.sum(segment**2),    # Energy
+        np.median(segment),    # Median
+        np.percentile(segment, 25),  # 25th percentile
+        np.percentile(segment, 75),  # 75th percentile
+    ])
+
+features = np.array(features)
+
+# Standardize features
+scaler_features = StandardScaler()
+features_scaled = scaler_features.fit_transform(features)
+
+# Apply KMeans clustering
+kmeans_features = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels_features = kmeans_features.fit_predict(features_scaled)
+
+# Assign larger cluster as S (squaring)
+cluster_counts_features = np.bincount(labels_features)
+print(f"Cluster counts: {cluster_counts_features}")
+
+# Determine which cluster is larger
+if cluster_counts_features[0] > cluster_counts_features[1]:
+    s_cluster_features = 0
+    m_cluster_features = 1
+else:
+    s_cluster_features = 1
+    m_cluster_features = 0
+
+# Create operation sequence
+operations_features = []
+for label in labels_features:
+    if label == s_cluster_features:
+        operations_features.append('S')
+    else:
+        operations_features.append('M')
+
+operations_features = np.array(operations_features)
+
+# Step 3: Constraint Verification
+s_count_features = np.sum(operations_features == 'S')
+first_op_features = operations_features[0]
+
+# Check for consecutive M operations
+consecutive_m_features = False
+for i in range(1, len(operations_features)):
+    if operations_features[i] == 'M' and operations_features[i-1] == 'M':
+        consecutive_m_features = True
+        break
+
+print("\n=== ATTEMPT 10: Time-domain Features + KMeans ===")
+print(f"S count: {s_count_features} (target: 1024)")
+print(f"First operation: {first_op_features} (target: S)")
+print(f"Consecutive M operations: {consecutive_m_features} (target: False)")
+print(f"All constraints satisfied: {s_count_features == 1024 and first_op_features == 'S' and not consecutive_m_features}")
+
+# Plot the first two features for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(features_scaled[operations_features == 'S', 0], features_scaled[operations_features == 'S', 1], 
+            c='blue', label='S (Squaring)', alpha=0.6)
+plt.scatter(features_scaled[operations_features == 'M', 0], features_scaled[operations_features == 'M', 1], 
+            c='red', label='M (Multiplication)', alpha=0.6)
+plt.title('Time-domain Features + KMeans Clustering Results')
+plt.xlabel('Feature 1 (Mean)')
+plt.ylabel('Feature 2 (Std Dev)')
+plt.legend()
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_170229_548394_12.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_170229_548394_12.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_11
+[Stream]: Cluster counts: [1024  512]
+
+=== ATTEMPT 10: Time-domain Features + KMeans ===
+S count: 1024 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: False (target: False)
+All constraints satisfied: True
+[Stream]: {"plot_path": "../images/img_20261006_170229_548394_12.png"}
+[Stream]: 
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 17:02:30] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Verify the results in detail
+print("=== FINAL VERIFICATION ===")
+print(f"Total operations: {len(operations_features)}")
+print(f"S operations: {s_count_features}")
+print(f"M operations: {len(operations_features) - s_count_features}")
+print(f"First operation: {operations_features[0]}")
+
+# Double-check for consecutive M operations
+consecutive_m_final = False
+consecutive_m_positions = []
+for i in range(1, len(operations_features)):
+    if operations_features[i] == 'M' and operations_features[i-1] == 'M':
+        consecutive_m_final = True
+        consecutive_m_positions.append(i)
+
+print(f"Consecutive M operations found: {consecutive_m_final}")
+if consecutive_m_final:
+    print(f"Positions with consecutive M: {consecutive_m_positions[:10]}...")  # Show first 10
+
+# Check the overall pattern
+print(f"\nFirst 20 operations: {''.join(operations_features[:20])}")
+print(f"Last 20 operations: {''.join(operations_features[-20:])}")
+
+# Save the operation sequence to file
+with open('./result.txt', 'w') as f:
+    f.write(''.join(operations_features))
+
+print(f"\nOperation sequence saved to ./result.txt")
+print("All constraints are satisfied!")
+
+# Display a summary of the sequence
+s_blocks = []
+m_positions = []
+current_block = 0
+for i, op in enumerate(operations_features):
+    if op == 'S':
+        current_block += 1
+    else:  # M operation
+        if current_block > 0:
+            s_blocks.append(current_block)
+            current_block = 0
+        m_positions.append(i)
+
+# Add the last S block if it exists
+if current_block > 0:
+    s_blocks.append(current_block)
+
+print(f"\nPattern analysis:")
+print(f"Number of S blocks: {len(s_blocks)}")
+print(f"Number of M operations: {len(m_positions)}")
+print(f"Average S block length: {np.mean(s_blocks):.2f}")
+print(f"Min/Max S block length: {min(s_blocks)}/{max(s_blocks)}")
+============================================================
+
+执行请求已发送, msg_id=f6b068f8-373f89bd16e1617559c429ec_23220_12
+[Stream]: === FINAL VERIFICATION ===
+Total operations: 1536
+S operations: 1024
+M operations: 512
+First operation: S
+Consecutive M operations found: False
+
+First 20 operations: SMSMSMSMSSSSSMSMSMSM
+Last 20 operations: SMSMSSSSSMSMSMSMSSSS
+[Stream]: Operation sequence saved to ./result.txt
+[Stream]: All constraints are satisfied!
+
+Pattern analysis:
+Number of S blocks: 513
+Number of M operations: 512
+Average S block length: 2.00
+Min/Max S block length: 1/5
+收到 idle 状态，执行完成
+代码执行完成，返回 3 条输出。
+127.0.0.1 - - [06/Oct/2026 17:02:59] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 17:03:05] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

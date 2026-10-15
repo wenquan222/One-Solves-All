@@ -1,0 +1,61 @@
+{
+  "model": "gpt4o",
+  "trace": "ECC-AT89S52",
+  "path": "runs/gpt4o/ECC-AT89S52/run09",
+  "original_calls_sha256": "a1a7ce66b30f15ec0b7a8dc8e566923777508bec43d1bd918bb4f66932ca59a1",
+  "replay_path": "<LOCAL>/run09",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "88072e801ad916f22be7974b12c129c4fb13b79082a8b968bb1fb4407f9c2338",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 1,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "original_snapshot_or_full_print",
+        "variable": "runs/gpt4o/ECC-AT89S52/run09\\snapshots\\call001_0001_result.txt",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 25.53191489361702,
+        "source": "archived_replay_matching_output",
+        "variable": "operation_sequence",
+        "sequence_sha256": "e7fc77c1de47349811c7d01ceb88e050833ab44d6bc449c39c955eca7e9e5802"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/gpt4o/ECC-AT89S52/run09\\snapshots\\call003_0002_result.txt",
+        "sequence_sha256": "36675a0f4fff8521bc0107f32d3f14c81b7e321fdbdeb2ab10ea4e3d2b78d61a"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}

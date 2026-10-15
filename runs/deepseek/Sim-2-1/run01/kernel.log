@@ -1,0 +1,259 @@
+初始化 Jupyter Kernel Manager，工作目录 runs/deepseek/Sim-2-1/run01\work
+Jupyter Kernel 已就绪。
+等待 Kernel 初始化完成...
+Kernel 初始化消息已清空，队列干净。
+正在启动 Flask 服务 (Port: 5064)...
+ * Serving Flask app 'exp2_kernel_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5064
+Press CTRL+C to quit
+127.0.0.1 - - [06/Oct/2026 16:28:08] "GET /health HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+# Load the trace data
+trace = np.load('./trace/Simulated-2-1.npy')
+print(f"Trace shape: {trace.shape}")
+print(f"Trace length: {len(trace)}")
+
+# Step 1: Segment the waveform into 1536 equal parts
+num_operations = 1536
+segment_length = len(trace) // num_operations
+print(f"Segment length: {segment_length}")
+
+# Reshape the trace into 1536 segments
+segments = trace[:num_operations * segment_length].reshape(num_operations, segment_length)
+print(f"Segments shape: {segments.shape}")
+
+# Plot a few segments to visualize
+plt.figure(figsize=(12, 6))
+for i in range(5):
+    plt.plot(segments[i], label=f'Segment {i}')
+plt.title('First 5 Segments of the Power Trace')
+plt.xlabel('Time Samples')
+plt.ylabel('Power Consumption')
+plt.legend()
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_162820_463997_1.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_162820_463997_1.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=9034d479-21d6f5a8bbea82328b97e01f_25960_1
+[Stream]: Trace shape: (153600,)
+Trace length: 153600
+Segment length: 100
+Segments shape: (1536, 100)
+[Stream]: {"plot_path": "../images/img_20261006_162820_463997_1.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 2 条输出。
+127.0.0.1 - - [06/Oct/2026 16:28:21] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Step 2: Dimensionality Reduction and Clustering
+# Standardize the data
+scaler = StandardScaler()
+segments_scaled = scaler.fit_transform(segments)
+
+# Apply PCA
+pca = PCA(n_components=10)  # Start with 10 components
+pca_features = pca.fit_transform(segments_scaled)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+print(f"Cumulative explained variance: {np.cumsum(pca.explained_variance_ratio_)}")
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+labels = kmeans.fit_predict(pca_features)
+
+# Count operations in each cluster
+cluster_counts = np.bincount(labels)
+print(f"Cluster counts: {cluster_counts}")
+
+# Assign larger cluster as S (squaring)
+if cluster_counts[0] > cluster_counts[1]:
+    s_cluster = 0
+    m_cluster = 1
+else:
+    s_cluster = 1
+    m_cluster = 0
+
+# Create operation sequence
+operations = []
+for label in labels:
+    if label == s_cluster:
+        operations.append('S')
+    else:
+        operations.append('M')
+
+operations = np.array(operations)
+
+# Step 3: Constraint Verification
+s_count = np.sum(operations == 'S')
+first_op = operations[0]
+
+# Check for consecutive M operations
+consecutive_m = False
+for i in range(1, len(operations)):
+    if operations[i] == 'M' and operations[i-1] == 'M':
+        consecutive_m = True
+        break
+
+print("\n=== ATTEMPT 1 RESULTS ===")
+print(f"S count: {s_count} (target: 1024)")
+print(f"First operation: {first_op} (target: S)")
+print(f"Consecutive M operations: {consecutive_m} (target: False)")
+
+# Check if all constraints are satisfied
+constraint1 = s_count == 1024
+constraint2 = first_op == 'S'
+constraint3 = not consecutive_m
+
+all_satisfied = constraint1 and constraint2 and constraint3
+print(f"All constraints satisfied: {all_satisfied}")
+
+# Plot the first two PCA components to visualize clustering
+plt.figure(figsize=(10, 6))
+colors = ['red' if op == 'M' else 'blue' for op in operations]
+plt.scatter(pca_features[:, 0], pca_features[:, 1], c=colors, alpha=0.6)
+plt.title('PCA Components with Clustering Results (Red=M, Blue=S)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.grid(True)
+
+try:
+    import matplotlib.pyplot as plt
+    import json as _json
+    plt.savefig("../images/img_20261006_162847_844496_2.png", dpi=160, bbox_inches='tight')
+    plt.close()
+    print(_json.dumps({"plot_path": "../images/img_20261006_162847_844496_2.png"}, ensure_ascii=False))
+except Exception as e:
+    print("图片保存失败:", str(e))
+============================================================
+
+执行请求已发送, msg_id=9034d479-21d6f5a8bbea82328b97e01f_25960_2
+[Stream]: Explained variance ratio: [9.97227925e-01 4.15607591e-05 4.02724246e-05 4.01167512e-05
+ 3.92199666e-05 3.88229106e-05 3.85587163e-05 3.75786082e-05
+ 3.73554138e-05 3.70347675e-05]
+Cumulative explained variance: [0.99722792 0.99726949 0.99730976 0.99734987 0.99738909 0.99742792
+ 0.99746648 0.99750406 0.99754141 0.99757845]
+[Stream]: <LOCAL>/context.py:136: UserWarning: Could not find the number of physical cores for the following reason:
+[WinError 2] 系统找不到指定的文件。
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+[Stream]: File "<LOCAL>/context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+               ^^^^^^^^^^^^^^^
+[Stream]: File "<LOCAL>/subprocess.py", line 546, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<LOCAL>/subprocess.py", line 1022, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "<LOCAL>/subprocess.py", line 1491, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Stream]: Cluster counts: [1024  512]
+[Stream]: === ATTEMPT 1 RESULTS ===
+S count: 1024 (target: 1024)
+First operation: S (target: S)
+Consecutive M operations: False (target: False)
+All constraints satisfied: True
+[Stream]: {"plot_path": "../images/img_20261006_162847_844496_2.png"}
+收到 idle 状态，执行完成
+代码执行完成，返回 7 条输出。
+127.0.0.1 - - [06/Oct/2026 16:28:48] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Additional verification of the operation sequence
+print("=== DETAILED VERIFICATION ===")
+
+# Check the entire sequence for consecutive M operations
+consecutive_m_positions = []
+for i in range(1, len(operations)):
+    if operations[i] == 'M' and operations[i-1] == 'M':
+        consecutive_m_positions.append(i)
+
+print(f"Positions with consecutive M operations: {consecutive_m_positions}")
+print(f"Number of consecutive M occurrences: {len(consecutive_m_positions)}")
+
+# Check the distribution of operations
+print(f"\nOperation distribution:")
+print(f"S operations: {s_count}")
+print(f"M operations: {len(operations) - s_count}")
+
+# Display first 20 operations
+print(f"\nFirst 20 operations: {''.join(operations[:20])}")
+
+# Display last 20 operations
+print(f"Last 20 operations: {''.join(operations[-20:])}")
+
+# Verify the sequence pattern looks reasonable
+print("\nSequence verification complete.")
+============================================================
+
+执行请求已发送, msg_id=9034d479-21d6f5a8bbea82328b97e01f_25960_3
+[Stream]: === DETAILED VERIFICATION ===
+Positions with consecutive M operations: []
+Number of consecutive M occurrences: 0
+
+Operation distribution:
+S operations: 1024
+M operations: 512
+
+First 20 operations: SMSMSMSMSSSSSMSMSMSM
+Last 20 operations: SMSMSSSSSMSMSMSMSSSS
+
+Sequence verification complete.
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 16:29:03] "POST /execute HTTP/1.1" 200 -
+
+===================== 收到代码执行请求 =====================
+# Save the operation sequence to file
+operation_string = ''.join(operations)
+
+with open('./result.txt', 'w') as f:
+    f.write(operation_string)
+
+print("Operation sequence saved to ./result.txt")
+print(f"Total operations: {len(operation_string)}")
+print(f"S operations: {operation_string.count('S')}")
+print(f"M operations: {operation_string.count('M')}")
+
+# Display a sample of the saved content
+print(f"\nFirst 100 characters of the saved sequence:")
+print(operation_string[:100])
+
+print(f"\nLast 100 characters of the saved sequence:")
+print(operation_string[-100:])
+============================================================
+
+执行请求已发送, msg_id=9034d479-21d6f5a8bbea82328b97e01f_25960_4
+[Stream]: Operation sequence saved to ./result.txt
+Total operations: 1536
+S operations: 1024
+M operations: 512
+
+First 100 characters of the saved sequence:
+SMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSM
+
+Last 100 characters of the saved sequence:
+SSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSSSMSMSMSMSSSS
+收到 idle 状态，执行完成
+代码执行完成，返回 1 条输出。
+127.0.0.1 - - [06/Oct/2026 16:29:13] "POST /execute HTTP/1.1" 200 -
+127.0.0.1 - - [06/Oct/2026 16:29:21] "POST /shutdown HTTP/1.1" 200 -
+正在清理 Jupyter Kernel 进程...
+Kernel 已关闭。

@@ -1,0 +1,286 @@
+{
+  "model": "deepseek",
+  "trace": "ECC-SC",
+  "path": "runs/deepseek/ECC-SC/run08",
+  "original_calls_sha256": "680067a6354d010a88a751db6602459ce8d53c2add1239d1d61702442e019fe6",
+  "replay_path": "<LOCAL>/run08",
+  "locally_reconstructed": false,
+  "terminal_replay_gap_covered_by_original_final": false,
+  "replay_report_sha256": "618d384ae2e5a22d70f1eafd9fe584f6446cc755b431e77868f7ef6994a4fac7",
+  "original_final_accuracy": 100.0,
+  "attempts": [
+    {
+      "attempt": 1,
+      "call": 2,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 35.483870967741936,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "b8c5e21100ca0e2d04bd266e9cadd50dbfce4597e40850e15c4ae03f0e85f8f0"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 2,
+      "call": 3,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 34.67741935483871,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "b77aaefd5cc7fda224dee991ed563adea47507fec7adc85f955b70caaa2826c9"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 3,
+      "call": 4,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 0.0,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "71ea93caf59c93200b10163c644182e64a7ddfa56d73b3da425def3b53f72d3f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 4,
+      "call": 5,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 0.0,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "71ea93caf59c93200b10163c644182e64a7ddfa56d73b3da425def3b53f72d3f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 5,
+      "call": 6,
+      "fit_names": [
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 19.892473118279568,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "1a85c08a5fc8952a74a40db758f1220410f6c709265b7206dbac1f8b01c55f5d"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 6,
+      "call": 7,
+      "fit_names": [
+        "DBSCAN"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 33.87096774193548,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "84451aefa726412045a101312dfbacd16359b30ba854014856d56308232a9b2e"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 7,
+      "call": 8,
+      "fit_names": [
+        "KMeans"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 55.376344086021504,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "950ae1131b75030fce3d01a5095dc7ccff9945d9fbe1b090a8551c882c0e6f0c"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 8,
+      "call": 9,
+      "fit_names": [
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 99.73118279569893,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "25b3de0d38f2bb9f76458a1ce93aa49b791de0d48522d148b8bc6a97c20daeaa"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 9,
+      "call": 10,
+      "fit_names": [
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 66.93548387096774,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "03a9b221f9dbeb7b97216b35c0831482016537ecd960f0d41306ea9615ba3a1e"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 10,
+      "call": 11,
+      "fit_names": [
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "SpectralClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 90.3225806451613,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "d58c94eba1fdd5788dc3be4c2915d54a9fcb04bdf29987b7b4d4d8e1dccf5453"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 11,
+      "call": 12,
+      "fit_names": [
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "GaussianMixture"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 7.258064516129032,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "4e83572e4636224168c523be6f86ff5c2c25625aaf26c174ba2ccd190e089d59"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 12,
+      "call": 13,
+      "fit_names": [
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 36.02150537634409,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "1929e635ba599f92d2b3ddfc2f0dba0462b3476003ffde39088755182e155676"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 13,
+      "call": 14,
+      "fit_names": [
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering",
+        "KMeans",
+        "AgglomerativeClustering",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 36.02150537634409,
+        "source": "archived_replay_matching_output",
+        "variable": "operations",
+        "sequence_sha256": "1929e635ba599f92d2b3ddfc2f0dba0462b3476003ffde39088755182e155676"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    },
+    {
+      "attempt": 14,
+      "call": 15,
+      "fit_names": [
+        "KMeans",
+        "KMeans",
+        "KMeans",
+        "AgglomerativeClustering"
+      ],
+      "new_valid_candidate": true,
+      "score": {
+        "accuracy": 100.0,
+        "source": "original_final_snapshot",
+        "variable": "runs/deepseek/ECC-SC/run08\\snapshots\\call015_0001_result.txt",
+        "sequence_sha256": "b32d949a8b858b5fd0f03ac1f5073a30e9c116e4e9b5a658f096ef7007ee881f"
+      },
+      "carried_previous": false,
+      "interval_has_replay_output_difference": false
+    }
+  ]
+}
