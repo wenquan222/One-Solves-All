@@ -4,8 +4,6 @@ Reproducibility materials for *A Prompt Framework for Expert-Free LLM-Based Full
 
 The framework encodes expert SPA strategies in prompts. An LLM generates and executes analysis code, checks operation constraints, and adjusts the analysis. This release provides the processed inputs and fixed run cohort used by the revised manuscript.
 
-Repository: https://github.com/wenquan222/One-Solves-All
-
 ## Reported results
 
 | Method | Mean operation accuracy | Complete recovery |
