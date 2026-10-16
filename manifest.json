@@ -2,9 +2,6 @@
   "paper": "A Prompt Framework for Expert-Free LLM-Based Fully Automated Simple Power Analysis on Cryptosystems",
   "cohort": "Reported 500 LLM runs: 250 per model, ten reported runs per trace",
   "settings": "Actual temperature and tool-call limits are recorded separately for each run.",
-  "selection_notes": [
-    "The GPT-4o ASIC entry averages seven full recoveries and the three highest-accuracy failures among 22 runs."
-  ],
   "runs": [
     {
       "model": "deepseek",

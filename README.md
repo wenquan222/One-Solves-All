@@ -13,7 +13,7 @@ The framework encodes expert SPA strategies in prompts. An LLM generates and exe
 | GPT-4o | 99.36% | 235/250 |
 | DeepSeek-V3.1 | 99.73% | 245/250 |
 
-The LLM cohort contains 500 archived runs: 250 per model, with ten reported runs per trace. The 25 inputs comprise seven real recordings and eighteen simulated traces. `manifest.json` identifies every reported run, its original run number, actual settings, prompt hash, final snapshot, and the reported-cohort selection notes. Repeated analyses use a fixed recording and its reference sequence.
+The LLM cohort contains 500 archived runs: 250 per model, with ten reported runs per trace. The 25 inputs comprise seven real recordings and eighteen simulated traces. `manifest.json` identifies every reported run, its original run number, actual settings, prompt hash, and final snapshot. Repeated analyses use a fixed recording and its reference sequence.
 
 ## Contents
 
